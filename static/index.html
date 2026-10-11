@@ -97,19 +97,11 @@
 
         <div class="nav-section-label mt-3">SERVICE & KNOWLEDGE</div>
 
-        <button class="nav-item" data-view="service-catalog" id="nav-btn-catalog" title="Enterprise Service Catalog & Requests">
+        <button class="nav-item" data-view="service-catalog" id="nav-btn-catalog" title="Enterprise Service Catalog &amp; Service Requests Dashboard">
           <span class="nav-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
           </span>
-          <span class="nav-label">Service Catalog</span>
-          <span class="nav-pill pill-live">Store</span>
-        </button>
-
-        <button class="nav-item" data-view="service-requests" id="nav-btn-requests" title="Service Requests Queue & Fulfillment">
-          <span class="nav-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-          </span>
-          <span class="nav-label">Service Requests</span>
+          <span class="nav-label">Service Catalog &amp; Requests</span>
           <span class="nav-pill pill-emerald" id="badge-requests-sidebar">4</span>
         </button>
 
@@ -281,10 +273,59 @@
       <main class="content-viewport">
 
         <!-- ======================================================== -->
-        <!-- VIEW 1: INCIDENT COMMAND (DEFAULT TABLE VIEW)            -->
+        <!-- VIEW 1: INCIDENT COMMAND                                 -->
         <!-- ======================================================== -->
         <section id="view-incident-command" class="view-panel active">
-          <!-- Toolbar Filter Controls -->
+          
+          <!-- Incidents Metrics KPI Bar on Top -->
+          <div class="page-kpi-bar" id="incidents-kpi-bar">
+            <div class="page-kpi-card" style="border-left: 3.5px solid #6366f1;">
+              <div class="page-kpi-top">
+                <span class="page-kpi-title">Active Incidents</span>
+                <span class="page-kpi-icon">🚨</span>
+              </div>
+              <span class="page-kpi-val font-mono text-indigo" id="kpi-inc-total">12 Open</span>
+              <span class="page-kpi-sub">SRE &amp; Platform Triage</span>
+            </div>
+
+            <div class="page-kpi-card" style="border-left: 3.5px solid #f43f5e;">
+              <div class="page-kpi-top">
+                <span class="page-kpi-title">Critical P1/P2</span>
+                <span class="page-kpi-icon">⚡</span>
+              </div>
+              <span class="page-kpi-val font-mono text-rose" id="kpi-inc-p1">2 Critical</span>
+              <span class="page-kpi-sub">Outage / Revenue Cascade</span>
+            </div>
+
+            <div class="page-kpi-card" style="border-left: 3.5px solid #10b981;">
+              <div class="page-kpi-top">
+                <span class="page-kpi-title">SLA Compliance</span>
+                <span class="page-kpi-icon">⏱️</span>
+              </div>
+              <span class="page-kpi-val font-mono text-emerald" id="kpi-inc-sla">98.2%</span>
+              <span class="page-kpi-sub">Target &gt; 95.0%</span>
+            </div>
+
+            <div class="page-kpi-card" style="border-left: 3.5px solid #0284c7;">
+              <div class="page-kpi-top">
+                <span class="page-kpi-title">Avg MTTR</span>
+                <span class="page-kpi-icon">📉</span>
+              </div>
+              <span class="page-kpi-val font-mono text-sky" id="kpi-inc-mttr">24.5 Mins</span>
+              <span class="page-kpi-sub">Mean Time to Mitigate</span>
+            </div>
+
+            <div class="page-kpi-card" style="border-left: 3.5px solid #f59e0b;">
+              <div class="page-kpi-top">
+                <span class="page-kpi-title">Open Labor Spend</span>
+                <span class="page-kpi-icon">💵</span>
+              </div>
+              <span class="page-kpi-val font-mono text-amber" id="kpi-inc-cost">$2,410</span>
+              <span class="page-kpi-sub">Logged Technician Labor</span>
+            </div>
+          </div>
+
+          <!-- Toolbar Filter Controls & View Switcher -->
           <div class="zen-toolbar">
             <div class="toolbar-left">
               <!-- Search Filter -->
@@ -325,7 +366,19 @@
               </div>
             </div>
 
-            <div class="toolbar-right">
+            <div class="toolbar-right" style="display: flex; align-items: center; gap: 12px;">
+              <!-- View Switcher (Table vs Kanban) -->
+              <div class="view-switcher-group" id="incidents-view-switcher">
+                <button class="view-switch-btn active" id="btn-inc-table-view" title="Tabular View (Best for >10 items)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                  <span>Table</span>
+                </button>
+                <button class="view-switch-btn" id="btn-inc-kanban-view" title="Kanban Board View">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="11" rx="1"/></svg>
+                  <span>Kanban</span>
+                </button>
+              </div>
+
               <!-- SLA Alert Pill -->
               <div class="sla-warning-indicator" id="sla-urgent-alert" title="Incidents requiring immediate mitigation">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -334,7 +387,7 @@
             </div>
           </div>
 
-          <!-- Default Table View Container -->
+          <!-- Table View Container -->
           <div id="table-container" class="table-view-wrapper" style="display: block;">
             <div class="zen-card table-card">
               <table class="zen-data-table">
@@ -354,6 +407,38 @@
                   <!-- Populated by app.js -->
                 </tbody>
               </table>
+            </div>
+          </div>
+
+          <!-- Incidents Kanban View Container -->
+          <div id="incidents-kanban-container" class="module-kanban-board" style="display: none;">
+            <div class="module-kanban-col" id="m-inc-col-new">
+              <div class="module-kanban-header">
+                <span class="module-kanban-title"><span class="dot-p1"></span> New / Triaging</span>
+                <span class="module-kanban-count" id="m-inc-count-new">0</span>
+              </div>
+              <div class="module-kanban-cards" id="m-inc-cards-new"></div>
+            </div>
+            <div class="module-kanban-col" id="m-inc-col-inprogress">
+              <div class="module-kanban-header">
+                <span class="module-kanban-title"><span class="dot-p3"></span> In Progress</span>
+                <span class="module-kanban-count" id="m-inc-count-inprogress">0</span>
+              </div>
+              <div class="module-kanban-cards" id="m-inc-cards-inprogress"></div>
+            </div>
+            <div class="module-kanban-col" id="m-inc-col-onhold">
+              <div class="module-kanban-header">
+                <span class="module-kanban-title"><span class="dot-p2"></span> On Hold (Paused)</span>
+                <span class="module-kanban-count" id="m-inc-count-onhold">0</span>
+              </div>
+              <div class="module-kanban-cards" id="m-inc-cards-onhold"></div>
+            </div>
+            <div class="module-kanban-col" id="m-inc-col-resolved">
+              <div class="module-kanban-header">
+                <span class="module-kanban-title"><span class="dot-p4"></span> Resolved / Closed</span>
+                <span class="module-kanban-count" id="m-inc-count-resolved">0</span>
+              </div>
+              <div class="module-kanban-cards" id="m-inc-cards-resolved"></div>
             </div>
           </div>
         </section>
@@ -455,28 +540,55 @@
         <!-- ======================================================== -->
         <section id="view-problem-management" class="view-panel">
           <div class="problem-workspace">
-            <div class="zen-hero-banner">
-              <div class="hero-left">
-                <div class="hero-tag">
-                  <span class="tag-sparkle">🔍</span>
-                  <span>ITIL 4 Problem Management &amp; Known Error Database</span>
+            <!-- Problems Metrics KPI Bar on Top -->
+            <div class="page-kpi-bar" id="problems-kpi-bar">
+              <div class="page-kpi-card" style="border-left: 3.5px solid #6366f1;">
+                <div class="page-kpi-top">
+                  <span class="page-kpi-title">Active Problems</span>
+                  <span class="page-kpi-icon">🔍</span>
                 </div>
-                <h2>Problem Management &amp; KEDB</h2>
-                <p>Identify underlying root causes behind recurring incidents, maintain the Known Error Database (KEDB) with validated workarounds, and step through interactive 5-Whys causal chains.</p>
+                <span class="page-kpi-val font-mono text-indigo" id="kpi-prb-total">3 Active</span>
+                <span class="page-kpi-sub">Root Cause Investigations</span>
               </div>
-              <div class="hero-right">
-                <div class="hero-metric-card">
-                  <span class="hero-m-val text-indigo font-mono" id="stat-total-problems">3 Problems</span>
-                  <span class="hero-m-label">Active Under Investigation</span>
+
+              <div class="page-kpi-card" style="border-left: 3.5px solid #10b981;">
+                <div class="page-kpi-top">
+                  <span class="page-kpi-title">KEDB Workarounds</span>
+                  <span class="page-kpi-icon">📖</span>
                 </div>
-                <div class="hero-metric-card">
-                  <span class="hero-m-val text-rose font-mono" id="stat-kedb-count">2 KEDB</span>
-                  <span class="hero-m-label">Known Error Workarounds</span>
+                <span class="page-kpi-val font-mono text-emerald" id="kpi-prb-kedb">2 Published</span>
+                <span class="page-kpi-sub">Deflecting Incidents</span>
+              </div>
+
+              <div class="page-kpi-card" style="border-left: 3.5px solid #8b5cf6;">
+                <div class="page-kpi-top">
+                  <span class="page-kpi-title">RCA Resolution Rate</span>
+                  <span class="page-kpi-icon">🎯</span>
                 </div>
+                <span class="page-kpi-val font-mono text-purple" id="kpi-prb-rca">66.7%</span>
+                <span class="page-kpi-sub">Root Cause Pinpointed</span>
+              </div>
+
+              <div class="page-kpi-card" style="border-left: 3.5px solid #0284c7;">
+                <div class="page-kpi-top">
+                  <span class="page-kpi-title">Incident Deflection</span>
+                  <span class="page-kpi-icon">🛡️</span>
+                </div>
+                <span class="page-kpi-val font-mono text-sky" id="kpi-prb-deflection">18 Incidents</span>
+                <span class="page-kpi-sub">Prevented by Workarounds</span>
+              </div>
+
+              <div class="page-kpi-card" style="border-left: 3.5px solid #f59e0b;">
+                <div class="page-kpi-top">
+                  <span class="page-kpi-title">Avg RCA Turnaround</span>
+                  <span class="page-kpi-icon">⏱️</span>
+                </div>
+                <span class="page-kpi-val font-mono text-amber" id="kpi-prb-time">1.4 Days</span>
+                <span class="page-kpi-sub">Target &lt; 3.0 Days</span>
               </div>
             </div>
 
-            <!-- Problem Toolbar & KEDB Toggle -->
+            <!-- Problem Toolbar, KEDB Toggle & View Switcher -->
             <div class="zen-toolbar mt-3">
               <div class="toolbar-left">
                 <div class="zen-input-wrap">
@@ -490,14 +602,74 @@
                   </button>
                 </div>
               </div>
-              <div class="toolbar-right">
+              <div class="toolbar-right" style="display: flex; align-items: center; gap: 12px;">
+                <!-- View Switcher (Table vs Kanban) -->
+                <div class="view-switcher-group" id="problems-view-switcher">
+                  <button class="view-switch-btn" id="btn-prb-table-view" title="Tabular View (Best for >10 items)">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                    <span>Table</span>
+                  </button>
+                  <button class="view-switch-btn active" id="btn-prb-kanban-view" title="Kanban Board View (Default for &lt;=10 items)">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="11" rx="1"/></svg>
+                    <span>Kanban</span>
+                  </button>
+                </div>
                 <button class="btn btn-sm btn-zen-primary" id="btn-create-problem-prompt">+ Log New Problem</button>
               </div>
             </div>
 
-            <!-- Problem Cards List -->
-            <div class="problem-cards-grid" id="problem-cards-container">
-              <!-- Rendered dynamically by app.js -->
+            <!-- Problem Table View Container -->
+            <div id="problems-table-container" class="table-view-wrapper" style="display: none; margin-top: 14px;">
+              <div class="zen-card table-card">
+                <table class="zen-data-table">
+                  <thead>
+                    <tr>
+                      <th width="120">Problem ID</th>
+                      <th width="100">Priority</th>
+                      <th>Problem Title &amp; Root Cause Analysis</th>
+                      <th width="170">Known Error (KEDB)</th>
+                      <th width="130">Status</th>
+                      <th width="110">Linked Incidents</th>
+                      <th width="170" class="text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="problems-table-body">
+                    <!-- Populated by app.js -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Problem Kanban View Container (Default for <=10 items) -->
+            <div id="problems-kanban-container" class="module-kanban-board" style="display: grid; margin-top: 14px;">
+              <div class="module-kanban-col" id="m-prb-col-investigating">
+                <div class="module-kanban-header">
+                  <span class="module-kanban-title"><span class="dot-p1"></span> Under Investigation</span>
+                  <span class="module-kanban-count" id="m-prb-count-investigating">0</span>
+                </div>
+                <div class="module-kanban-cards" id="m-prb-cards-investigating"></div>
+              </div>
+              <div class="module-kanban-col" id="m-prb-col-rca">
+                <div class="module-kanban-header">
+                  <span class="module-kanban-title"><span class="dot-p2"></span> RCA In Progress</span>
+                  <span class="module-kanban-count" id="m-prb-count-rca">0</span>
+                </div>
+                <div class="module-kanban-cards" id="m-prb-cards-rca"></div>
+              </div>
+              <div class="module-kanban-col" id="m-prb-col-workaround">
+                <div class="module-kanban-header">
+                  <span class="module-kanban-title"><span class="dot-p3"></span> Workaround / KEDB</span>
+                  <span class="module-kanban-count" id="m-prb-count-workaround">0</span>
+                </div>
+                <div class="module-kanban-cards" id="m-prb-cards-workaround"></div>
+              </div>
+              <div class="module-kanban-col" id="m-prb-col-resolved">
+                <div class="module-kanban-header">
+                  <span class="module-kanban-title"><span class="dot-p4"></span> Permanently Resolved</span>
+                  <span class="module-kanban-count" id="m-prb-count-resolved">0</span>
+                </div>
+                <div class="module-kanban-cards" id="m-prb-cards-resolved"></div>
+              </div>
             </div>
           </div>
         </section>
@@ -507,28 +679,55 @@
         <!-- ======================================================== -->
         <section id="view-change-management" class="view-panel">
           <div class="change-workspace">
-            <div class="zen-hero-banner">
-              <div class="hero-left">
-                <div class="hero-tag">
-                  <span class="tag-sparkle">🛡️</span>
-                  <span>ITIL 4 Change Enablement &amp; CAB Governance</span>
+            <!-- Changes Metrics KPI Bar on Top -->
+            <div class="page-kpi-bar" id="changes-kpi-bar">
+              <div class="page-kpi-card" style="border-left: 3.5px solid #6366f1;">
+                <div class="page-kpi-top">
+                  <span class="page-kpi-title">Active RFCs</span>
+                  <span class="page-kpi-icon">🔄</span>
                 </div>
-                <h2>Change Management &amp; CAB Advisory</h2>
-                <p>Review Request for Changes (RFCs), calculate multi-factor blast radius risk scores, and execute Change Advisory Board (CAB) voting workflows prior to production rollout.</p>
+                <span class="page-kpi-val font-mono text-indigo" id="kpi-chg-total">3 Active</span>
+                <span class="page-kpi-sub">In Pipeline</span>
               </div>
-              <div class="hero-right">
-                <div class="hero-metric-card">
-                  <span class="hero-m-val text-amber font-mono" id="stat-pending-cab">2 Pending</span>
-                  <span class="hero-m-label">CAB Decisions Required</span>
+
+              <div class="page-kpi-card" style="border-left: 3.5px solid #f59e0b;">
+                <div class="page-kpi-top">
+                  <span class="page-kpi-title">Pending CAB</span>
+                  <span class="page-kpi-icon">🗳️</span>
                 </div>
-                <div class="hero-metric-card">
-                  <span class="hero-m-val text-emerald font-mono">98.9%</span>
-                  <span class="hero-m-label">Change Success Rate</span>
+                <span class="page-kpi-val font-mono text-amber" id="kpi-chg-pending">2 Pending</span>
+                <span class="page-kpi-sub">Awaiting Governance</span>
+              </div>
+
+              <div class="page-kpi-card" style="border-left: 3.5px solid #f43f5e;">
+                <div class="page-kpi-top">
+                  <span class="page-kpi-title">High Risk RFCs</span>
+                  <span class="page-kpi-icon">⚠️</span>
                 </div>
+                <span class="page-kpi-val font-mono text-rose" id="kpi-chg-risk">1 High Risk</span>
+                <span class="page-kpi-sub">CMDB Blast Radius &gt; 50</span>
+              </div>
+
+              <div class="page-kpi-card" style="border-left: 3.5px solid #10b981;">
+                <div class="page-kpi-top">
+                  <span class="page-kpi-title">Success Rate</span>
+                  <span class="page-kpi-icon">📈</span>
+                </div>
+                <span class="page-kpi-val font-mono text-emerald" id="kpi-chg-success">98.9%</span>
+                <span class="page-kpi-sub">Zero Rollbacks (30d)</span>
+              </div>
+
+              <div class="page-kpi-card" style="border-left: 3.5px solid #0284c7;">
+                <div class="page-kpi-top">
+                  <span class="page-kpi-title">Scheduled Windows</span>
+                  <span class="page-kpi-icon">📅</span>
+                </div>
+                <span class="page-kpi-val font-mono text-sky" id="kpi-chg-windows">2 Maintenance</span>
+                <span class="page-kpi-sub">FSC Collision Verified</span>
               </div>
             </div>
 
-            <!-- Change Filter Toolbar -->
+            <!-- Change Filter Toolbar & View Switcher -->
             <div class="zen-toolbar mt-3">
               <div class="toolbar-left">
                 <div class="zen-input-wrap">
@@ -542,29 +741,74 @@
                   <button class="filter-chip change-type-chip" data-type="Standard">Standard</button>
                 </div>
               </div>
-              <div class="toolbar-right">
+              <div class="toolbar-right" style="display: flex; align-items: center; gap: 12px;">
+                <!-- View Switcher (Table vs Kanban) -->
+                <div class="view-switcher-group" id="changes-view-switcher">
+                  <button class="view-switch-btn" id="btn-chg-table-view" title="Tabular View (Best for >10 items)">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                    <span>Table</span>
+                  </button>
+                  <button class="view-switch-btn active" id="btn-chg-kanban-view" title="Kanban Board View (Default for &lt;=10 items)">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="11" rx="1"/></svg>
+                    <span>Kanban</span>
+                  </button>
+                </div>
                 <button class="btn btn-sm btn-zen-primary" id="btn-create-rfc-prompt">+ New Change Request (RFC)</button>
               </div>
             </div>
 
-            <!-- Changes Table Card -->
-            <div class="changes-table-card">
-              <table class="zen-data-table">
-                <thead>
-                  <tr>
-                    <th width="110">Change ID</th>
-                    <th width="100">Type</th>
-                    <th>RFC Title &amp; Target Service</th>
-                    <th width="160">Risk Score</th>
-                    <th width="150">CAB Status</th>
-                    <th width="160">Scheduled Window</th>
-                    <th width="160" class="text-right">CAB Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="changes-table-body">
-                  <!-- Populated by app.js -->
-                </tbody>
-              </table>
+            <!-- Changes Table Card Container -->
+            <div id="changes-table-container" class="table-view-wrapper" style="display: none; margin-top: 14px;">
+              <div class="zen-card table-card">
+                <table class="zen-data-table">
+                  <thead>
+                    <tr>
+                      <th width="110">Change ID</th>
+                      <th width="100">Type</th>
+                      <th>RFC Title &amp; Target Service</th>
+                      <th width="160">Risk Score</th>
+                      <th width="150">CAB Status</th>
+                      <th width="160">Scheduled Window</th>
+                      <th width="160" class="text-right">CAB Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="changes-table-body">
+                    <!-- Populated by app.js -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Changes Kanban View Container (Default for <=10 items) -->
+            <div id="changes-kanban-container" class="module-kanban-board" style="display: grid; margin-top: 14px;">
+              <div class="module-kanban-col" id="m-chg-col-draft">
+                <div class="module-kanban-header">
+                  <span class="module-kanban-title"><span class="dot-p3"></span> Draft / Requested</span>
+                  <span class="module-kanban-count" id="m-chg-count-draft">0</span>
+                </div>
+                <div class="module-kanban-cards" id="m-chg-cards-draft"></div>
+              </div>
+              <div class="module-kanban-col" id="m-chg-col-cab">
+                <div class="module-kanban-header">
+                  <span class="module-kanban-title"><span class="dot-p2"></span> Pending CAB</span>
+                  <span class="module-kanban-count" id="m-chg-count-cab">0</span>
+                </div>
+                <div class="module-kanban-cards" id="m-chg-cards-cab"></div>
+              </div>
+              <div class="module-kanban-col" id="m-chg-col-approved">
+                <div class="module-kanban-header">
+                  <span class="module-kanban-title"><span class="dot-p1"></span> Approved &amp; Scheduled</span>
+                  <span class="module-kanban-count" id="m-chg-count-approved">0</span>
+                </div>
+                <div class="module-kanban-cards" id="m-chg-cards-approved"></div>
+              </div>
+              <div class="module-kanban-col" id="m-chg-col-implemented">
+                <div class="module-kanban-header">
+                  <span class="module-kanban-title"><span class="dot-p4"></span> Implemented / Verified</span>
+                  <span class="module-kanban-count" id="m-chg-count-implemented">0</span>
+                </div>
+                <div class="module-kanban-cards" id="m-chg-cards-implemented"></div>
+              </div>
             </div>
           </div>
         </section>
@@ -1403,16 +1647,30 @@
         </section>
 
                 <!-- ======================================================== -->
-        <!-- VIEW 5: SERVICE CATALOG & REQUEST FULFILLMENT            -->
+        <!-- ======================================================== -->
+        <!-- VIEW 5: SERVICE CATALOG & CUSTOM SERVICE REQUESTS        -->
         <!-- ======================================================== -->
         <section id="view-service-catalog" class="view-panel">
           <div class="catalog-workspace">
             <div class="catalog-header">
-              <h2>Enterprise Service Catalog</h2>
-              <p>One-click standardized operational and IT requests with pre-baked AI approval workflows</p>
+              <h2>Enterprise Service Catalog &amp; Requests</h2>
+              <p>One-click standardized operational offerings, bespoke custom requests, and unified fulfillment dashboard</p>
             </div>
 
             <div class="catalog-grid">
+              <!-- Prominent Bespoke Custom Service Request Card -->
+              <div class="zen-card catalog-card catalog-card-custom" id="card-custom-service-request">
+                <div class="catalog-icon-box" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: #ffffff;">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </div>
+                <div class="catalog-badge-pill">★ BESPOKE REQUEST</div>
+                <h3 style="color: #4338ca; font-size: 16px;">Custom Service Request</h3>
+                <p>Submit a customized IT, infrastructure, security, or tooling request tailored with bespoke specifications, budget allocation, and target delivery SLA.</p>
+                <button class="btn btn-zen-primary btn-sm mt-3" id="btn-open-custom-request" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); width: 100%;">
+                  <span>+ Submit Custom Request</span>
+                </button>
+              </div>
+
               <!-- IT & Workstation Services -->
               <div class="zen-card catalog-card" data-template="laptop-prov">
                 <div class="catalog-icon-box bg-indigo-subtle">
@@ -1487,86 +1745,96 @@
                 <button class="btn btn-zen-outline btn-sm mt-3 btn-catalog-request" data-template="traffic-shift">Deploy Request</button>
               </div>
             </div>
-          </div>
-        </section>
 
-        <!-- ======================================================== -->
-        <!-- VIEW 5B: SERVICE REQUESTS & FULFILLMENT QUEUE             -->
-        <!-- ======================================================== -->
-        <section id="view-service-requests" class="view-panel">
-          <!-- Hero Banner -->
-          <div class="zen-hero-banner" style="background: linear-gradient(135deg, #064e3b 0%, #047857 50%, #0f766e 100%);">
-            <div class="hero-left">
-              <div class="hero-tag">
-                <span class="tag-sparkle">📦</span>
-                <span>Enterprise Service Request Fulfillment &amp; SLA Tracking</span>
+            <!-- Section Divider: Active Service Requests & Fulfillment Queue Dashboard -->
+            <div class="catalog-section-divider">
+              <div class="divider-title-group">
+                <span class="divider-icon-pill">📦</span>
+                <div>
+                  <h3 style="font-size: 16px; font-weight: 800; color: #0f172a; margin: 0;">Active Service Requests &amp; Fulfillment Queue Dashboard</h3>
+                  <p style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">Track, approve, and fulfill employee hardware, IAM entitlements, and custom enterprise service requests</p>
+                </div>
               </div>
-              <h2 style="color: #ffffff;">Service Requests &amp; Procurement Queue</h2>
-              <p style="color: #a7f3d0;">Manage employee hardware allocations, cloud infrastructure IAM grants, software license subscriptions, and multi-tier manager approval chains. Built on ITIL v4 Service Request Management principles.</p>
+              <span class="badge-tag tag-aurora">Real-time Fulfillment Engine</span>
             </div>
-            <div class="hero-right">
-              <div class="hero-metric-card">
-                <span class="hero-m-val text-emerald font-mono" id="stat-requests-active">4 Active</span>
-                <span class="hero-m-label">Open Requests</span>
-              </div>
-              <div class="hero-metric-card">
-                <span class="hero-m-val text-amber font-mono" id="stat-requests-approval">1 Pending</span>
-                <span class="hero-m-label">Manager Approval</span>
-              </div>
-              <div class="hero-metric-card">
-                <span class="hero-m-val text-indigo font-mono" id="stat-requests-fulfillment">2 In Progress</span>
-                <span class="hero-m-label">In Provisioning</span>
-              </div>
-              <div class="hero-metric-card">
-                <span class="hero-m-val text-emerald font-mono">4.2 Hours</span>
-                <span class="hero-m-label">Avg Fulfillment</span>
-              </div>
-            </div>
-          </div>
 
-          <!-- Toolbar -->
-          <div class="zen-toolbar">
-            <div class="toolbar-left" style="flex-wrap: wrap; gap: 10px;">
-              <div class="zen-input-wrap">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                <input type="text" id="requests-filter-search" placeholder="Search requests by ID, employee, item, department..." autocomplete="off" style="width: 320px;">
+            <!-- Service Requests Fulfillment Queue Dashboard (Directly Below Catalog Grid) -->
+            <div id="service-requests-embedded-queue" class="requests-queue-container">
+              <!-- Hero Metric Banner -->
+              <div class="zen-hero-banner" style="background: linear-gradient(135deg, #064e3b 0%, #047857 50%, #0f766e 100%);">
+                <div class="hero-left">
+                  <div class="hero-tag">
+                    <span class="tag-sparkle">📦</span>
+                    <span>Enterprise Service Request Fulfillment &amp; SLA Tracking</span>
+                  </div>
+                  <h2 style="color: #ffffff;">Service Requests &amp; Procurement Queue</h2>
+                  <p style="color: #a7f3d0;">Manage employee hardware allocations, cloud infrastructure IAM grants, software license subscriptions, and multi-tier manager approval chains. Built on ITIL v4 Service Request Management principles.</p>
+                </div>
+                <div class="hero-right">
+                  <div class="hero-metric-card">
+                    <span class="hero-m-val text-emerald font-mono" id="stat-requests-active">4 Active</span>
+                    <span class="hero-m-label">Open Requests</span>
+                  </div>
+                  <div class="hero-metric-card">
+                    <span class="hero-m-val text-amber font-mono" id="stat-requests-approval">1 Pending</span>
+                    <span class="hero-m-label">Manager Approval</span>
+                  </div>
+                  <div class="hero-metric-card">
+                    <span class="hero-m-val text-indigo font-mono" id="stat-requests-fulfillment">2 In Progress</span>
+                    <span class="hero-m-label">In Provisioning</span>
+                  </div>
+                  <div class="hero-metric-card">
+                    <span class="hero-m-val text-emerald font-mono">4.2 Hours</span>
+                    <span class="hero-m-label">Avg Fulfillment</span>
+                  </div>
+                </div>
               </div>
-              <div class="filter-chips-row">
-                <span class="filter-caption">Stage:</span>
-                <button class="filter-chip active req-stage-chip" data-stage="ALL">All (4)</button>
-                <button class="filter-chip req-stage-chip" data-stage="Pending Approval">Pending Approval (1)</button>
-                <button class="filter-chip req-stage-chip" data-stage="In Fulfillment">In Fulfillment (2)</button>
-                <button class="filter-chip req-stage-chip" data-stage="Fulfilled">Fulfilled (1)</button>
-              </div>
-            </div>
-            <div class="toolbar-right">
-              <button class="btn btn-zen-primary" id="btn-jump-catalog-order">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-                <span>+ Browse Service Catalog</span>
-              </button>
-            </div>
-          </div>
 
-          <!-- Requests Table Card -->
-          <div class="zen-card" style="padding: 0; overflow: hidden; margin-top: 14px;">
-            <div class="table-responsive">
-              <table class="zen-table">
-                <thead>
-                  <tr>
-                    <th style="width: 110px;">Request #</th>
-                    <th>Service Offering / Item Requested</th>
-                    <th>Requester &amp; Department</th>
-                    <th>Approval Status</th>
-                    <th>Fulfillment Stage</th>
-                    <th>Priority</th>
-                    <th>SLA Delivery Due</th>
-                    <th class="text-right" style="width: 140px;">Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="requests-table-body">
-                  <!-- Populated by app.js -->
-                </tbody>
-              </table>
+              <!-- Requests Toolbar -->
+              <div class="zen-toolbar mt-3">
+                <div class="toolbar-left" style="flex-wrap: wrap; gap: 10px;">
+                  <div class="zen-input-wrap">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    <input type="text" id="requests-filter-search" placeholder="Search requests by ID, employee, item, department..." autocomplete="off" style="width: 320px;">
+                  </div>
+                  <div class="filter-chips-row">
+                    <span class="filter-caption">Stage:</span>
+                    <button class="filter-chip active req-stage-chip" data-stage="ALL">All (4)</button>
+                    <button class="filter-chip req-stage-chip" data-stage="Pending Approval">Pending Approval (1)</button>
+                    <button class="filter-chip req-stage-chip" data-stage="In Fulfillment">In Fulfillment (2)</button>
+                    <button class="filter-chip req-stage-chip" data-stage="Fulfilled">Fulfilled (1)</button>
+                  </div>
+                </div>
+                <div class="toolbar-right">
+                  <button class="btn btn-zen-primary" id="btn-jump-custom-order" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    <span>+ New Custom Request</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Requests Table Card -->
+              <div class="zen-card" style="padding: 0; overflow: hidden; margin-top: 14px;">
+                <div class="table-responsive">
+                  <table class="zen-table">
+                    <thead>
+                      <tr>
+                        <th style="width: 110px;">Request #</th>
+                        <th>Service Offering / Item Requested</th>
+                        <th>Requester &amp; Department</th>
+                        <th>Approval Status</th>
+                        <th>Fulfillment Stage</th>
+                        <th>Priority</th>
+                        <th>SLA Delivery Due</th>
+                        <th class="text-right" style="width: 140px;">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="requests-table-body">
+                      <!-- Populated by app.js -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -2326,6 +2594,94 @@
         <div class="modal-form-body" id="kb-modal-body" style="overflow-y: auto;">
           <!-- Populated by app.js -->
         </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- CUSTOM SERVICE REQUEST SUBMISSION MODAL                  -->
+    <!-- ======================================================== -->
+    <div class="modal-backdrop" id="modal-custom-service-request" style="display: none;">
+      <div class="modal-dialog resolution-modal-card" style="width: 740px; max-height: 90vh;">
+        <div class="modal-header modal-header-futuristic" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #4338ca 100%);">
+          <div class="modal-title-wrap">
+            <span class="badge-gem-dot" style="background:#a855f7; box-shadow:0 0 10px #a855f7;"></span>
+            <div>
+              <h3 style="font-size:17px; font-weight:800; color:#ffffff;">Submit Custom Service Request</h3>
+              <p style="font-size:12px; color:#c7d2fe; margin-top:2px;">Bespoke IT, Cloud Infrastructure, &amp; Tooling Procurement</p>
+            </div>
+          </div>
+          <button class="btn-icon-sm" id="btn-close-custom-req-modal" style="color: #ffffff;">&times;</button>
+        </div>
+
+        <form id="form-custom-service-request" class="modal-form-body" style="overflow-y: auto; max-height: calc(90vh - 120px);">
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="custom-req-title">Request Title / Summary <span class="required">*</span></label>
+              <input type="text" id="custom-req-title" class="zen-form-control" placeholder="e.g., Dedicated GPU Instance for Deep Learning" required>
+            </div>
+            <div class="form-group">
+              <label for="custom-req-category">Offering Category <span class="required">*</span></label>
+              <select id="custom-req-category" class="zen-form-control zen-select" required>
+                <option value="Specialized Infrastructure" selected>Specialized Infrastructure &amp; Cloud</option>
+                <option value="Hardware & Workstation">Hardware &amp; Workstation</option>
+                <option value="Cloud IAM & Security">Cloud IAM &amp; Security Entitlements</option>
+                <option value="Software License / SaaS">Software License / SaaS Tooling</option>
+                <option value="DevOps & CI/CD Pipeline">DevOps &amp; CI/CD Pipeline</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="custom-req-priority">Fulfillment Priority <span class="required">*</span></label>
+              <select id="custom-req-priority" class="zen-form-control zen-select" required>
+                <option value="P3">P3 - Standard Normal (48h SLA)</option>
+                <option value="P2">P2 - High Priority (24h SLA)</option>
+                <option value="P1">P1 - Critical Rush (4h SLA)</option>
+                <option value="P4">P4 - Low Urgency (72h SLA)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="custom-req-department">Department / Cost Center <span class="required">*</span></label>
+              <select id="custom-req-department" class="zen-form-control zen-select" required>
+                <option value="Engineering & Platform" selected>Engineering &amp; Platform</option>
+                <option value="Data Science & AI Labs">Data Science &amp; AI Labs</option>
+                <option value="Security Operations">Security Operations</option>
+                <option value="Product Architecture">Product Architecture</option>
+                <option value="Executive / Operations">Executive / Operations</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="custom-req-requester">Requester Full Name <span class="required">*</span></label>
+              <input type="text" id="custom-req-requester" class="zen-form-control" value="Alex Chen (Lead Architect)" required>
+            </div>
+            <div class="form-group">
+              <label for="custom-req-manager">Approving Manager / Lead Email <span class="required">*</span></label>
+              <input type="email" id="custom-req-manager" class="zen-form-control" value="devops-manager@opennow.io" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="custom-req-specs">Detailed Technical Specifications &amp; Parameters <span class="required">*</span></label>
+            <textarea id="custom-req-specs" class="zen-form-control form-textarea" rows="3" placeholder="Provide machine specs, VPC peering CIDRs, license count, or repository access requirements..." required>Requires 1x AWS g5.2xlarge EC2 node attached to VPC vpc-0a88ef with IAM role arn:aws:iam::123456789:role/MLDataPipelineRole and 2TB gp3 EBS volume.</textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="custom-req-justification">Business Justification &amp; Impact</label>
+            <textarea id="custom-req-justification" class="zen-form-control form-textarea" rows="2" placeholder="Explain the business need, customer urgency, or project milestone...">Needed for sprint 42 generative AI fine-tuning experiment scheduled for Monday morning deployment.</textarea>
+          </div>
+
+          <div class="form-actions-bar mt-4" style="display:flex; justify-content:flex-end; gap:10px;">
+            <button type="button" class="btn btn-zen-subtle" id="btn-cancel-custom-req">Cancel</button>
+            <button type="submit" class="btn btn-zen-primary" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Submit Custom Request to Fulfillment Queue</span>
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </body>

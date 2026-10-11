@@ -2462,6 +2462,48 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
 
     attachKanbanEvents();
 
+    // Module Kanban Container (in Incident Command view)
+    const mCardsNew = document.getElementById('m-inc-cards-new');
+    const mCardsProg = document.getElementById('m-inc-cards-inprogress');
+    const mCardsHold = document.getElementById('m-inc-cards-onhold');
+    const mCardsRes = document.getElementById('m-inc-cards-resolved');
+    if (mCardsNew) mCardsNew.innerHTML = cols.NEW.map(renderKanbanCardHtml).join('');
+    if (mCardsProg) mCardsProg.innerHTML = cols.IN_PROGRESS.map(renderKanbanCardHtml).join('');
+    if (mCardsHold) mCardsHold.innerHTML = cols.ON_HOLD.map(renderKanbanCardHtml).join('');
+    if (mCardsRes) mCardsRes.innerHTML = cols.RESOLVED.map(renderKanbanCardHtml).join('');
+
+    const mCountNew = document.getElementById('m-inc-count-new');
+    const mCountProg = document.getElementById('m-inc-count-inprogress');
+    const mCountHold = document.getElementById('m-inc-count-onhold');
+    const mCountRes = document.getElementById('m-inc-count-resolved');
+    if (mCountNew) mCountNew.textContent = cols.NEW.length;
+    if (mCountProg) mCountProg.textContent = cols.IN_PROGRESS.length;
+    if (mCountHold) mCountHold.textContent = cols.ON_HOLD.length;
+    if (mCountRes) mCountRes.textContent = cols.RESOLVED.length;
+
+    // Dynamic View Mode Heuristic: >10 open => Table, else <=10 => Kanban
+    const openIncidentsCount = state.incidents.filter(i => i.status !== 'RESOLVED' && i.status !== 'CLOSED').length;
+    const incMode = state.incidentViewMode || (openIncidentsCount > 10 ? 'table' : 'kanban');
+
+    const incTable = document.getElementById('table-container');
+    const incKanban = document.getElementById('incidents-kanban-container');
+    const btnIncTable = document.getElementById('btn-inc-table-view');
+    const btnIncKanban = document.getElementById('btn-inc-kanban-view');
+
+    if (incTable) incTable.style.display = incMode === 'table' ? 'block' : 'none';
+    if (incKanban) incKanban.style.display = incMode === 'kanban' ? 'grid' : 'none';
+    if (btnIncTable) btnIncTable.classList.toggle('active', incMode === 'table');
+    if (btnIncKanban) btnIncKanban.classList.toggle('active', incMode === 'kanban');
+
+    // Update Incidents Top KPI Bar
+    const kpiTotal = document.getElementById('kpi-inc-total');
+    if (kpiTotal) kpiTotal.textContent = `${openIncidentsCount} Open`;
+    const kpiP1 = document.getElementById('kpi-inc-p1');
+    if (kpiP1) {
+      const p1Count = state.incidents.filter(i => (i.priority === 'P1' || i.priority === 'P2') && i.status !== 'RESOLVED' && i.status !== 'CLOSED').length;
+      kpiP1.textContent = `${p1Count} Critical`;
+    }
+
     if (DOM.incidentsTableBody) {
       DOM.incidentsTableBody.innerHTML = filtered.map(inc => {
         const isCriticalSla = inc.slaSecondsRemaining > 0 && inc.slaSecondsRemaining < 1800;
@@ -6678,10 +6720,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
 
   // --- Problem Management ---
   function renderProblemManagement() {
-    const container = document.getElementById('problem-cards-container');
-    if (!container) return;
-
-    let problems = state.problems;
+    let problems = state.problems || [];
     if (state.filterKedbOnly) {
       problems = problems.filter(p => p.isKedb);
     }
@@ -6690,41 +6729,125 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
       problems = problems.filter(p => p.title.toLowerCase().includes(search) || p.rootCause.toLowerCase().includes(search) || p.ciName.toLowerCase().includes(search));
     }
 
-    const statTotal = document.getElementById('stat-total-problems');
-    if (statTotal) statTotal.textContent = `${state.problems.length} Problems`;
-    const statKedb = document.getElementById('stat-kedb-count');
-    if (statKedb) statKedb.textContent = `${state.problems.filter(p => p.isKedb).length} KEDB`;
+    // Dynamic View Mode Heuristic: >10 open => Table, else <=10 => Kanban
+    const openProblemsCount = state.problems.filter(p => p.status !== 'Resolved' && p.status !== 'Closed').length;
+    const prbMode = state.problemViewMode || (openProblemsCount > 10 ? 'table' : 'kanban');
 
-    container.innerHTML = problems.map(p => `
-      <div class="problem-card">
-        <div class="problem-head">
-          <span class="font-mono text-indigo font-bold">${p.id}</span>
-          ${p.isKedb ? '<span class="badge-kedb">★ KEDB Known Error</span>' : '<span class="badge-tag">Investigating</span>'}
-        </div>
-        <h4 style="font-size:13.5px; font-weight:700; color:var(--text-zen-primary);">${escapeHtml(p.title)}</h4>
-        <div style="font-size:12px; color:var(--text-zen-secondary);">
-          <strong>Affected CI:</strong> <span class="ci-pill">${escapeHtml(p.ciName)}</span>
-        </div>
-        <div style="font-size:12px; color:var(--text-zen-muted); line-height:1.4;">
-          <strong>Root Cause:</strong> ${escapeHtml(p.rootCause)}
-        </div>
-        ${p.workaround ? `
-          <div class="kedb-workaround-box">
-            <strong>KEDB Workaround:</strong>
-            <p style="margin-top:2px;">${escapeHtml(p.workaround)}</p>
+    const prbTableWrap = document.getElementById('problems-table-container');
+    const prbKanbanWrap = document.getElementById('problems-kanban-container');
+    const btnPrbTable = document.getElementById('btn-prb-table-view');
+    const btnPrbKanban = document.getElementById('btn-prb-kanban-view');
+
+    if (prbTableWrap) prbTableWrap.style.display = prbMode === 'table' ? 'block' : 'none';
+    if (prbKanbanWrap) prbKanbanWrap.style.display = prbMode === 'kanban' ? 'grid' : 'none';
+    if (btnPrbTable) btnPrbTable.classList.toggle('active', prbMode === 'table');
+    if (btnPrbKanban) btnPrbKanban.classList.toggle('active', prbMode === 'kanban');
+
+    // Update Problems Top KPI Bar
+    const kpiTotal = document.getElementById('kpi-prb-total');
+    if (kpiTotal) kpiTotal.textContent = `${openProblemsCount} Active`;
+    const kpiKedb = document.getElementById('kpi-prb-kedb');
+    if (kpiKedb) kpiKedb.textContent = `${state.problems.filter(p => p.isKedb).length} Published`;
+    const kpiRca = document.getElementById('kpi-prb-rca');
+    if (kpiRca) kpiRca.textContent = `${Math.round((state.problems.filter(p => p.rootCause).length / Math.max(1, state.problems.length)) * 100)}%`;
+    const kpiDeflection = document.getElementById('kpi-prb-deflection');
+    if (kpiDeflection) kpiDeflection.textContent = `${state.problems.reduce((sum, p) => sum + (p.linkedIncidents ? p.linkedIncidents.length * 3 : 6), 0)} Incidents`;
+
+    // Render Table View Body
+    const tbody = document.getElementById('problems-table-body');
+    if (tbody) {
+      tbody.innerHTML = problems.map(p => `
+        <tr data-problem-id="${p.id}">
+          <td class="font-mono text-indigo font-bold">${p.id}</td>
+          <td><span class="priority-pill pill-p2">P2 High</span></td>
+          <td>
+            <div style="font-weight:700; color:var(--text-zen-primary); font-size:13px;">${escapeHtml(p.title)}</div>
+            <div class="text-xs text-muted" style="margin-top:2px;"><strong>Root Cause:</strong> ${escapeHtml(p.rootCause || 'Under active diagnostic trace')}</div>
+            <div class="text-xs text-secondary mt-1"><span class="ci-pill">${escapeHtml(p.ciName)}</span></div>
+          </td>
+          <td>
+            ${p.isKedb ? '<span class="badge-tag text-emerald font-bold">★ KEDB Workaround</span>' : '<span class="badge-tag">No Workaround</span>'}
+          </td>
+          <td>
+            <span class="badge-tag ${p.status === 'Resolved' ? 'text-emerald' : 'text-indigo'}">${escapeHtml(p.status)}</span>
+          </td>
+          <td class="font-mono text-center"><strong>${p.linkedIncidents ? p.linkedIncidents.length : 0}</strong></td>
+          <td class="text-right">
+            <button class="btn btn-xs btn-zen-primary btn-open-whys" data-problem-id="${p.id}">
+              <span>🔍 5-Whys Analyzer</span>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Render Kanban View Columns
+    const cols = {
+      investigating: [],
+      rca: [],
+      workaround: [],
+      resolved: []
+    };
+
+    problems.forEach(p => {
+      if (p.status === 'Resolved' || p.status === 'Closed') {
+        cols.resolved.push(p);
+      } else if (p.isKedb || p.status === 'Known Error') {
+        cols.workaround.push(p);
+      } else if (p.rootCause && p.rootCause.length > 20) {
+        cols.rca.push(p);
+      } else {
+        cols.investigating.push(p);
+      }
+    });
+
+    function renderProblemKanbanCard(p) {
+      return `
+        <div class="m-kanban-card">
+          <div class="m-kanban-card-top">
+            <span class="m-kanban-id">${p.id}</span>
+            ${p.isKedb ? '<span class="badge-tag text-emerald" style="font-size:10px;">★ KEDB</span>' : '<span class="badge-tag" style="font-size:10px;">P2 High</span>'}
           </div>
-        ` : ''}
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-top:4px;">
-          <span class="text-xs text-muted">Linked: <strong>${p.linkedIncidents.length} Incidents</strong></span>
-          <button class="btn btn-xs btn-zen-primary btn-open-whys" data-problem-id="${p.id}">
-            <span>🔍 5-Whys Analyzer</span>
-          </button>
+          <div class="m-kanban-title">${escapeHtml(p.title)}</div>
+          <div class="m-kanban-meta">
+            <span class="ci-pill" style="font-size:10.5px;">${escapeHtml(p.ciName)}</span>
+            <span class="text-xs text-muted"><strong>${p.linkedIncidents ? p.linkedIncidents.length : 0}</strong> linked</span>
+          </div>
+          <div style="font-size:11px; color:#64748b; line-height:1.35; margin-top:4px;">
+            ${escapeHtml((p.rootCause || 'Root cause investigation underway...').slice(0, 85))}...
+          </div>
+          <div class="m-kanban-foot">
+            <span class="text-xs text-muted">${escapeHtml(p.status)}</span>
+            <button class="btn btn-xs btn-zen-subtle btn-open-whys" data-problem-id="${p.id}">🔍 5-Whys</button>
+          </div>
         </div>
-      </div>
-    `).join('');
+      `;
+    }
 
-    container.querySelectorAll('.btn-open-whys').forEach(btn => {
-      btn.addEventListener('click', () => {
+    const cardsInvestigating = document.getElementById('m-prb-cards-investigating');
+    const cardsRca = document.getElementById('m-prb-cards-rca');
+    const cardsWorkaround = document.getElementById('m-prb-cards-workaround');
+    const cardsResolved = document.getElementById('m-prb-cards-resolved');
+
+    if (cardsInvestigating) cardsInvestigating.innerHTML = cols.investigating.map(renderProblemKanbanCard).join('');
+    if (cardsRca) cardsRca.innerHTML = cols.rca.map(renderProblemKanbanCard).join('');
+    if (cardsWorkaround) cardsWorkaround.innerHTML = cols.workaround.map(renderProblemKanbanCard).join('');
+    if (cardsResolved) cardsResolved.innerHTML = cols.resolved.map(renderProblemKanbanCard).join('');
+
+    const countInvestigating = document.getElementById('m-prb-count-investigating');
+    const countRca = document.getElementById('m-prb-count-rca');
+    const countWorkaround = document.getElementById('m-prb-count-workaround');
+    const countResolved = document.getElementById('m-prb-count-resolved');
+
+    if (countInvestigating) countInvestigating.textContent = cols.investigating.length;
+    if (countRca) countRca.textContent = cols.rca.length;
+    if (countWorkaround) countWorkaround.textContent = cols.workaround.length;
+    if (countResolved) countResolved.textContent = cols.resolved.length;
+
+    // Attach 5-Whys modal triggers to all buttons across table & kanban
+    document.querySelectorAll('.btn-open-whys').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
         const pId = btn.getAttribute('data-problem-id');
         open5WhysModal(pId);
       });
@@ -6792,10 +6915,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
 
   // --- Change Management ---
   function renderChangeManagement() {
-    const tbody = document.getElementById('changes-table-body');
-    if (!tbody) return;
-
-    let changes = state.changes;
+    let changes = state.changes || [];
     if (state.changeTypeFilter && state.changeTypeFilter !== 'ALL') {
       changes = changes.filter(c => c.type === state.changeTypeFilter);
     }
@@ -6804,41 +6924,141 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
       changes = changes.filter(c => c.title.toLowerCase().includes(search) || c.ciName.toLowerCase().includes(search) || c.lead.toLowerCase().includes(search));
     }
 
-    tbody.innerHTML = changes.map(chg => {
-      const riskClass = chg.riskScore < 30 ? 'risk-low' : chg.riskScore < 60 ? 'risk-med' : 'risk-high';
-      const cabClass = chg.cabStatus.includes('Approved') ? 'badge-cab-approved' : 'badge-cab-pending';
-      return `
-        <tr>
-          <td class="font-mono text-indigo font-bold">${chg.id}</td>
-          <td><span class="badge-tag">${escapeHtml(chg.type)}</span></td>
-          <td>
-            <div style="font-weight:600; color:var(--text-zen-primary); font-size:12.5px;">${escapeHtml(chg.title)}</div>
-            <div class="text-xs text-muted">${escapeHtml(chg.ciName)} • Lead: ${escapeHtml(chg.lead)}</div>
-          </td>
-          <td>
-            <div class="risk-meter">
-              <span class="risk-pill ${riskClass}">${chg.riskScore}% Risk</span>
-              <span class="text-xs text-muted font-mono">(${chg.riskLevel})</span>
-            </div>
-          </td>
-          <td><span class="${cabClass}">${escapeHtml(chg.cabStatus)}</span></td>
-          <td class="font-mono text-xs">${escapeHtml(chg.scheduled)}</td>
-          <td class="text-right">
-            <div style="display:inline-flex; gap:6px;">
-              ${chg.cabStatus.includes('Pending') ? `
-                <button class="btn btn-xs btn-zen-primary btn-cab-approve" data-chg-id="${chg.id}">Approve</button>
-                <button class="btn btn-xs btn-zen-subtle btn-cab-reject" data-chg-id="${chg.id}">Reject</button>
-              ` : `
-                <span class="text-emerald font-bold text-xs">✓ Ready</span>
-              `}
-            </div>
-          </td>
-        </tr>
-      `;
-    }).join('');
+    // Dynamic View Mode Heuristic: >10 open => Table, else <=10 => Kanban
+    const openChangesCount = state.changes.filter(c => c.cabStatus !== 'Implemented' && c.cabStatus !== 'Closed').length;
+    const chgMode = state.changeViewMode || (openChangesCount > 10 ? 'table' : 'kanban');
 
-    tbody.querySelectorAll('.btn-cab-approve').forEach(btn => {
-      btn.addEventListener('click', () => {
+    const chgTableWrap = document.getElementById('changes-table-container');
+    const chgKanbanWrap = document.getElementById('changes-kanban-container');
+    const btnChgTable = document.getElementById('btn-chg-table-view');
+    const btnChgKanban = document.getElementById('btn-chg-kanban-view');
+
+    if (chgTableWrap) chgTableWrap.style.display = chgMode === 'table' ? 'block' : 'none';
+    if (chgKanbanWrap) chgKanbanWrap.style.display = chgMode === 'kanban' ? 'grid' : 'none';
+    if (btnChgTable) btnChgTable.classList.toggle('active', chgMode === 'table');
+    if (btnChgKanban) btnChgKanban.classList.toggle('active', chgMode === 'kanban');
+
+    // Update Changes Top KPI Bar
+    const kpiTotal = document.getElementById('kpi-chg-total');
+    if (kpiTotal) kpiTotal.textContent = `${openChangesCount} Active`;
+    const kpiPending = document.getElementById('kpi-chg-pending');
+    if (kpiPending) kpiPending.textContent = `${state.changes.filter(c => c.cabStatus.includes('Pending')).length} Pending`;
+    const kpiRisk = document.getElementById('kpi-chg-risk');
+    if (kpiRisk) kpiRisk.textContent = `${state.changes.filter(c => c.riskScore >= 50).length} High Risk`;
+    const kpiSuccess = document.getElementById('kpi-chg-success');
+    if (kpiSuccess) kpiSuccess.textContent = '98.9%';
+    const kpiWindows = document.getElementById('kpi-chg-windows');
+    if (kpiWindows) kpiWindows.textContent = '2 Scheduled';
+
+    // Render Table View Body
+    const tbody = document.getElementById('changes-table-body');
+    if (tbody) {
+      tbody.innerHTML = changes.map(chg => {
+        const riskClass = chg.riskScore < 30 ? 'risk-low' : chg.riskScore < 60 ? 'risk-med' : 'risk-high';
+        const cabClass = chg.cabStatus.includes('Approved') ? 'badge-cab-approved' : 'badge-cab-pending';
+        return `
+          <tr>
+            <td class="font-mono text-indigo font-bold">${chg.id}</td>
+            <td><span class="badge-tag">${escapeHtml(chg.type)}</span></td>
+            <td>
+              <div style="font-weight:600; color:var(--text-zen-primary); font-size:12.5px;">${escapeHtml(chg.title)}</div>
+              <div class="text-xs text-muted">${escapeHtml(chg.ciName)} • Lead: ${escapeHtml(chg.lead)}</div>
+            </td>
+            <td>
+              <div class="risk-meter">
+                <span class="risk-pill ${riskClass}">${chg.riskScore}% Risk</span>
+                <span class="text-xs text-muted font-mono">(${chg.riskLevel})</span>
+              </div>
+            </td>
+            <td><span class="${cabClass}">${escapeHtml(chg.cabStatus)}</span></td>
+            <td class="font-mono text-xs">${escapeHtml(chg.scheduled)}</td>
+            <td class="text-right">
+              <div style="display:inline-flex; gap:6px;">
+                ${chg.cabStatus.includes('Pending') ? `
+                  <button class="btn btn-xs btn-zen-primary btn-cab-approve" data-chg-id="${chg.id}">Approve</button>
+                  <button class="btn btn-xs btn-zen-subtle btn-cab-reject" data-chg-id="${chg.id}">Reject</button>
+                ` : `
+                  <span class="text-emerald font-bold text-xs">✓ Ready</span>
+                `}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Render Kanban View Columns
+    const cols = {
+      draft: [],
+      cab: [],
+      approved: [],
+      implemented: []
+    };
+
+    changes.forEach(c => {
+      if (c.cabStatus === 'Implemented' || c.cabStatus === 'Closed' || c.cabStatus === 'Verified') {
+        cols.implemented.push(c);
+      } else if (c.cabStatus.includes('Approved') || c.cabStatus.includes('Scheduled')) {
+        cols.approved.push(c);
+      } else if (c.cabStatus.includes('Pending')) {
+        cols.cab.push(c);
+      } else {
+        cols.draft.push(c);
+      }
+    });
+
+    function renderChangeKanbanCard(c) {
+      const riskClass = c.riskScore < 30 ? 'risk-low' : c.riskScore < 60 ? 'risk-med' : 'risk-high';
+      return `
+        <div class="m-kanban-card">
+          <div class="m-kanban-card-top">
+            <span class="m-kanban-id">${c.id}</span>
+            <span class="badge-tag" style="font-size:10px;">${escapeHtml(c.type)}</span>
+          </div>
+          <div class="m-kanban-title">${escapeHtml(c.title)}</div>
+          <div class="m-kanban-meta">
+            <span class="ci-pill" style="font-size:10.5px;">${escapeHtml(c.ciName)}</span>
+            <span class="risk-pill ${riskClass}" style="font-size:10.5px;">${c.riskScore}% Risk</span>
+          </div>
+          <div style="font-size:11px; color:#64748b; line-height:1.35; margin-top:4px;">
+            Scheduled: <span class="font-mono text-secondary">${escapeHtml(c.scheduled)}</span>
+          </div>
+          <div class="m-kanban-foot">
+            <span class="text-xs text-muted">Lead: ${escapeHtml(c.lead)}</span>
+            ${c.cabStatus.includes('Pending') ? `
+              <button class="btn btn-xs btn-zen-primary btn-cab-approve" data-chg-id="${c.id}">Approve</button>
+            ` : `
+              <span class="text-emerald font-bold text-xs">✓ ${escapeHtml(c.cabStatus)}</span>
+            `}
+          </div>
+        </div>
+      `;
+    }
+
+    const cardsDraft = document.getElementById('m-chg-cards-draft');
+    const cardsCab = document.getElementById('m-chg-cards-cab');
+    const cardsApproved = document.getElementById('m-chg-cards-approved');
+    const cardsImplemented = document.getElementById('m-chg-cards-implemented');
+
+    if (cardsDraft) cardsDraft.innerHTML = cols.draft.map(renderChangeKanbanCard).join('');
+    if (cardsCab) cardsCab.innerHTML = cols.cab.map(renderChangeKanbanCard).join('');
+    if (cardsApproved) cardsApproved.innerHTML = cols.approved.map(renderChangeKanbanCard).join('');
+    if (cardsImplemented) cardsImplemented.innerHTML = cols.implemented.map(renderChangeKanbanCard).join('');
+
+    const countDraft = document.getElementById('m-chg-count-draft');
+    const countCab = document.getElementById('m-chg-count-cab');
+    const countApproved = document.getElementById('m-chg-count-approved');
+    const countImplemented = document.getElementById('m-chg-count-implemented');
+
+    if (countDraft) countDraft.textContent = cols.draft.length;
+    if (countCab) countCab.textContent = cols.cab.length;
+    if (countApproved) countApproved.textContent = cols.approved.length;
+    if (countImplemented) countImplemented.textContent = cols.implemented.length;
+
+    // Attach CAB approve/reject handlers to buttons across table & kanban
+    document.querySelectorAll('.btn-cab-approve').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
         const id = btn.getAttribute('data-chg-id');
         const c = state.changes.find(x => x.id === id);
         if (c) {
@@ -6849,8 +7069,9 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
       });
     });
 
-    tbody.querySelectorAll('.btn-cab-reject').forEach(btn => {
-      btn.addEventListener('click', () => {
+    document.querySelectorAll('.btn-cab-reject').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
         const id = btn.getAttribute('data-chg-id');
         const c = state.changes.find(x => x.id === id);
         if (c) {
@@ -7300,7 +7521,7 @@ ${notes}`,
       renderKnowledgeBase();
     } else if (viewName === 'omnichannel-hub') {
       renderOmnichannelHub();
-    } else if (viewName === 'service-requests') {
+    } else if (viewName === 'service-catalog' || viewName === 'service-requests') {
       renderServiceRequests();
     } else if (viewName === 'kanban-board') {
       renderUnifiedKanbanBoard();
@@ -7484,6 +7705,108 @@ ${notes}`,
         switchView('service-catalog');
       });
     }
+
+    // View Switchers for Incidents, Problems, Changes (Table vs Kanban)
+    document.getElementById('btn-inc-table-view')?.addEventListener('click', () => {
+      state.incidentViewMode = 'table';
+      renderTickets();
+    });
+    document.getElementById('btn-inc-kanban-view')?.addEventListener('click', () => {
+      state.incidentViewMode = 'kanban';
+      renderTickets();
+    });
+
+    document.getElementById('btn-prb-table-view')?.addEventListener('click', () => {
+      state.problemViewMode = 'table';
+      renderProblemManagement();
+    });
+    document.getElementById('btn-prb-kanban-view')?.addEventListener('click', () => {
+      state.problemViewMode = 'kanban';
+      renderProblemManagement();
+    });
+
+    document.getElementById('btn-chg-table-view')?.addEventListener('click', () => {
+      state.changeViewMode = 'table';
+      renderChangeManagement();
+    });
+    document.getElementById('btn-chg-kanban-view')?.addEventListener('click', () => {
+      state.changeViewMode = 'kanban';
+      renderChangeManagement();
+    });
+
+    // Custom Service Request Modal Bindings
+    const modalCustomReq = document.getElementById('modal-custom-service-request');
+    function openCustomReqModal() {
+      if (modalCustomReq) modalCustomReq.style.display = 'flex';
+    }
+    function closeCustomReqModal() {
+      if (modalCustomReq) modalCustomReq.style.display = 'none';
+    }
+
+    document.getElementById('card-custom-service-request')?.addEventListener('click', () => {
+      openCustomReqModal();
+    });
+    document.getElementById('btn-open-custom-request')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openCustomReqModal();
+    });
+    document.getElementById('btn-jump-custom-order')?.addEventListener('click', () => {
+      openCustomReqModal();
+    });
+    document.getElementById('btn-close-custom-req-modal')?.addEventListener('click', closeCustomReqModal);
+    document.getElementById('btn-cancel-custom-req')?.addEventListener('click', closeCustomReqModal);
+
+    modalCustomReq?.addEventListener('click', (e) => {
+      if (e.target === modalCustomReq) closeCustomReqModal();
+    });
+
+    document.getElementById('form-custom-service-request')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('custom-req-title')?.value.trim();
+      const category = document.getElementById('custom-req-category')?.value;
+      const priority = document.getElementById('custom-req-priority')?.value || 'P3';
+      const department = document.getElementById('custom-req-department')?.value || 'Engineering & Platform';
+      const requester = document.getElementById('custom-req-requester')?.value.trim() || 'Alex Chen (Lead Architect)';
+      const manager = document.getElementById('custom-req-manager')?.value.trim();
+      const specs = document.getElementById('custom-req-specs')?.value.trim();
+      const justification = document.getElementById('custom-req-justification')?.value.trim();
+
+      const newReqId = `REQ-${1000 + (state.serviceRequests ? state.serviceRequests.length : 0) + 1}`;
+      const newReq = {
+        id: newReqId,
+        template: 'custom-bespoke',
+        title: title || 'Custom Service Request',
+        category: category,
+        requesterName: requester,
+        requesterEmail: 'alex.chen@opennow.io',
+        department: department,
+        manager: manager,
+        priority: priority,
+        approvalStatus: 'Pending Approval',
+        stage: 'Pending Approval',
+        slaDue: priority === 'P1' ? '4 Hours' : priority === 'P2' ? '24 Hours' : '48 Hours',
+        specs: specs,
+        justification: justification,
+        created_at: new Date().toISOString()
+      };
+
+      if (!state.serviceRequests) state.serviceRequests = [];
+      state.serviceRequests.unshift(newReq);
+
+      // Update sidebar badge
+      const badgeSidebar = document.getElementById('badge-requests-sidebar');
+      if (badgeSidebar) {
+        const openReqs = state.serviceRequests.filter(r => r.stage !== 'Fulfilled' && r.stage !== 'Fulfilled & Delivered').length;
+        badgeSidebar.textContent = openReqs;
+      }
+
+      renderServiceRequests();
+      if (state.currentView === 'kanban-board') renderUnifiedKanbanBoard();
+
+      closeCustomReqModal();
+      document.getElementById('form-custom-service-request')?.reset();
+      showToast(`Custom Service Request ${newReqId} created and routed for fulfillment!`, 'success');
+    });
 
     // Interactive 4-Step Wizard Navigation
     document.querySelectorAll('.btn-wizard-next').forEach(btn => {
