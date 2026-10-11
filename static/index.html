@@ -1601,148 +1601,294 @@
     <!-- ======================================================== -->
     <div class="modal-backdrop" id="create-modal-backdrop">
       <div class="modal-dialog create-ticket-modal-card">
-        <div class="modal-header">
+        <div class="modal-header modal-header-futuristic">
           <div class="modal-title-wrap">
-            <span class="badge-gem-dot"></span>
-            <h3>File Production Incident</h3>
-            <span class="badge-tag">Zen Single-Flow Triage</span>
+            <span class="badge-gem-dot dot-indigo"></span>
+            <div>
+              <h3 style="font-size:18px; font-weight:800; letter-spacing:-0.02em; color:#0f172a;">File Production Incident</h3>
+              <p style="font-size:12px; color:#64748b; margin-top:2px;">Enterprise ITIL v4 Single-Flow Triage &amp; Automated SLA Calibration</p>
+            </div>
           </div>
-          <button class="btn-icon-sm" id="btn-close-create-modal">&times;</button>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span class="badge-tag tag-aurora">● Active SLA Monitor</span>
+            <button class="btn-icon-sm" id="btn-close-create-modal">&times;</button>
+          </div>
+        </div>
+
+        <!-- Guided Stepper Visual Progress Tracker -->
+        <div class="modal-stepper-bar">
+          <div class="guided-step-item active" data-step="1">
+            <div class="step-badge-icon icon-indigo">🎯</div>
+            <div class="step-text"><span class="step-index">01</span><span class="step-name">Scope &amp; Trace</span></div>
+          </div>
+          <div class="step-arrow-divider">›</div>
+          <div class="guided-step-item" data-step="2">
+            <div class="step-badge-icon icon-emerald">🏷️</div>
+            <div class="step-text"><span class="step-index">02</span><span class="step-name">3-Tier Classify</span></div>
+          </div>
+          <div class="step-arrow-divider">›</div>
+          <div class="guided-step-item" data-step="3">
+            <div class="step-badge-icon icon-amber">⚡</div>
+            <div class="step-text"><span class="step-index">03</span><span class="step-name">SLA Matrix</span></div>
+          </div>
+          <div class="step-arrow-divider">›</div>
+          <div class="guided-step-item" data-step="4">
+            <div class="step-badge-icon icon-sky">🌐</div>
+            <div class="step-text"><span class="step-index">04</span><span class="step-name">CI &amp; Route</span></div>
+          </div>
+          <div class="step-arrow-divider">›</div>
+          <div class="guided-step-item step-ai-glow" data-step="5">
+            <div class="step-badge-icon icon-violet">✦</div>
+            <div class="step-text"><span class="step-index">05</span><span class="step-name">AI Triage</span></div>
+          </div>
         </div>
 
         <div class="modal-body-vertical">
           <form id="form-create-ticket" class="create-form-vertical">
-            <div class="form-group">
-              <label for="input-ticket-title">Incident Title <span class="required">*</span></label>
-              <input type="text" id="input-ticket-title" class="zen-form-control" placeholder="e.g., PostgreSQL Lock Contention causing 504 on checkout" required>
-            </div>
-
-            <div class="form-group">
-              <div class="label-with-ai-hint">
-                <label for="input-ticket-desc">Detailed Symptoms &amp; Telemetry <span class="required">*</span></label>
-                <span class="ai-typing-indicator" id="ai-typing-status" style="display: none;">
-                  <span class="ai-sparkle-dot"></span> AI Copilot analyzing...
-                </span>
-              </div>
-              <textarea id="input-ticket-desc" class="zen-form-control form-textarea" rows="3" placeholder="Paste alert traces, stack errors, affected endpoints, or customer impact..." required></textarea>
-            </div>
-
-            <!-- 3-Tier Cascading Classification (Zoho SDP & GLPI) -->
-            <div class="classification-fieldset">
-              <div class="field-section-heading">
-                <span class="fs-icon">🏷️</span>
-                <span>Three-Tier ITIL Classification</span>
-              </div>
-              <div class="form-row-3">
-                <div class="form-group">
-                  <label for="select-ticket-category">Category <span class="required">*</span></label>
-                  <select id="select-ticket-category" class="zen-form-control zen-select" required></select>
-                </div>
-                <div class="form-group">
-                  <label for="select-ticket-subcategory">Subcategory <span class="required">*</span></label>
-                  <select id="select-ticket-subcategory" class="zen-form-control zen-select" required></select>
-                </div>
-                <div class="form-group">
-                  <label for="select-ticket-item">Item <span class="required">*</span></label>
-                  <select id="select-ticket-item" class="zen-form-control zen-select" required></select>
-                </div>
-              </div>
-            </div>
-
-            <!-- Impact x Urgency Priority Matrix -->
-            <div class="priority-matrix-fieldset">
-              <div class="field-section-heading">
-                <span class="fs-icon">⚡</span>
-                <span>Priority Matrix (Impact × Urgency)</span>
-              </div>
-              <div class="form-row-3">
-                <div class="form-group">
-                  <label for="select-ticket-impact">Impact</label>
-                  <select id="select-ticket-impact" class="zen-form-control zen-select">
-                    <option value="Enterprise" selected>Enterprise (High / Org-wide)</option>
-                    <option value="Department">Department (Medium / Service)</option>
-                    <option value="Single User">Single User (Low / Localized)</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="select-ticket-urgency">Urgency</label>
-                  <select id="select-ticket-urgency" class="zen-form-control zen-select">
-                    <option value="Critical">Critical (Immediate Outage)</option>
-                    <option value="High" selected>High (Severe Disruption)</option>
-                    <option value="Medium">Medium (Workaround Exists)</option>
-                    <option value="Low">Low (Minor / Inquiry)</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Calculated Priority</label>
-                  <div class="priority-matrix-badge-box" id="create-priority-preview-box">
-                    <span class="priority-pill pill-p1" id="create-priority-preview-badge">P1</span>
-                    <span class="matrix-calc-label" id="create-priority-calc-label">Enterprise × High = P1 Critical</span>
+            
+            <!-- STEP 01 CARD: Incident Scope & Telemetry -->
+            <div class="step-guided-card card-step-scope">
+              <div class="card-step-header">
+                <div class="step-header-left">
+                  <span class="step-tag-pill pill-indigo">STEP 01</span>
+                  <div class="step-title-group">
+                    <span class="step-card-title">Incident Identity &amp; Telemetry Trace</span>
+                    <span class="step-card-subtitle">Define the headline problem and paste system logs or alert payloads</span>
                   </div>
-                  <input type="hidden" id="select-ticket-priority" value="P1">
+                </div>
+                <span class="badge-tag tag-required">Required</span>
+              </div>
+
+              <div class="step-card-body">
+                <div class="form-group">
+                  <label for="input-ticket-title" class="field-label-styled">
+                    <span class="label-icon">🎯</span>
+                    <span>Incident Title</span>
+                    <span class="required">*</span>
+                  </label>
+                  <div class="input-with-icon-wrap">
+                    <span class="input-icon-left">📌</span>
+                    <input type="text" id="input-ticket-title" class="zen-form-control input-enhanced" placeholder="e.g., PostgreSQL Lock Contention causing 504 on checkout" required>
+                  </div>
+                </div>
+
+                <div class="form-group mt-3">
+                  <div class="label-with-ai-hint">
+                    <label for="input-ticket-desc" class="field-label-styled">
+                      <span class="label-icon">📋</span>
+                      <span>Detailed Symptoms &amp; Telemetry</span>
+                      <span class="required">*</span>
+                    </label>
+                    <span class="ai-typing-indicator" id="ai-typing-status" style="display: none;">
+                      <span class="ai-sparkle-dot"></span> AI Copilot analyzing stream...
+                    </span>
+                  </div>
+                  <textarea id="input-ticket-desc" class="zen-form-control form-textarea input-enhanced" rows="3" placeholder="Paste alert traces, HTTP 5xx codes, stack traces, affected microservice endpoints, or customer business impact..." required></textarea>
+                  <div class="field-micro-hint">
+                    <span>💡 Tip: Pasting stack traces or server error codes activates real-time automated root-cause detection below.</span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div class="form-row-2">
-              <div class="form-group">
-                <label for="select-ticket-ci">Affected Configuration Item (CI)</label>
-                <select id="select-ticket-ci" class="zen-form-control zen-select">
-                  <option value="CI-DB-001">PostgreSQL Primary (us-east-1)</option>
-                  <option value="CI-PAY-003">Payment Gateway Service</option>
-                  <option value="CI-CACHE-002">Redis Session Cache</option>
-                  <option value="CI-AUTH-004">Auth0 &amp; JWT Token Service</option>
-                  <option value="CI-INGRESS-005">Kong API Gateway Ingress</option>
-                  <option value="CI-K8S-006">EKS Core Cluster (us-east-1)</option>
-                  <option value="CI-KAFKA-007">Kafka Order Event Bus</option>
-                  <option value="CI-CDN-008">Cloudflare Global Edge</option>
-                </select>
+            <!-- STEP 02 CARD: 3-Tier Cascading ITIL Classification -->
+            <div class="step-guided-card card-step-classification">
+              <div class="card-step-header">
+                <div class="step-header-left">
+                  <span class="step-tag-pill pill-emerald">STEP 02</span>
+                  <div class="step-title-group">
+                    <span class="step-card-title">Three-Tier ITIL Taxonomic Classification</span>
+                    <span class="step-card-subtitle">Structure incident hierarchy for accurate analytics and automated routing</span>
+                  </div>
+                </div>
+                <span class="badge-tag tag-required">Required</span>
               </div>
 
-              <div class="form-group">
-                <label for="select-ticket-team">Assignment Group</label>
-                <select id="select-ticket-team" class="zen-form-control zen-select">
-                  <option value="Database-Ops">Database Ops</option>
-                  <option value="SRE-Core" selected>SRE Core</option>
-                  <option value="Payment-Platform">Payment Platform</option>
-                  <option value="Cloud-Infra">Cloud Infra</option>
-                  <option value="Security-SecOps">SecOps / IAM</option>
-                </select>
+              <div class="step-card-body">
+                <div class="form-row-3">
+                  <div class="form-group">
+                    <label for="select-ticket-category" class="field-label-styled">
+                      <span class="label-icon">📁</span>
+                      <span>Category</span>
+                      <span class="required">*</span>
+                    </label>
+                    <select id="select-ticket-category" class="zen-form-control zen-select select-enhanced" required></select>
+                  </div>
+                  <div class="form-group">
+                    <label for="select-ticket-subcategory" class="field-label-styled">
+                      <span class="label-icon">📂</span>
+                      <span>Subcategory</span>
+                      <span class="required">*</span>
+                    </label>
+                    <select id="select-ticket-subcategory" class="zen-form-control zen-select select-enhanced" required></select>
+                  </div>
+                  <div class="form-group">
+                    <label for="select-ticket-item" class="field-label-styled">
+                      <span class="label-icon">📄</span>
+                      <span>Item / Component</span>
+                      <span class="required">*</span>
+                    </label>
+                    <select id="select-ticket-item" class="zen-form-control zen-select select-enhanced" required></select>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div class="form-actions-bar">
-              <button type="button" class="btn btn-zen-subtle" id="btn-cancel-create">Cancel</button>
-              <button type="submit" class="btn btn-zen-primary">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                <span>Dispatch Incident</span>
-              </button>
+            <!-- STEP 03 CARD: Severity & SLA Matrix Calibration -->
+            <div class="step-guided-card card-step-matrix">
+              <div class="card-step-header">
+                <div class="step-header-left">
+                  <span class="step-tag-pill pill-amber">STEP 03</span>
+                  <div class="step-title-group">
+                    <span class="step-card-title">Impact × Urgency Matrix &amp; SLA Calibration</span>
+                    <span class="step-card-subtitle">Calculates contractual response and resolution countdown target</span>
+                  </div>
+                </div>
+                <span class="badge-tag tag-auto">Auto-Calculated</span>
+              </div>
+
+              <div class="step-card-body">
+                <div class="matrix-interactive-layout">
+                  <div class="matrix-inputs-col">
+                    <div class="form-group">
+                      <label for="select-ticket-impact" class="field-label-styled">
+                        <span class="label-icon">💥</span>
+                        <span>Impact Scope</span>
+                      </label>
+                      <select id="select-ticket-impact" class="zen-form-control zen-select select-enhanced">
+                        <option value="Enterprise" selected>Enterprise (High / Org-wide Outage)</option>
+                        <option value="Department">Department (Medium / Single Service)</option>
+                        <option value="Single User">Single User (Low / Localized)</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group mt-3">
+                      <label for="select-ticket-urgency" class="field-label-styled">
+                        <span class="label-icon">⏱️</span>
+                        <span>Urgency Severity</span>
+                      </label>
+                      <select id="select-ticket-urgency" class="zen-form-control zen-select select-enhanced">
+                        <option value="Critical">Critical (Immediate Revenue Outage)</option>
+                        <option value="High" selected>High (Severe Disruption / Workaround)</option>
+                        <option value="Medium">Medium (Normal Operational Delay)</option>
+                        <option value="Low">Low (Minor Inquiry / Cosmetic)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Futuristic Priority & SLA HUD Output Display -->
+                  <div class="matrix-hud-card" id="create-priority-preview-box">
+                    <div class="hud-top-row">
+                      <span class="hud-label">CALCULATED ITIL PRIORITY</span>
+                      <span class="priority-pill pill-p1 hud-priority-badge" id="create-priority-preview-badge">P1</span>
+                    </div>
+                    <div class="hud-formula-row">
+                      <span class="hud-formula-text" id="create-priority-calc-label">Enterprise × High = P1 Critical</span>
+                    </div>
+                    <div class="hud-sla-row">
+                      <div class="hud-sla-chip">
+                        <span class="hud-sla-icon">⏱️</span>
+                        <span>Resolution SLA: <strong id="create-sla-target-text">1.0 Hour Target</strong></span>
+                      </div>
+                      <div class="hud-sla-chip chip-response">
+                        <span class="hud-sla-icon">⚡</span>
+                        <span>Response SLA: <strong>15 Mins</strong></span>
+                      </div>
+                    </div>
+                    <input type="hidden" id="select-ticket-priority" value="P1">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 04 CARD: Infrastructure CI & Team Dispatch -->
+            <div class="step-guided-card card-step-assignment">
+              <div class="card-step-header">
+                <div class="step-header-left">
+                  <span class="step-tag-pill pill-sky">STEP 04</span>
+                  <div class="step-title-group">
+                    <span class="step-card-title">Infrastructure CI Link &amp; Team Routing</span>
+                    <span class="step-card-subtitle">Connect CMDB topology and assign primary engineering escalation queue</span>
+                  </div>
+                </div>
+                <span class="badge-tag tag-routing">Smart Routing</span>
+              </div>
+
+              <div class="step-card-body">
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label for="select-ticket-ci" class="field-label-styled">
+                      <span class="label-icon">🌐</span>
+                      <span>Affected Configuration Item (CI)</span>
+                    </label>
+                    <select id="select-ticket-ci" class="zen-form-control zen-select select-enhanced">
+                      <option value="CI-DB-001">PostgreSQL Primary (us-east-1)</option>
+                      <option value="CI-PAY-003">Payment Gateway Service</option>
+                      <option value="CI-CACHE-002">Redis Session Cache</option>
+                      <option value="CI-AUTH-004">Auth0 &amp; JWT Token Service</option>
+                      <option value="CI-INGRESS-005">Kong API Gateway Ingress</option>
+                      <option value="CI-K8S-006">EKS Core Cluster (us-east-1)</option>
+                      <option value="CI-KAFKA-007">Kafka Order Event Bus</option>
+                      <option value="CI-CDN-008">Cloudflare Global Edge</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="select-ticket-team" class="field-label-styled">
+                      <span class="label-icon">👥</span>
+                      <span>Assignment Support Group</span>
+                    </label>
+                    <select id="select-ticket-team" class="zen-form-control zen-select select-enhanced">
+                      <option value="Database-Ops">Database Ops</option>
+                      <option value="SRE-Core" selected>SRE Core</option>
+                      <option value="Payment-Platform">Payment Platform</option>
+                      <option value="Cloud-Infra">Cloud Infra</option>
+                      <option value="Security-SecOps">SecOps / IAM</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 05: Modernized Live AI Assist Widget (Vertical Scroll at Bottom) -->
+            <div class="step-guided-card card-step-ai">
+              <div class="ai-bottom-head">
+                <div class="ai-bottom-head-left">
+                  <div class="ai-bottom-sparkle-gem">✦</div>
+                  <div class="ai-bottom-titles">
+                    <h4>STEP 05: Autonomous AI Triage Copilot</h4>
+                    <span>Continuous neural analysis of symptoms, topology blast radius, and historical incident patterns</span>
+                  </div>
+                </div>
+                <span class="badge-tag tag-ai-live">● Real-time Heuristics</span>
+              </div>
+
+              <div class="ai-copilot-body-bottom" id="live-ai-copilot-content">
+                <div class="ai-empty-prompt">
+                  <div class="ai-pulsing-rings">
+                    <div class="ring-1"></div>
+                    <div class="ring-2"></div>
+                  </div>
+                  <p>Start typing an incident title or symptoms above to trigger autonomous root-cause reasoning, blast radius risk calculation, and recommended runbook generation.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom Dispatch Navigation Landmark -->
+            <div class="form-actions-bar modal-dispatch-bar">
+              <div class="dispatch-sla-notice">
+                <span class="notice-icon">⏱️</span>
+                <span>Submitting starts official SLA countdown &amp; notifies on-call leads immediately.</span>
+              </div>
+              <div class="dispatch-buttons-group">
+                <button type="button" class="btn btn-zen-subtle" id="btn-cancel-create">Discard</button>
+                <button type="submit" class="btn btn-zen-primary btn-dispatch-prominent">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  <span>Dispatch Incident &amp; Page On-Call</span>
+                </button>
+              </div>
             </div>
           </form>
-
-          <!-- Modernized Live AI Assist Widget (Vertical Scroll at Bottom) -->
-          <div class="create-ai-bottom-widget">
-            <div class="ai-bottom-head">
-              <div class="ai-bottom-head-left">
-                <div class="ai-bottom-sparkle-gem">✦</div>
-                <div class="ai-bottom-titles">
-                  <h4>Live AI Triage Copilot</h4>
-                  <span>Streaming analysis as you describe the issue</span>
-                </div>
-              </div>
-              <span class="badge-tag">Zero-Touch Intelligence</span>
-            </div>
-
-            <div class="ai-copilot-body-bottom" id="live-ai-copilot-content">
-              <div class="ai-empty-prompt">
-                <div class="ai-pulsing-rings">
-                  <div class="ring-1"></div>
-                  <div class="ring-2"></div>
-                </div>
-                <p>Type into the title or description to activate real-time AI root-cause hypothesis, severity calculation, and related historical incident matching.</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
