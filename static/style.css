@@ -927,6 +927,7 @@ button, input, select, textarea {
   overflow-x: hidden;
   background-color: var(--bg-zen-canvas);
   position: relative;
+  zoom: 1.15;
 }
 
 .view-panel {
@@ -2564,6 +2565,7 @@ button, input, select, textarea {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  zoom: 1.15;
 }
 
 .slideover-drawer.open {
@@ -3222,6 +3224,7 @@ button, input, select, textarea {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  zoom: 1.15;
 }
 
 .modal-header {

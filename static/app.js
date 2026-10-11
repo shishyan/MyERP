@@ -477,7 +477,7 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
       assignedTeam: 'IT-Software-Procurement',
       assignedTo: 'Carlos Mendes',
       createdAt: '1 day ago',
-      slaDue: '✓ Delivered within SLA',
+      slaDue: 'Delivered within SLA',
       slaHoursRemaining: 0,
       cost: 499.00,
       justification: 'Annual license renewal for DataGrip and IntelliJ Ultimate for database performance tuning.',
@@ -1942,7 +1942,7 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
     if (DOM.btnSidebarZenToggle) DOM.btnSidebarZenToggle.classList.toggle('active', state.zenMode);
 
     if (state.zenMode) {
-      showToast('☯ Zen Focus Mode Enabled: Peripheral chrome collapsed for tranquil focus.', 'ai');
+      showToast('Zen Focus Mode Enabled: Peripheral chrome collapsed for tranquil focus.', 'ai');
     } else {
       showToast('Standard Mode Restored.', 'info');
     }
@@ -2125,7 +2125,7 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
       tbody.innerHTML = `
         <tr>
           <td colspan="8" style="text-align:center; padding:32px; color:#64748b; font-size:13px;">
-            ✓ No items matching current executive filter.
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" style="vertical-align:-2px; margin-right:4px;"><polyline points="20 6 9 17 4 12"/></svg>No items matching current executive filter.
           </td>
         </tr>
       `;
@@ -2161,7 +2161,7 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
           </td>
           <td class="${item.slaClass}">${escapeHtml(item.slaText)}</td>
           <td class="text-right">
-            <button class="btn btn-icon-sm btn-inspect-exec" data-item-id="${item.id}" title="Inspect in Universal Drawer">➔</button>
+            <button class="btn btn-icon-sm btn-inspect-exec" data-item-id="${item.id}" title="Inspect in Universal Drawer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
           </td>
         </tr>
       `;
@@ -2275,7 +2275,7 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
       let replyText = '';
 
       if (q.includes('inc-1001') || q.includes('postgres') || q.includes('deadlock')) {
-        replyText = `### 🚨 Local SLM Diagnostic: Incident INC-1001 (P1 Critical)
+        replyText = `### <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2.2" style="vertical-align:-2px; margin-right:4px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Local SLM Diagnostic: Incident INC-1001 (P1 Critical)
 **Primary Issue:** PostgreSQL Aurora connection pool exhausted with cascading query lock timeouts.
 **CMDB Dependency Analysis:**
 - Affected CI: \`ci-db-postgres-primary\` (Tier 1 Mission-Critical DB)
@@ -2287,7 +2287,7 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
 2. Terminate blocking idle connections: \`SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE state = 'idle in transaction' AND age(clock_timestamp(), state_change) > interval '2 minutes';\`
 3. Increase connection pool ceiling by 25% on PgBouncer proxy.`;
       } else if (q.includes('chg-2001') || q.includes('change') || q.includes('collision') || q.includes('cab')) {
-        replyText = `### 🔄 Local SLM Change Advisory: Forward Schedule of Change (FSC)
+        replyText = `### <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" style="vertical-align:-2px; margin-right:4px;"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>Local SLM Change Advisory: Forward Schedule of Change (FSC)
 **Target Record:** \`CHG-2001: Kubernetes Cluster Upgrade to v1.29\` (Normal Change)
 **CAB & Collision Evaluation:**
 - Risk Score: **25% (Low Risk)** with verified rollback scripts.
@@ -2297,7 +2297,7 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
 
 **Recommendation:** Proceed with deployment during designated maintenance window.`;
       } else if (q.includes('laptop') || q.includes('request') || q.includes('req-') || q.includes('hardware')) {
-        replyText = `### 📦 Local SLM Service Catalog Assistant
+        replyText = `### <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" style="vertical-align:-2px; margin-right:4px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>Local SLM Service Catalog Assistant
 **Developer Laptop Provisioning Policy (ITIL v4):**
 - **Standard Spec:** Apple MacBook Pro M3 Max (36GB RAM, 1TB SSD) with Jamf MDM & Zero-Trust VPN.
 - **Turnaround SLA:** **4.2 Hours** from departmental manager approval.
@@ -2305,13 +2305,13 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
 
 You can submit this request directly via the **Service Catalog & Requests** view.`;
       } else if (q.includes('sla') || q.includes('mttr') || q.includes('kpi') || q.includes('executive')) {
-        replyText = `### 📊 Local SLM Executive Reliability Briefing (Week 41)
+        replyText = `### <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2.2" style="vertical-align:-2px; margin-right:4px;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Local SLM Executive Reliability Briefing (Week 41)
 - **Global SLA Compliance:** **98.7%** across all 4 streams (Target > 95.0%). Zero SLA breaches in 30 days.
 - **Incident Mean Time to Resolve (MTTR):** **22.4 Minutes** (P1 average: 18.2 mins).
 - **Change Success Rate:** **99.2%** (Change Failure Rate: 0.8%, well below the 5.0% DORA threshold).
 - **Service Request Turnaround:** **4.2 Hours** average delivery.`;
       } else {
-        replyText = `### 🤖 Local SLM Assistant (${modelName})
+        replyText = `### <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2" style="vertical-align:-2px; margin-right:4px;"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4M8 15h.01M16 15h.01"/></svg>Local SLM Assistant (${modelName})
 I have processed your query: *"${escapeHtml(query)}"*
 ZenERP's on-device SLM has evaluated your query against active tickets, CMDB topology, and ITIL runbooks. All systems are operating normally at **98.4% Reliability**.
 You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, \`REQ-4001\`), calculate blast radius, or fetch diagnostic CLI commands.`;
@@ -2385,7 +2385,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
         isPending: inc.status === 'ON_HOLD' || inc.isPaused,
         isCritical: inc.priority === 'P1' || inc.priority === 'P2',
         isCompleted: isResolved,
-        slaText: (inc.status === 'ON_HOLD' || inc.isPaused) ? `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-1px; margin-right:3px;"><circle cx="12" cy="12" r="10"/><line x1="10" y1="15" x2="10" y2="9"/><line x1="14" y1="15" x2="14" y2="9"/></svg>Paused` : isResolved ? '✓ Met SLA' : `⏱ ${formatSlaTime(inc.slaSecondsRemaining)}`,
+        slaText: (inc.status === 'ON_HOLD' || inc.isPaused) ? `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-1px; margin-right:3px;"><circle cx="12" cy="12" r="10"/><line x1="10" y1="15" x2="10" y2="9"/><line x1="14" y1="15" x2="14" y2="9"/></svg>Paused` : isResolved ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.8" style="vertical-align:-1px; margin-right:3px;"><polyline points="20 6 9 17 4 12"/></svg>Met SLA' : `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:3px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${formatSlaTime(inc.slaSecondsRemaining)}`,
         slaClass: isResolved ? 'text-emerald font-semibold' : inc.slaSecondsRemaining <= 0 ? 'text-rose font-bold' : 'text-indigo font-mono',
         raw: inc
       });
@@ -2576,7 +2576,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
         status: inc.status,
         metaLine: `${inc.ciName || inc.ci} • ${inc.team}`,
         slaTime: inc.slaSecondsRemaining,
-        slaText: (inc.status === 'ON_HOLD' || inc.isPaused) ? `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-1px; margin-right:3px;"><circle cx="12" cy="12" r="10"/><line x1="10" y1="15" x2="10" y2="9"/><line x1="14" y1="15" x2="14" y2="9"/></svg>Paused (${escapeHtml(inc.holdReason || 'Hold')})` : inc.status === 'RESOLVED' ? '✓ Met SLA' : `⏱ ${formatSlaTime(inc.slaSecondsRemaining)}`,
+        slaText: (inc.status === 'ON_HOLD' || inc.isPaused) ? `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-1px; margin-right:3px;"><circle cx="12" cy="12" r="10"/><line x1="10" y1="15" x2="10" y2="9"/><line x1="14" y1="15" x2="14" y2="9"/></svg>Paused (${escapeHtml(inc.holdReason || 'Hold')})` : inc.status === 'RESOLVED' ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.8" style="vertical-align:-1px; margin-right:3px;"><polyline points="20 6 9 17 4 12"/></svg>Met SLA' : `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:3px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${formatSlaTime(inc.slaSecondsRemaining)}`,
         assignee: inc.team || 'SRE',
         raw: inc
       });
@@ -2775,11 +2775,11 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
     }
 
     tbody.innerHTML = requests.map(req => {
-      let stageBadge = `<span class="badge-req-progress">⚡ ${escapeHtml(req.stage)}</span>`;
+      let stageBadge = `<span class="badge-req-progress"><svg width="11" height="11" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" style="vertical-align:-1px; margin-right:3px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>${escapeHtml(req.stage)}</span>`;
       if (req.status === 'NEW') {
-        stageBadge = `<span class="badge-req-pending">⏸️ ${escapeHtml(req.stage)}</span>`;
+        stageBadge = `<span class="badge-req-pending"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2" style="vertical-align:-1px; margin-right:3px;"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>${escapeHtml(req.stage)}</span>`;
       } else if (req.status === 'RESOLVED') {
-        stageBadge = `<span class="badge-req-fulfilled">✓ ${escapeHtml(req.stage)}</span>`;
+        stageBadge = `<span class="badge-req-fulfilled"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.8" style="vertical-align:-1px; margin-right:3px;"><polyline points="20 6 9 17 4 12"/></svg>${escapeHtml(req.stage)}</span>`;
       }
 
       const pClass = req.priority.toLowerCase();
@@ -2810,9 +2810,9 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
               ` : req.status === 'IN_PROGRESS' ? `
                 <button class="btn btn-xs btn-emerald-primary btn-req-fulfill" data-req-id="${req.id}" title="Complete procurement and mark delivered">Fulfill</button>
               ` : `
-                <span class="text-emerald font-bold text-xs">✓ Delivered</span>
+                <span class="text-emerald font-bold text-xs"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.8" style="vertical-align:-1px; margin-right:3px;"><polyline points="20 6 9 17 4 12"/></svg>Delivered</span>
               `}
-              <button class="btn btn-icon-sm btn-inspect-req" data-req-id="${req.id}" title="Inspect full request specifications">➔</button>
+              <button class="btn btn-icon-sm btn-inspect-req" data-req-id="${req.id}" title="Inspect full request specifications"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
             </div>
           </td>
         </tr>
@@ -2860,7 +2860,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
         if (req) {
           req.status = 'RESOLVED';
           req.stage = 'Fulfilled & Delivered';
-          req.slaDue = '✓ Delivered within SLA';
+          req.slaDue = 'Delivered within SLA';
           renderServiceRequests();
           if (state.activeView === 'kanban-board') renderUnifiedKanbanBoard();
           showToast(`Service Request ${id} fulfilled and delivered to ${req.requesterName}!`, 'success');
@@ -2935,7 +2935,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
       <!-- Multi-tier Approver Chain Status -->
       <div class="req-approval-chain-box">
         <div class="req-approval-header">
-          <span>✓</span>
+          <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.8" style="vertical-align:-1px;"><polyline points="20 6 9 17 4 12"/></svg></span>
           <span>MULTI-TIER ITIL APPROVAL CHAIN</span>
         </div>
         <p style="font-size:12px; color:#15803d;">
@@ -2953,7 +2953,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
           ` : req.status === 'IN_PROGRESS' ? `
             <button class="btn btn-sm btn-emerald-primary" id="btn-modal-req-fulfill">Mark Fulfilled &amp; Delivered</button>
           ` : `
-            <span class="text-emerald font-bold text-xs" style="align-self:center;">✓ Request Delivered</span>
+            <span class="text-emerald font-bold text-xs" style="align-self:center;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.8" style="vertical-align:-1px; margin-right:3px;"><polyline points="20 6 9 17 4 12"/></svg>Request Delivered</span>
           `}
         </div>
       </div>
@@ -2980,7 +2980,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
     document.getElementById('btn-modal-req-fulfill')?.addEventListener('click', () => {
       req.status = 'RESOLVED';
       req.stage = 'Fulfilled & Delivered';
-      req.slaDue = '✓ Delivered within SLA';
+      req.slaDue = 'Delivered within SLA';
       modal.classList.remove('open');
       renderServiceRequests();
       if (state.activeView === 'kanban-board') renderUnifiedKanbanBoard();
@@ -3067,7 +3067,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
         if (inc.status === 'ON_HOLD' || inc.isPaused) {
           slaColText = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-1px; margin-right:3px;"><circle cx="12" cy="12" r="10"/><line x1="10" y1="15" x2="10" y2="9"/><line x1="14" y1="15" x2="14" y2="9"/></svg>Paused (${formatDurationShort(inc.totalPausedSeconds || 0)})`;
         } else if (inc.status === 'RESOLVED') {
-          slaColText = `✓ Met SLA`;
+          slaColText = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.8" style="vertical-align:-1px; margin-right:3px;"><polyline points="20 6 9 17 4 12"/></svg>Met SLA`;
         }
 
         return `
@@ -3092,7 +3092,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             </td>
             <td class="font-mono ${slaClass}">${slaColText}</td>
             <td class="text-right">
-              <button class="btn btn-icon-sm btn-inspect-row" data-ticket-id="${inc.id}" title="Inspect incident details">➔</button>
+              <button class="btn btn-icon-sm btn-inspect-row" data-ticket-id="${inc.id}" title="Inspect incident details"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
             </td>
           </tr>
         `;
@@ -3114,11 +3114,11 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
     const isBreached = inc.slaSecondsRemaining <= 0;
     const slaClass = (inc.status === 'ON_HOLD' || inc.isPaused) ? 'sla-paused' : isBreached ? 'sla-breach' : isCriticalSla ? 'sla-warn' : 'sla-safe';
 
-    let slaTagText = `⏱ ${formatSlaTime(inc.slaSecondsRemaining)}`;
+    let slaTagText = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:3px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${formatSlaTime(inc.slaSecondsRemaining)}`;
     if (inc.status === 'ON_HOLD' || inc.isPaused) {
       slaTagText = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-1px; margin-right:3px;"><circle cx="12" cy="12" r="10"/><line x1="10" y1="15" x2="10" y2="9"/><line x1="14" y1="15" x2="14" y2="9"/></svg>Paused (${escapeHtml(inc.holdReason || 'On Hold')})`;
     } else if (inc.status === 'RESOLVED') {
-      slaTagText = `✓ Met SLA`;
+      slaTagText = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.8" style="vertical-align:-1px; margin-right:3px;"><polyline points="20 6 9 17 4 12"/></svg>Met SLA`;
     }
 
     return `
@@ -3240,12 +3240,12 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
                 el.title = `SLA Clock Paused (${formatSlaTime(inc.slaSecondsRemaining)} left) • Paused for ${formatDurationShort(inc.totalPausedSeconds || 0)}`;
               } else if (inc.status === 'RESOLVED') {
                 el.className = 'sla-timer-tag sla-safe';
-                el.textContent = `✓ Met SLA`;
+                el.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.8" style="vertical-align:-1px; margin-right:3px;"><polyline points="20 6 9 17 4 12"/></svg>Met SLA`;
               } else {
                 const isCrit = inc.slaSecondsRemaining > 0 && inc.slaSecondsRemaining < 1800;
                 const isBr = inc.slaSecondsRemaining <= 0;
                 el.className = `sla-timer-tag ${isBr ? 'sla-breach' : isCrit ? 'sla-warn' : 'sla-safe'}`;
-                el.textContent = `⏱ ${formatSlaTime(inc.slaSecondsRemaining)}`;
+                el.textContent = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:3px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${formatSlaTime(inc.slaSecondsRemaining)}`;
               }
             }
           }
@@ -3473,7 +3473,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
       }
     });
 
-    showToast('🚨 Cascading Blast Radius Simulated: 4 Services impacted across Payment Mesh.', 'error');
+    showToast('Cascading Blast Radius Simulated: 4 Services impacted across Payment Mesh.', 'error');
     openCmdbInspector('CI-PAY-003');
   }
 
@@ -3596,7 +3596,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
 
     if (DOM.migStrategyNotice) {
       DOM.migStrategyNotice.innerHTML = `
-        <span class="ai-star-sparkle">✦</span>
+        <span class="ai-star-sparkle"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg></span>
         <span><strong>AI Relational Synthesis Engine:</strong> ${escapeHtml(platform.strategy)}</span>
       `;
     }
@@ -3667,7 +3667,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             ${tableData.map(row => `
               <tr>
                 <td><span class="schema-source-pill">${escapeHtml(row.source)}</span></td>
-                <td class="text-center font-bold text-muted">➔</td>
+                <td class="text-center font-bold text-muted"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></td>
                 <td><span class="schema-target-pill">${escapeHtml(row.target)}</span></td>
                 <td><span class="badge-tag">${escapeHtml(row.type)}</span></td>
                 <td><span class="schema-fk-pill">${escapeHtml(row.fk)}</span></td>
@@ -3728,7 +3728,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
         if (DOM.btnExecuteMigration) DOM.btnExecuteMigration.style.display = 'none';
         if (DOM.btnViewIngestedTickets) DOM.btnViewIngestedTickets.style.display = 'inline-flex';
 
-        showToast(`🎉 Migration Successful! Ingested tickets added to Incident Command.`, 'success');
+        showToast(`Migration Successful! Ingested tickets added to Incident Command.`, 'success');
       }
     }, 160);
   }
@@ -3908,33 +3908,33 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
     const currentStatus = inc.status || inc.cabStatus || inc.stage || 'NEW';
 
     if (currentStatus === 'NEW' || currentStatus === 'Draft' || currentStatus === 'Pending CAB Approval' || currentStatus === 'Under Investigation') {
-      ribbonActionBtn = `<button class="btn-ribbon-action btn-ribbon-start" id="ribbon-btn-start">▶ Start Work</button>`;
+      ribbonActionBtn = `<button class="btn-ribbon-action btn-ribbon-start" id="ribbon-btn-start"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px; margin-right:3px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>Start Work</button>`;
       transitionsHtml = `
-        <button class="btn-transition btn-transition-start" id="trans-btn-start" title="Acknowledge and begin work">▶ Start Work</button>
-        <button class="btn-transition btn-transition-hold" id="trans-btn-hold" title="Pause SLA clock and place on hold">⏸ Put on Hold</button>
-        <button class="btn-transition btn-transition-resolve" id="trans-btn-resolve" title="Record resolution or approval">✓ Resolve / Approve</button>
-        <button class="btn-transition btn-transition-close" id="trans-btn-close" title="Close ticket">✕ Close</button>
+        <button class="btn-transition btn-transition-start" id="trans-btn-start" title="Acknowledge and begin work"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px; margin-right:3px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>Start Work</button>
+        <button class="btn-transition btn-transition-hold" id="trans-btn-hold" title="Pause SLA clock and place on hold"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px; margin-right:3px;"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>Put on Hold</button>
+        <button class="btn-transition btn-transition-resolve" id="trans-btn-resolve" title="Record resolution or approval"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" style="vertical-align:-1px; margin-right:3px;"><polyline points="20 6 9 17 4 12"/></svg>Resolve / Approve</button>
+        <button class="btn-transition btn-transition-close" id="trans-btn-close" title="Close ticket"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-1px; margin-right:3px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Close</button>
       `;
     } else if (currentStatus === 'IN_PROGRESS' || currentStatus === 'Approved by CAB' || currentStatus === 'In Fulfillment') {
-      ribbonActionBtn = `<button class="btn-ribbon-action btn-ribbon-resolve" id="ribbon-btn-resolve">✓ Complete &amp; Resolve</button>`;
+      ribbonActionBtn = `<button class="btn-ribbon-action btn-ribbon-resolve" id="ribbon-btn-resolve"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" style="vertical-align:-1px; margin-right:3px;"><polyline points="20 6 9 17 4 12"/></svg>Complete &amp; Resolve</button>`;
       transitionsHtml = `
-        <button class="btn-transition btn-transition-hold" id="trans-btn-hold" title="Pause SLA clock and place on hold">⏸ Put on Hold</button>
-        <button class="btn-transition btn-transition-resolve" id="trans-btn-resolve" title="Record resolution">✓ Resolve / Fulfill</button>
-        ${inc.priority !== 'P1' ? `<button class="btn-transition btn-transition-escalate" id="trans-btn-escalate" title="Escalate severity to P1 Critical">⚡ Escalate to P1</button>` : ''}
-        <button class="btn-transition btn-transition-close" id="trans-btn-close" title="Close ticket">✕ Close</button>
+        <button class="btn-transition btn-transition-hold" id="trans-btn-hold" title="Pause SLA clock and place on hold"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px; margin-right:3px;"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>Put on Hold</button>
+        <button class="btn-transition btn-transition-resolve" id="trans-btn-resolve" title="Record resolution"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" style="vertical-align:-1px; margin-right:3px;"><polyline points="20 6 9 17 4 12"/></svg>Resolve / Fulfill</button>
+        ${inc.priority !== 'P1' ? `<button class="btn-transition btn-transition-escalate" id="trans-btn-escalate" title="Escalate severity to P1 Critical"><svg width="11" height="11" viewBox="0 0 24 24" fill="#f43f5e" stroke="#f43f5e" style="vertical-align:-1px; margin-right:3px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Escalate to P1</button>` : ''}
+        <button class="btn-transition btn-transition-close" id="trans-btn-close" title="Close ticket"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-1px; margin-right:3px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Close</button>
       `;
     } else if (currentStatus === 'ON_HOLD') {
-      ribbonActionBtn = `<button class="btn-ribbon-action btn-ribbon-start" id="ribbon-btn-resume">▶ Resume SLA</button>`;
+      ribbonActionBtn = `<button class="btn-ribbon-action btn-ribbon-start" id="ribbon-btn-resume"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px; margin-right:3px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>Resume SLA</button>`;
       transitionsHtml = `
-        <button class="btn-transition btn-transition-resume" id="trans-btn-resume" title="Resume active work">▶ Resume Work</button>
-        <button class="btn-transition btn-transition-resolve" id="trans-btn-resolve" title="Record resolution">✓ Resolve</button>
-        <button class="btn-transition btn-transition-close" id="trans-btn-close" title="Close ticket">✕ Close</button>
+        <button class="btn-transition btn-transition-resume" id="trans-btn-resume" title="Resume active work"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px; margin-right:3px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>Resume Work</button>
+        <button class="btn-transition btn-transition-resolve" id="trans-btn-resolve" title="Record resolution"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" style="vertical-align:-1px; margin-right:3px;"><polyline points="20 6 9 17 4 12"/></svg>Resolve</button>
+        <button class="btn-transition btn-transition-close" id="trans-btn-close" title="Close ticket"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-1px; margin-right:3px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Close</button>
       `;
     } else { // RESOLVED / CLOSED / Fulfilled
-      ribbonActionBtn = `<button class="btn-ribbon-action btn-ribbon-reopen" id="ribbon-btn-reopen">⟲ Reopen</button>`;
+      ribbonActionBtn = `<button class="btn-ribbon-action btn-ribbon-reopen" id="ribbon-btn-reopen"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1px; margin-right:3px;"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>Reopen</button>`;
       transitionsHtml = `
-        <button class="btn-transition btn-transition-reopen" id="trans-btn-reopen" title="Reopen record">⟲ Reopen Record</button>
-        <button class="btn-transition btn-transition-close" id="trans-btn-close" title="Archive and close permanently">✕ Archive &amp; Close</button>
+        <button class="btn-transition btn-transition-reopen" id="trans-btn-reopen" title="Reopen record"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1px; margin-right:3px;"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>Reopen Record</button>
+        <button class="btn-transition btn-transition-close" id="trans-btn-close" title="Archive and close permanently"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-1px; margin-right:3px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Archive &amp; Close</button>
       `;
     }
 
@@ -3943,13 +3943,13 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
     let statusLabel = currentStatus;
     if (currentStatus === 'IN_PROGRESS' || currentStatus.includes('Approved') || currentStatus.includes('Fulfillment')) {
       statusBadgeClass = 'status-badge-progress';
-      statusLabel = `⚡ ${currentStatus}`;
+      statusLabel = `<svg width="11" height="11" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" style="vertical-align:-1px; margin-right:3px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>${currentStatus}`;
     } else if (currentStatus === 'ON_HOLD') {
       statusBadgeClass = 'status-badge-hold';
       statusLabel = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-1px; margin-right:3px;"><circle cx="12" cy="12" r="10"/><line x1="10" y1="15" x2="10" y2="9"/><line x1="14" y1="15" x2="14" y2="9"/></svg>Paused (${escapeHtml(inc.holdReason || 'Hold')})`;
     } else if (currentStatus === 'RESOLVED' || currentStatus === 'Fulfilled' || currentStatus.includes('Delivered')) {
       statusBadgeClass = 'status-badge-resolved';
-      statusLabel = `✓ ${currentStatus}`;
+      statusLabel = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.8" style="vertical-align:-1px; margin-right:3px;"><polyline points="20 6 9 17 4 12"/></svg>${currentStatus}`;
     }
 
     // SLA Countdown text
@@ -3979,7 +3979,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
         <div class="kpi-hud-card" style="border-left: 3.5px solid ${currentStatus === 'ON_HOLD' ? '#f59e0b' : currentStatus === 'RESOLVED' ? '#10b981' : '#6366f1'};">
           <div class="kpi-hud-top">
             <span class="kpi-hud-title">SLA Resolution Target</span>
-            <span class="kpi-hud-icon">${currentStatus === 'ON_HOLD' ? '⏸️' : '⏱️'}</span>
+            <span class="kpi-hud-icon">${currentStatus === 'ON_HOLD' ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>' : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'}</span>
           </div>
           <span class="kpi-hud-val font-mono ${currentStatus === 'ON_HOLD' ? 'text-amber' : currentStatus === 'RESOLVED' ? 'text-emerald' : 'text-indigo'}">${slaText}</span>
           <span class="kpi-hud-sub">Target: ${policyTargetHours}h • Due: ${inc.slaDue || 'Today'}</span>
@@ -3988,7 +3988,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
         <div class="kpi-hud-card" style="border-left: 3.5px solid #f59e0b;">
           <div class="kpi-hud-top">
             <span class="kpi-hud-title">Severity / Impact</span>
-            <span class="kpi-hud-icon">⚡</span>
+            <span class="kpi-hud-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="#f43f5e" stroke="#f43f5e"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
           </div>
           <span class="kpi-hud-val">${inc.priority || 'P2'} Level</span>
           <span class="kpi-hud-sub">${escapeHtml(inc.impact || 'Enterprise')} × ${escapeHtml(inc.urgency || 'High')}</span>
@@ -3997,7 +3997,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
         <div class="kpi-hud-card" style="border-left: 3.5px solid #10b981;">
           <div class="kpi-hud-top">
             <span class="kpi-hud-title">Affected Service CI</span>
-            <span class="kpi-hud-icon">🌐</span>
+            <span class="kpi-hud-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
           </div>
           <span class="kpi-hud-val" style="font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(inc.ciName || inc.ci || 'Core Service')}</span>
           <span class="kpi-hud-sub font-mono">Tier: ${ciObj ? ciObj.tier : '1'} • Cloud Infra</span>
@@ -4006,7 +4006,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
         <div class="kpi-hud-card" style="border-left: 3.5px solid #0284c7;">
           <div class="kpi-hud-top">
             <span class="kpi-hud-title">Labor &amp; Subtasks</span>
-            <span class="kpi-hud-icon">💵</span>
+            <span class="kpi-hud-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg></span>
           </div>
           <span class="kpi-hud-val text-emerald font-mono">$${totalLaborCost.toFixed(2)}</span>
           <span class="kpi-hud-sub">${completedSubtasks}/${subtasksList.length} Tasks Done (${subtasksPct}%)</span>
@@ -4027,7 +4027,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <!-- 1. Core Details & Classification -->
             <button class="drawer-vnav-item ${state.activeDrawerTab === 'core' ? 'active' : ''}" data-drawer-tab="core" title="Title, status, taxonomy & priority matrix">
               <div class="vnav-item-left">
-                <span class="vnav-icon-pill pill-blue">🏷️</span>
+                <span class="vnav-icon-pill pill-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>
                 <div class="vnav-text-col">
                   <span class="vnav-title">Core &amp; Taxonomy</span>
                   <span class="vnav-sub">Status &amp; Category</span>
@@ -4039,7 +4039,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <!-- 2. People & SLA Governance -->
             <button class="drawer-vnav-item ${state.activeDrawerTab === 'people' ? 'active' : ''}" data-drawer-tab="people" title="Ownership, caller, technician, SLA policy & cost center">
               <div class="vnav-item-left">
-                <span class="vnav-icon-pill pill-emerald">👥</span>
+                <span class="vnav-icon-pill pill-emerald"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
                 <div class="vnav-text-col">
                   <span class="vnav-title">People &amp; SLA</span>
                   <span class="vnav-sub">Ownership &amp; Group</span>
@@ -4051,7 +4051,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <!-- 3. Scope, Specs & Diagnostics -->
             <button class="drawer-vnav-item ${state.activeDrawerTab === 'diagnostics' ? 'active' : ''}" data-drawer-tab="diagnostics" title="Diagnostic telemetry, stack trace & CMDB topology">
               <div class="vnav-item-left">
-                <span class="vnav-icon-pill pill-slate">💻</span>
+                <span class="vnav-icon-pill pill-slate"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>
                 <div class="vnav-text-col">
                   <span class="vnav-title">Specs &amp; Topology</span>
                   <span class="vnav-sub">Telemetry &amp; Blast</span>
@@ -4063,7 +4063,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <!-- 4. Workflows, Actions & Governance -->
             <button class="drawer-vnav-item ${state.activeDrawerTab === 'workflows' ? 'active' : ''}" data-drawer-tab="workflows" title="Lifecycle actions, subtasks checklist, 5-whys & approvals">
               <div class="vnav-item-left">
-                <span class="vnav-icon-pill pill-amber">⚙️</span>
+                <span class="vnav-icon-pill pill-amber"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
                 <div class="vnav-text-col">
                   <span class="vnav-title">Workflows &amp; Actions</span>
                   <span class="vnav-sub">Subtasks &amp; Governance</span>
@@ -4075,19 +4075,19 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <!-- 5. AI Ops Center & Copilot -->
             <button class="drawer-vnav-item ${state.activeDrawerTab === 'ai-hub' ? 'active' : ''}" data-drawer-tab="ai-hub" title="Autonomous AI triage, blast radius, runbooks & communications">
               <div class="vnav-item-left">
-                <span class="vnav-icon-pill pill-purple">🤖</span>
+                <span class="vnav-icon-pill pill-purple"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2.2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4M8 15h.01M16 15h.01"/></svg></span>
                 <div class="vnav-text-col">
                   <span class="vnav-title">AI Ops Copilot</span>
                   <span class="vnav-sub">Runbooks &amp; Triage</span>
                 </div>
               </div>
-              <span class="vnav-badge-pill pill-purple-tag">✦ 4 Tools</span>
+              <span class="vnav-badge-pill pill-purple-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px; margin-right:2px;"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg>4 Tools</span>
             </button>
 
             <!-- 6. Labor Costs & Audit Stream -->
             <button class="drawer-vnav-item ${state.activeDrawerTab === 'timeline' ? 'active' : ''}" data-drawer-tab="timeline" title="Technician labor hours, costing & chronological audit stream">
               <div class="vnav-item-left">
-                <span class="vnav-icon-pill pill-teal">📜</span>
+                <span class="vnav-icon-pill pill-teal"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
                 <div class="vnav-text-col">
                   <span class="vnav-title">Labor &amp; Audit</span>
                   <span class="vnav-sub">Worklogs &amp; Stream</span>
@@ -4117,7 +4117,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <div class="drawer-tier-group tier-mandatory">
               <div class="drawer-tier-header">
                 <div class="tier-header-left">
-                  <span class="tier-header-icon">🔴</span>
+                  <span class="tier-header-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="#ef4444"><circle cx="12" cy="12" r="9"/></svg></span>
                   <span class="tier-header-title">Mandatory Information</span>
                 </div>
                 <span class="tier-badge badge-mandatory">Required Fields</span>
@@ -4172,7 +4172,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <div class="drawer-tier-group tier-recommended">
               <div class="drawer-tier-header">
                 <div class="tier-header-left">
-                  <span class="tier-header-icon">🟡</span>
+                  <span class="tier-header-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="#f59e0b"><circle cx="12" cy="12" r="9"/></svg></span>
                   <span class="tier-header-title">Recommended Context</span>
                 </div>
                 <span class="tier-badge badge-recommended">Operational Importance</span>
@@ -4182,7 +4182,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
                 <!-- Priority Matrix Calculator Card -->
                 <div class="drawer-card-highlight">
                   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                    <span style="font-weight:700; font-size:12px; color:#9a3412;">⚡ Dynamic Priority Matrix</span>
+                    <span style="font-weight:700; font-size:12px; color:#9a3412;"><svg width="13" height="13" viewBox="0 0 24 24" fill="#ea580c" stroke="#ea580c" style="vertical-align:-2px; margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Dynamic Priority Matrix</span>
                     <span class="priority-pill pill-${(inc.priority || 'P2').toLowerCase()}" id="drawer-matrix-badge">${inc.priority || 'P2'}</span>
                   </div>
                   <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
@@ -4212,12 +4212,12 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
                 <!-- Primary CI Card -->
                 <div class="drawer-card-highlight">
                   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                    <span style="font-weight:700; font-size:12px; color:#0284c7;">🖥️ Target Service CI</span>
+                    <span style="font-weight:700; font-size:12px; color:#0284c7;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" style="vertical-align:-2px; margin-right:4px;"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Target Service CI</span>
                     <span class="badge-tag tag-sky font-mono">${ciObj ? ciObj.tier : 'Tier 1'}</span>
                   </div>
                   <div class="ci-title-link" id="drawer-jump-ci" title="Click to inspect in CMDB Topology Graph" style="cursor:pointer; padding:6px 8px; border:1px solid #bae6fd; border-radius:6px; background:#f0f9ff; display:flex; justify-content:space-between; align-items:center;">
                     <strong class="text-indigo" style="font-size:12px;">${escapeHtml(inc.ciName || inc.ci || 'Core Infrastructure')}</strong>
-                    <span class="text-xs text-indigo">➔ Inspect</span>
+                    <span class="text-xs text-indigo"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-1px; margin-left:3px;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>Inspect</span>
                   </div>
                   <div class="text-xs text-muted mt-2">
                     Identifier: <span class="font-mono">${inc.ci || 'CI-CORE-001'}</span> • Provider: ${ciObj ? ciObj.provider : 'Cloud AWS'}
@@ -4230,7 +4230,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <div class="drawer-tier-group tier-optional">
               <div class="drawer-tier-header">
                 <div class="tier-header-left">
-                  <span class="tier-header-icon">⚪</span>
+                  <span class="tier-header-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="#94a3b8"><circle cx="12" cy="12" r="9"/></svg></span>
                   <span class="tier-header-title">Optional &amp; Advanced Labels</span>
                 </div>
                 <span class="tier-badge badge-optional">Optional Fields</span>
@@ -4259,7 +4259,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <div class="drawer-tier-group tier-mandatory">
               <div class="drawer-tier-header">
                 <div class="tier-header-left">
-                  <span class="tier-header-icon">🔴</span>
+                  <span class="tier-header-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="#ef4444"><circle cx="12" cy="12" r="9"/></svg></span>
                   <span class="tier-header-title">Mandatory Ownership</span>
                 </div>
                 <span class="tier-badge badge-mandatory">Required Fields</span>
@@ -4302,7 +4302,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <div class="drawer-tier-group tier-recommended">
               <div class="drawer-tier-header">
                 <div class="tier-header-left">
-                  <span class="tier-header-icon">🟡</span>
+                  <span class="tier-header-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="#f59e0b"><circle cx="12" cy="12" r="9"/></svg></span>
                   <span class="tier-header-title">Recommended SLA Targets &amp; Escalation</span>
                 </div>
                 <span class="tier-badge badge-recommended">Operational Importance</span>
@@ -4310,7 +4310,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
 
               <div class="drawer-form-grid-2">
                 <div class="drawer-card-highlight">
-                  <span class="field-label-micro text-amber">⏱️ Active SLA Clock &amp; Policy</span>
+                  <span class="field-label-micro text-amber"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2" style="vertical-align:-2px; margin-right:4px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Active SLA Clock &amp; Policy</span>
                   <div style="font-size:16px; font-weight:800; font-family:var(--font-mono); color:#d97706; margin-top:2px;">
                     ${slaText}
                   </div>
@@ -4320,7 +4320,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
                 </div>
 
                 <div class="drawer-card-highlight">
-                  <span class="field-label-micro text-indigo">🛡️ Escalation / Approving Manager</span>
+                  <span class="field-label-micro text-indigo"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2" style="vertical-align:-2px; margin-right:4px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Escalation / Approving Manager</span>
                   <div style="font-weight:700; font-size:13px; color:#1e3a8a; margin-top:2px;">
                     ${escapeHtml(inc.manager || 'Marcus Vance (Director of SRE)')}
                   </div>
@@ -4335,7 +4335,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <div class="drawer-tier-group tier-optional">
               <div class="drawer-tier-header">
                 <div class="tier-header-left">
-                  <span class="tier-header-icon">⚪</span>
+                  <span class="tier-header-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="#94a3b8"><circle cx="12" cy="12" r="9"/></svg></span>
                   <span class="tier-header-title">Optional Cost Allocation &amp; Stakeholders</span>
                 </div>
                 <span class="tier-badge badge-optional">Optional Fields</span>
@@ -4364,7 +4364,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <div class="drawer-tier-group tier-mandatory">
               <div class="drawer-tier-header">
                 <div class="tier-header-left">
-                  <span class="tier-header-icon">🔴</span>
+                  <span class="tier-header-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="#ef4444"><circle cx="12" cy="12" r="9"/></svg></span>
                   <span class="tier-header-title">Diagnostic Telemetry / Scope Payload</span>
                 </div>
                 <span class="tier-badge badge-mandatory">Mandatory Specs</span>
@@ -4388,7 +4388,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <div class="drawer-tier-group tier-recommended">
               <div class="drawer-tier-header">
                 <div class="tier-header-left">
-                  <span class="tier-header-icon">🟡</span>
+                  <span class="tier-header-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="#f59e0b"><circle cx="12" cy="12" r="9"/></svg></span>
                   <span class="tier-header-title">CMDB Service Topology &amp; Blast Radius</span>
                 </div>
                 <span class="tier-badge badge-recommended">Topology Context</span>
@@ -4412,7 +4412,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
 
               <div class="mt-3 text-right">
                 <button class="btn btn-sm btn-zen-outline" id="drawer-jump-ci-diag">
-                  <span>➔ Inspect Full Graph in CMDB Topology</span>
+                  <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-1px; margin-left:3px;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>Inspect Full Graph in CMDB Topology</span>
                 </button>
               </div>
             </div>
@@ -4421,7 +4421,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <div class="drawer-tier-group tier-optional">
               <div class="drawer-tier-header">
                 <div class="tier-header-left">
-                  <span class="tier-header-icon">⚪</span>
+                  <span class="tier-header-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="#94a3b8"><circle cx="12" cy="12" r="9"/></svg></span>
                   <span class="tier-header-title">Optional Cloud Hosting Specs</span>
                 </div>
                 <span class="tier-badge badge-optional">Infrastructure Metadata</span>
@@ -4458,7 +4458,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <div class="drawer-tier-group tier-mandatory">
               <div class="drawer-tier-header">
                 <div class="tier-header-left">
-                  <span class="tier-header-icon">🔴</span>
+                  <span class="tier-header-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="#ef4444"><circle cx="12" cy="12" r="9"/></svg></span>
                   <span class="tier-header-title">Primary Workflow Action / Resolution</span>
                 </div>
                 <span class="tier-badge badge-mandatory">State Decision</span>
@@ -4482,14 +4482,14 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
               ` : itemType === 'CHANGE' ? `
                 <div class="mt-3 p-3" style="background:#fef3c7; border:1px solid #fde68a; border-radius:8px;">
                   <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <strong style="font-size:12px; color:#92400e;">🗳️ CAB Governance Review:</strong>
+                    <strong style="font-size:12px; color:#92400e;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2.2" style="vertical-align:-2px; margin-right:4px;"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>CAB Governance Review:</strong>
                     <span class="badge-tag">${escapeHtml(inc.cabStatus || 'Pending')}</span>
                   </div>
                   <p class="text-xs text-secondary mt-1">Scheduled Window: <strong>${escapeHtml(inc.scheduled || 'Weekend Window')}</strong></p>
                 </div>
               ` : currentStatus === 'RESOLVED' ? `
                 <div class="mt-3 p-3" style="background:#ecfdf5; border:1.5px solid #a7f3d0; border-radius:8px;">
-                  <strong class="text-emerald" style="font-size:12px;">✓ Verified Service Restoration</strong>
+                  <strong class="text-emerald" style="font-size:12px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.8" style="vertical-align:-2px; margin-right:4px;"><polyline points="20 6 9 17 4 12"/></svg>Verified Service Restoration</strong>
                   <p class="text-xs text-secondary mt-1">Root Cause: <strong>${escapeHtml(inc.rootCause || 'Eliminated defect')}</strong></p>
                 </div>
               ` : ''}
@@ -4499,7 +4499,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <div class="drawer-tier-group tier-recommended">
               <div class="drawer-tier-header">
                 <div class="tier-header-left">
-                  <span class="tier-header-icon">🟡</span>
+                  <span class="tier-header-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="#f59e0b"><circle cx="12" cy="12" r="9"/></svg></span>
                   <span class="tier-header-title">Remediation Action Items Checklist</span>
                 </div>
                 <span class="tier-badge badge-recommended">${completedSubtasks} of ${subtasksList.length} Completed (${subtasksPct}%)</span>
@@ -4539,7 +4539,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <div class="drawer-tier-group tier-optional">
               <div class="drawer-tier-header">
                 <div class="tier-header-left">
-                  <span class="tier-header-icon">⚪</span>
+                  <span class="tier-header-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="#94a3b8"><circle cx="12" cy="12" r="9"/></svg></span>
                   <span class="tier-header-title">Optional Hardening &amp; Rollback Notes</span>
                 </div>
                 <span class="tier-badge badge-optional">Contingency</span>
@@ -4562,7 +4562,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <div class="drawer-tier-group tier-mandatory" style="border-left-color:#8b5cf6; background:linear-gradient(180deg, #faf5ff 0%, #ffffff 85%); border-color:#e9d5ff;">
               <div class="drawer-tier-header">
                 <div class="tier-header-left">
-                  <span class="tier-header-icon">✦</span>
+                  <span class="tier-header-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="#8b5cf6"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg></span>
                   <span class="tier-header-title" style="color:#6b21a8;">Autonomous Sentinel-AI Action Hub</span>
                 </div>
                 <span class="tier-badge" style="background:#f3e8ff; color:#7e22ce; border:1px solid #d8b4fe;">Heuristic Ops</span>
@@ -4570,28 +4570,28 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
 
               <div class="ai-tiles-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:10px;">
                 <button class="btn-ai-tile" id="ai-btn-triage" style="text-align:left; padding:10px; border-radius:8px; border:1px solid #e9d5ff; background:#ffffff; cursor:pointer;">
-                  <span class="tile-icon" style="font-size:18px;">⚡</span>
+                  <span class="tile-icon" style="display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:6px; background:#f3e8ff;"><svg width="18" height="18" viewBox="0 0 24 24" fill="#8b5cf6" stroke="#8b5cf6"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
                   <div class="tile-info" style="margin-top:4px;">
                     <h5 style="font-size:12px; font-weight:700; color:#581c87; margin:0;">Auto-Triage Analysis</h5>
                     <p style="font-size:10.5px; color:#6b21a8; margin:2px 0 0 0;">Neural root-cause hypothesis</p>
                   </div>
                 </button>
                 <button class="btn-ai-tile" id="ai-btn-blast" style="text-align:left; padding:10px; border-radius:8px; border:1px solid #e9d5ff; background:#ffffff; cursor:pointer;">
-                  <span class="tile-icon" style="font-size:18px;">🌐</span>
+                  <span class="tile-icon" style="display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:6px; background:#e0f2fe;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
                   <div class="tile-info" style="margin-top:4px;">
                     <h5 style="font-size:12px; font-weight:700; color:#581c87; margin:0;">CMDB Blast Radius</h5>
                     <p style="font-size:10.5px; color:#6b21a8; margin:2px 0 0 0;">Traverse graph dependencies</p>
                   </div>
                 </button>
                 <button class="btn-ai-tile" id="ai-btn-runbook" style="text-align:left; padding:10px; border-radius:8px; border:1px solid #e9d5ff; background:#ffffff; cursor:pointer;">
-                  <span class="tile-icon" style="font-size:18px;">🛠️</span>
+                  <span class="tile-icon" style="display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:6px; background:#fef3c7;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
                   <div class="tile-info" style="margin-top:4px;">
                     <h5 style="font-size:12px; font-weight:700; color:#581c87; margin:0;">Synthesize Runbook</h5>
                     <p style="font-size:10.5px; color:#6b21a8; margin:2px 0 0 0;">Diagnostic commands &amp; steps</p>
                   </div>
                 </button>
                 <button class="btn-ai-tile" id="ai-btn-stakeholder" style="text-align:left; padding:10px; border-radius:8px; border:1px solid #e9d5ff; background:#ffffff; cursor:pointer;">
-                  <span class="tile-icon" style="font-size:18px;">📢</span>
+                  <span class="tile-icon" style="display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:6px; background:#fce7f3;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#db2777" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>
                   <div class="tile-info" style="margin-top:4px;">
                     <h5 style="font-size:12px; font-weight:700; color:#581c87; margin:0;">Draft Broadcast</h5>
                     <p style="font-size:10.5px; color:#6b21a8; margin:2px 0 0 0;">Customer &amp; leadership memo</p>
@@ -4604,7 +4604,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <div class="drawer-tier-group tier-recommended" style="border-left-color:#6366f1;">
               <div class="drawer-tier-header">
                 <div class="tier-header-left">
-                  <span class="tier-header-icon">💻</span>
+                  <span class="tier-header-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>
                   <span class="tier-header-title" style="color:#3730a3;">Live Autonomous Intelligence Console</span>
                 </div>
                 <span class="tier-badge badge-recommended">Interactive Output</span>
@@ -4621,7 +4621,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <div class="drawer-tier-group tier-optional">
               <div class="drawer-tier-header">
                 <div class="tier-header-left">
-                  <span class="tier-header-icon">⚪</span>
+                  <span class="tier-header-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="#94a3b8"><circle cx="12" cy="12" r="9"/></svg></span>
                   <span class="tier-header-title">Optional Autonomous SRE Parameters</span>
                 </div>
                 <span class="tier-badge badge-optional">Telemetry Weights</span>
@@ -4650,7 +4650,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <div class="drawer-tier-group tier-mandatory">
               <div class="drawer-tier-header">
                 <div class="tier-header-left">
-                  <span class="tier-header-icon">🔴</span>
+                  <span class="tier-header-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="#ef4444"><circle cx="12" cy="12" r="9"/></svg></span>
                   <span class="tier-header-title">Real-time Chronological Audit Stream</span>
                 </div>
                 <span class="tier-badge badge-mandatory">${inc.timeline.length} Entries</span>
@@ -4680,7 +4680,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <div class="drawer-tier-group tier-recommended">
               <div class="drawer-tier-header">
                 <div class="tier-header-left">
-                  <span class="tier-header-icon">🟡</span>
+                  <span class="tier-header-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="#f59e0b"><circle cx="12" cy="12" r="9"/></svg></span>
                   <span class="tier-header-title">Technician Labor Hours &amp; Costing</span>
                 </div>
                 <span class="tier-badge badge-recommended">$${totalLaborCost.toFixed(2)} Total</span>
@@ -4767,7 +4767,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <div class="drawer-tier-group tier-optional">
               <div class="drawer-tier-header">
                 <div class="tier-header-left">
-                  <span class="tier-header-icon">⚪</span>
+                  <span class="tier-header-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="#94a3b8"><circle cx="12" cy="12" r="9"/></svg></span>
                   <span class="tier-header-title">Optional Audit Log Filter</span>
                 </div>
                 <span class="tier-badge badge-optional">Audit View</span>
@@ -4867,7 +4867,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             inc.timeline.unshift({
               time: 'Just now',
               user: 'Alex Rivera (SRE)',
-              text: `Recalculated priority: ${oldP} ➔ ${calcP} (Impact: ${imp}, Urgency: ${urg}).`
+              text: `Recalculated priority: ${oldP} -> ${calcP} (Impact: ${imp}, Urgency: ${urg}).`
             });
             renderTickets();
             showToast(`Priority recalculated to ${calcP}`, 'info');
@@ -5024,7 +5024,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
         });
 
         openTicketDrawer(inc.id);
-        showToast(`⏱️ Logged ${hours}h ${mins}m ($${cost.toFixed(2)}) labor cost.`, 'success');
+        showToast(`Logged ${hours}h ${mins}m ($${cost.toFixed(2)}) labor cost.`, 'success');
       });
     }
 
@@ -5084,7 +5084,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             text: `${st.completed ? 'Completed' : 'Unchecked'} checklist task: "${st.title}".`
           });
           openTicketDrawer(inc.id);
-          showToast(st.completed ? '✓ Subtask marked complete.' : 'Subtask unchecked.', 'info');
+          showToast(st.completed ? 'Subtask marked complete.' : 'Subtask unchecked.', 'info');
         }
       });
     });
@@ -5140,7 +5140,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
       btnTriage.addEventListener('click', () => {
         outputBox.style.display = 'flex';
         outputBox.innerHTML = `
-          <h5>✦ AI Triage Intelligence (Confidence: 98.4%)</h5>
+          <h5><svg width="13" height="13" viewBox="0 0 24 24" fill="#8b5cf6" style="vertical-align:-1px; margin-right:4px;"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg>AI Triage Intelligence (Confidence: 98.4%)</h5>
           <p><strong>Predicted Root Cause:</strong> Severe lock contention on database table caused by unindexed batch query or uncommitted transaction.</p>
           <p><strong>Recommended Priority:</strong> <span class="priority-pill pill-p1">P1 Critical</span> (Direct checkout cascade detected).</p>
           <p><strong>Recommended Assignment:</strong> Database-Ops (Primary on-call: @david-chen)</p>
@@ -5174,7 +5174,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
       btnBlast.addEventListener('click', () => {
         outputBox.style.display = 'flex';
         outputBox.innerHTML = `
-          <h5>✦ CMDB Graph Blast Radius Solver</h5>
+          <h5><svg width="13" height="13" viewBox="0 0 24 24" fill="#8b5cf6" style="vertical-align:-1px; margin-right:4px;"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg>CMDB Graph Blast Radius Solver</h5>
           <p>Traversed downstream dependency mesh for <strong>${escapeHtml(inc.ciName)}</strong>:</p>
           <ul style="padding-left: 18px; margin: 4px 0; color: #475569;">
             <li><strong>Direct Dependents:</strong> Payment Gateway Service (CI-PAY-003)</li>
@@ -5203,7 +5203,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
       btnRunbook.addEventListener('click', () => {
         outputBox.style.display = 'flex';
         outputBox.innerHTML = `
-          <h5>✦ Autonomous Runbook Synthesizer</h5>
+          <h5><svg width="13" height="13" viewBox="0 0 24 24" fill="#8b5cf6" style="vertical-align:-1px; margin-right:4px;"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg>Autonomous Runbook Synthesizer</h5>
           <p>Step 1: Terminate blocking connection holding RowExclusiveLock in terminal:</p>
           <div class="ai-command-snippet">
 SELECT pg_terminate_backend(pid) 
@@ -5249,7 +5249,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
       btnStakeholder.addEventListener('click', () => {
         outputBox.style.display = 'flex';
         outputBox.innerHTML = `
-          <h5>✦ Stakeholder &amp; Statuspage Communications Draft</h5>
+          <h5><svg width="13" height="13" viewBox="0 0 24 24" fill="#8b5cf6" style="vertical-align:-1px; margin-right:4px;"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg>Stakeholder &amp; Statuspage Communications Draft</h5>
           <div class="drawer-desc-box" style="font-size:12px; margin-top:6px;">
 <strong>INCIDENT UPDATE: [Investigating] Payment &amp; Database Degradation</strong>
 
@@ -5325,7 +5325,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
     if (state.selectedTicket && state.selectedTicket.id === id) {
       openTicketDrawer(id);
     }
-    showToast(`🎉 Incident ${id} resolved with ${resCode}!`, 'success');
+    showToast(`Incident ${id} resolved with ${resCode}!`, 'success');
   }
 
   function openHoldModal(ticketId) {
@@ -5369,7 +5369,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
     if (state.selectedTicket && state.selectedTicket.id === id) {
       openTicketDrawer(id);
     }
-    showToast(`⏸️ Incident ${id} placed on hold (${reason}). SLA paused.`, 'warning');
+    showToast(`Incident ${id} placed on hold (${reason}). SLA paused.`, 'warning');
   }
 
   // =========================================================================
@@ -5599,7 +5599,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
           </div>
 
           <button type="button" class="btn btn-sm btn-zen-primary w-full mt-2" id="btn-accept-ai-suggestions">
-            ✦ Apply AI Suggestions to Form
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px; margin-right:4px;"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg>Apply AI Suggestions to Form
           </button>
         </div>
       `;
@@ -5732,7 +5732,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
         }
       ],
       timeline: [
-        { time: 'Just now', user: caller, text: `Filed production incident ${newId}. Classification: ${category} ➔ ${subcategory} ➔ ${item}. Impact: ${impact}, Urgency: ${urgency} (${priority}).` },
+        { time: 'Just now', user: caller, text: `Filed production incident ${newId}. Classification: ${category} -> ${subcategory} -> ${item}. Impact: ${impact}, Urgency: ${urgency} (${priority}).` },
         { time: 'Just now', user: 'Sentinel AI', text: `Dispatched to ${team} (${technician}). Synchronized affected CI: ${ciObj ? ciObj.name : ci}.`, isAi: true }
       ]
     };
@@ -5748,7 +5748,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
     renderTickets();
     setupCmdbGraph();
 
-    showToast(`🚀 Incident ${newId} dispatched successfully!`, 'success');
+    showToast(`Incident ${newId} dispatched successfully!`, 'success');
 
     // Immediately open in the Universal Drawer to review!
     openTicketDrawer(newId);
@@ -5932,18 +5932,38 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
     setupCmdbGraph();
     renderAiEvents();
 
-    showToast(`⚡ CHAOS INJECTED: ${newId} (${scenario.title}) created!`, 'error');
+    showToast(`CHAOS INJECTED: ${newId} (${scenario.title}) created!`, 'error');
   }
 
   // =========================================================================
   // VIEW 6: ENTERPRISE SETUP & MASTER DATA CONFIGURATION CENTER
   // =========================================================================
 
+  
+  function getBlueprintSvg(id) {
+    switch (id) {
+      case 'fintech':
+        return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>';
+      case 'healthcare':
+        return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2.2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>';
+      case 'retail':
+        return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>';
+      case 'saas_ai':
+        return '<svg width="24" height="24" viewBox="0 0 24 24" fill="#8b5cf6" stroke="#8b5cf6"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>';
+      case 'manufacturing':
+        return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2.2"><path d="M2 20h20"/><path d="M5 20V8l5 4V8l5 4V4h5v16"/></svg>';
+      case 'telecom':
+        return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>';
+      default:
+        return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="9" y1="22" x2="9" y2="22.01"/><line x1="15" y1="22" x2="15" y2="22.01"/><line x1="9" y1="6" x2="9" y2="6.01"/><line x1="15" y1="6" x2="15" y2="6.01"/><line x1="9" y1="10" x2="9" y2="10.01"/><line x1="15" y1="10" x2="15" y2="10.01"/><line x1="9" y1="14" x2="9" y2="14.01"/><line x1="15" y1="14" x2="15" y2="14.01"/><line x1="9" y1="18" x2="9" y2="18.01"/><line x1="15" y1="18" x2="15" y2="18.01"/></svg>';
+    }
+  }
+
   const DEFAULT_INDUSTRY_BLUEPRINTS = [
     {
       id: 'fintech',
       name: 'FinTech, Banking & Capital Markets',
-      icon: '💳',
+      icon: 'fintech',
       theme: 'bp-theme-fintech',
       sub_industries: ['Payment Processing & Acquiring', 'Neo-Banking & Core Ledgers', 'Algorithmic Trading & WealthTech', 'Lending & Mortgage Underwriting'],
       primary_offering: 'High-Throughput Payment Authorization Rails & Settlement Ledger',
@@ -5957,7 +5977,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
     {
       id: 'healthcare',
       name: 'Healthcare & Life Sciences',
-      icon: '🏥',
+      icon: 'healthcare',
       theme: 'bp-theme-healthcare',
       sub_industries: ['Hospital Electronic Health Records (EHR)', 'IoMT Bedside Telemetry & ICU', 'PACS / DICOM Diagnostic Imaging', 'Telemedicine & Clinical Operations'],
       primary_offering: 'Clinical Care EHR Platform & IoMT Critical Care Telemetry',
@@ -5971,7 +5991,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
     {
       id: 'retail',
       name: 'E-Commerce, Omnichannel Retail & Logistics',
-      icon: '🛒',
+      icon: 'retail',
       theme: 'bp-theme-retail',
       sub_industries: ['Omnichannel Direct-to-Consumer (D2C)', 'Warehouse Management & Automated WMS', 'Point-of-Sale (POS) & Store Systems', 'Order Fulfillment & Global Shipping'],
       primary_offering: 'Global Multi-Region E-Commerce Storefront & Real-Time Checkout',
@@ -5985,7 +6005,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
     {
       id: 'saas_ai',
       name: 'Cloud Tech, Developer SaaS & Autonomous AI',
-      icon: '⚡',
+      icon: 'saas_ai',
       theme: 'bp-theme-saas_ai',
       sub_industries: ['LLM Inference & Autonomous Agent Platform', 'Vector Search & Embeddings Infrastructure', 'DevSecOps & Cloud Platform (PaaS)', 'API Management & Developer Ecosystem'],
       primary_offering: 'Low-Latency LLM Inference API & Agent Orchestration Mesh',
@@ -5999,7 +6019,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
     {
       id: 'manufacturing',
       name: 'Manufacturing & Industrial IoT',
-      icon: '🏭',
+      icon: 'manufacturing',
       theme: 'bp-theme-manufacturing',
       sub_industries: ['Automotive & Aerospace Robotics', 'SCADA & Industrial Control Systems', 'MES Plant Floor Execution', 'Supply Chain Telemetry & Predictive Maintenance'],
       primary_offering: 'Automated Robotics Assembly Line & SCADA Telemetry Controller',
@@ -6013,7 +6033,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
     {
       id: 'telecom',
       name: 'Telecommunications & 5G Carrier Operations',
-      icon: '📡',
+      icon: 'telecom',
       theme: 'bp-theme-telecom',
       sub_industries: ['5G Standalone (SA) Mobile Packet Core', 'Fiber Broadband & ISP Transport Network', 'VoLTE / VoNR & E911 Emergency Services', 'BGP Carrier Peering & Edge CDN'],
       primary_offering: '5G Standalone Packet Core & Tier-1 BGP Border Peering',
@@ -6100,7 +6120,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
         if (state.currentView === 'cmdb-topology') {
           setupCmdbGraph();
         }
-        showToast(`🏢 OpenNow successfully calibrated to ${data.dna.industry_name}!`, 'success');
+        showToast(`ZenERP successfully calibrated to ${data.dna.industry_name}!`, 'success');
       } else {
         showToast(data.detail || 'Failed to apply blueprint', 'error');
       }
@@ -6180,7 +6200,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
                 <div class="blueprint-card ${themeClass} ${isActive ? 'active' : ''}" data-bp-id="${bp.id}">
                   <div>
                     <div class="bp-header">
-                      <div class="bp-icon-wrap">${bp.icon || '🏢'}</div>
+                      <div class="bp-icon-wrap">${getBlueprintSvg(bp.id)}</div>
                       <div class="bp-title-wrap">
                         <h4 class="bp-name">${escapeHtml(bp.name)}</h4>
                         <span class="bp-compliance-badge">${escapeHtml(bp.compliance_standard || 'Enterprise Governance')}</span>
@@ -6212,7 +6232,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
 
                   <div class="bp-footer">
                     <button class="btn-apply-blueprint" data-bp-id="${bp.id}">
-                      ${isActive ? '✓ Blueprint Currently Active' : '⚡ 1-Click Apply Blueprint'}
+                      ${isActive ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" style="vertical-align:-1px; margin-right:4px;"><polyline points="20 6 9 17 4 12"/></svg>Blueprint Currently Active' : '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px; margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>1-Click Apply Blueprint'}
                     </button>
                   </div>
                 </div>
@@ -6232,7 +6252,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
             <div class="form-group">
               <label class="text-xs text-muted font-bold">Industry Archetype</label>
               <select id="dna-select-industry" class="zen-select w-full" style="height:36px;">
-                ${blueprints.map(bp => `<option value="${bp.id}" ${bp.id === dna.industry_id ? 'selected' : ''}>${bp.icon || '🏢'} ${escapeHtml(bp.name)}</option>`).join('')}
+                ${blueprints.map(bp => `<option value="${bp.id}" ${bp.id === dna.industry_id ? 'selected' : ''}>${escapeHtml(bp.name)}</option>`).join('')}
               </select>
             </div>
 
@@ -6267,7 +6287,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
             <!-- Dynamic Outage Exposure Calculator Callout -->
             <div class="dna-downtime-calculator-card">
               <div class="calc-left">
-                <h4>⚠️ Calculated Business Interruption Exposure</h4>
+                <h4><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2" style="vertical-align:-2px; margin-right:4px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Calculated Business Interruption Exposure</h4>
                 <p>Real-time ITIL v4 downtime financial risk projection modeled against current SLA targets.</p>
               </div>
               <div class="calc-rates font-mono">
@@ -6288,7 +6308,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
 
             <div class="dna-form-full mt-2" style="display:flex; justify-content:flex-end;">
               <button type="submit" class="btn btn-zen-primary" id="btn-save-dna-custom" style="padding:10px 22px; font-weight:800;">
-                <span>🚀 Save DNA &amp; Recalibrate OpenNow</span>
+                <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-2px; margin-right:4px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Save DNA &amp; Recalibrate ZenERP</span>
               </button>
             </div>
           </form>
@@ -6488,7 +6508,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
                 <div class="tree-cat-node">
                   <div class="tree-cat-header ${isCatSelected ? 'selected' : ''}" data-cat="${escapeHtml(cat)}">
                     <div style="display:flex; align-items:center; gap:8px;">
-                      <span>📁</span>
+                      <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" style="vertical-align:-1px;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></span>
                       <span>${escapeHtml(cat)}</span>
                     </div>
                     <div style="display:flex; align-items:center; gap:6px;">
@@ -6504,7 +6524,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
                         return `
                           <div class="tree-subcat-row ${isSubSelected ? 'selected' : ''}" data-cat="${escapeHtml(cat)}" data-sub="${escapeHtml(sub)}">
                             <div style="display:flex; align-items:center; gap:6px;">
-                              <span>↳ 📂</span>
+                              <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2" style="vertical-align:-1px;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></span>
                               <span>${escapeHtml(sub)}</span>
                             </div>
                             <div style="display:flex; align-items:center; gap:6px;">
@@ -6532,7 +6552,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
               <span class="text-xs text-muted">Active Classification Breadcrumb:</span>
               <div style="font-size:14px; font-weight:700; color:var(--text-zen-primary); display:flex; align-items:center; gap:6px; margin-top:2px;">
                 <span>${escapeHtml(selectedCat)}</span>
-                <span class="text-muted">➔</span>
+                <span class="text-muted"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
                 <span class="text-indigo">${escapeHtml(selectedSub || 'Select a Subcategory')}</span>
               </div>
             </div>
@@ -6992,7 +7012,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
             ${codes.map((code, idx) => `
               <div class="res-item-row">
                 <div style="display:flex; align-items:center; gap:8px;">
-                  <span class="text-emerald font-bold">✓</span>
+                  <span class="text-emerald font-bold"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
                   <span>${escapeHtml(code)}</span>
                 </div>
                 <button class="btn-del-chip btn-del-res-code" data-index="${idx}" title="Delete Code">&times;</button>
@@ -7018,7 +7038,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
             ${causes.map((cause, idx) => `
               <div class="res-item-row">
                 <div style="display:flex; align-items:center; gap:8px;">
-                  <span class="text-indigo font-bold">🔍</span>
+                  <span class="text-indigo font-bold"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
                   <span>${escapeHtml(cause)}</span>
                 </div>
                 <button class="btn-del-chip btn-del-root-cause" data-index="${idx}" title="Delete Cause">&times;</button>
@@ -7510,7 +7530,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
         }
         setupPriorityMatrixCalculator(DOM.selectTicketImpact, DOM.selectTicketUrgency, DOM.createPriorityPreviewBadge, DOM.createPriorityCalcLabel, DOM.selectTicketPriority);
       }
-      showToast(`⚡ Business Rule: "${matchedRule.name}" applied (Routed to ${matchedRule.targetTeam})`, 'ai');
+      showToast(`Business Rule: "${matchedRule.name}" applied (Routed to ${matchedRule.targetTeam})`, 'ai');
     }
   }
 
@@ -7709,7 +7729,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
       </div>
 
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:12px; margin-top:8px;">
-        <strong class="text-indigo" style="font-size:12px;">★ Validated Root Cause Discovery</strong>
+        <strong class="text-indigo" style="font-size:12px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="#6366f1" stroke="#6366f1" style="vertical-align:-1px; margin-right:4px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Validated Root Cause Discovery</strong>
         <p style="font-size:12px; margin-top:2px; color:#1e3a8a;">${escapeHtml(p.rootCause)}</p>
       </div>
 
@@ -7803,7 +7823,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
                   <button class="btn btn-xs btn-zen-primary btn-cab-approve" data-chg-id="${chg.id}">Approve</button>
                   <button class="btn btn-xs btn-zen-subtle btn-cab-reject" data-chg-id="${chg.id}">Reject</button>
                 ` : `
-                  <span class="text-emerald font-bold text-xs">✓ Ready</span>
+                  <span class="text-emerald font-bold text-xs"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" style="vertical-align:-1px; margin-right:2px;"><polyline points="20 6 9 17 4 12"/></svg>Ready</span>
                 `}
               </div>
             </td>
@@ -7853,7 +7873,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
             ${c.cabStatus.includes('Pending') ? `
               <button class="btn btn-xs btn-zen-primary btn-cab-approve" data-chg-id="${c.id}">Approve</button>
             ` : `
-              <span class="text-emerald font-bold text-xs">✓ ${escapeHtml(c.cabStatus)}</span>
+              <span class="text-emerald font-bold text-xs"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" style="vertical-align:-1px; margin-right:2px;"><polyline points="20 6 9 17 4 12"/></svg>${escapeHtml(c.cabStatus)}</span>
             `}
           </div>
         </div>
@@ -7994,8 +8014,8 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
       <div style="display:flex; align-items:center; justify-content:space-between; margin-top:20px; padding-top:14px; border-top:1px solid var(--border-zen-medium);">
         <div style="display:flex; align-items:center; gap:8px;">
           <span class="text-xs text-muted">Was this article helpful?</span>
-          <button class="btn btn-xs btn-zen-outline" id="btn-kb-thumbs-up">👍 (${art.helpfulUp})</button>
-          <button class="btn btn-xs btn-zen-outline" id="btn-kb-thumbs-down">👎 (${art.helpfulDown})</button>
+          <button class="btn btn-xs btn-zen-outline" id="btn-kb-thumbs-up"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" style="vertical-align:-2px; margin-right:4px;"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>Helpful (${art.helpfulUp})</button>
+          <button class="btn btn-xs btn-zen-outline" id="btn-kb-thumbs-down"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2.2" style="vertical-align:-2px; margin-right:4px;"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"/></svg>Not Helpful (${art.helpfulDown})</button>
         </div>
         <button class="btn btn-sm btn-zen-primary" id="btn-close-kb-action">Done Reading</button>
       </div>
@@ -8008,7 +8028,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
 
     document.getElementById('btn-kb-thumbs-up')?.addEventListener('click', () => {
       art.helpfulUp++;
-      document.getElementById('btn-kb-thumbs-up').textContent = `👍 (${art.helpfulUp})`;
+      document.getElementById('btn-kb-thumbs-up').innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" style="vertical-align:-2px; margin-right:4px;"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>Helpful (${art.helpfulUp})`;
       showToast('Thank you for rating this runbook!', 'success');
     });
   }
@@ -8081,7 +8101,7 @@ ${body}`,
           resSummary.innerHTML = `Subject: <strong>${escapeHtml(subj)}</strong><br>Parsed Priority: <span class="priority-pill pill-p1">P1</span> • Assigned to <strong>Database-Ops</strong>`;
         }
 
-        showToast(`⚡ Email successfully converted to incident ${newId}!`, 'success');
+        showToast(`Email successfully converted to incident ${newId}!`, 'success');
       });
     }
 
@@ -8137,7 +8157,7 @@ ${notes}`,
 
         state.incidents.unshift(newInc);
         renderTickets();
-        showToast(`📞 Active call converted into incident ${newId}!`, 'success');
+        showToast(`Active call converted into incident ${newId}!`, 'success');
         openTicketDrawer(newId);
       });
     }
@@ -8155,7 +8175,7 @@ ${notes}`,
       btnSimRing.setAttribute('data-bound', 'true');
       btnSimRing.addEventListener('click', () => {
         state.ctiSeconds = 0;
-        showToast('📞 Incoming Call Screen Pop: Marcus Vance (Principal Security Engineer)...', 'ai');
+        showToast('Incoming Call Screen Pop: Marcus Vance (Principal Security Engineer)...', 'ai');
       });
     }
   }
@@ -8940,8 +8960,8 @@ ${notes}`,
 
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
-    const icon = type === 'success' ? '✓' : type === 'error' ? '⚠' : type === 'ai' ? '✦' : 'ℹ';
-    toast.innerHTML = `<strong>${icon}</strong> <span>${escapeHtml(message)}</span>`;
+    const icon = type === 'success' ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" style="vertical-align:-2px;"><polyline points="20 6 9 17 4 12"/></svg>' : type === 'error' ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2.5" style="vertical-align:-2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' : type === 'ai' ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="#a855f7" stroke="#a855f7" style="vertical-align:-2px;"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg>' : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5" style="vertical-align:-2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
+    toast.innerHTML = `<span class="toast-icon-wrap" style="display:inline-flex; align-items:center; margin-right:6px;">${icon}</span> <span>${escapeHtml(message.replace(/^[\u26a1\u2713\u23f1\u23f8\u26a0\u2728\U0001f389\U0001f680\U0001f4de\U0001f3e2\ufe0f]+\s*/g, ''))}</span>`;
 
     DOM.toastsContainer.appendChild(toast);
 
