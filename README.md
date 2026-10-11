@@ -1,22 +1,22 @@
-# OpenNow — The AI-Native, 100% Free Enterprise Service Platform & Autonomous CMDB
+# ZenERP — The AI-Native Enterprise Service Platform & Autonomous ITSM
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10+-brightgreen.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688.svg)](https://fastapi.tiangolo.com)
 [![Status: Production Ready](https://img.shields.io/badge/Status-Production%20Ready-emerald.svg)]()
 
-> **The modern, 100% free and open-source alternative to ServiceNow and GLPI.**  
-> Built for small, mid-sized, and growing enterprises that need a world-class ITIL Service Management (ITSM), Configuration Management Database (CMDB), and Autonomous AI Co-Pilot without six-figure vendor lock-in or outdated PHP interfaces.
+> **The modern, open-source alternative to ServiceNow and legacy ERP/ITSM suites.**  
+> Built for enterprises that require a world-class ITIL Service Management (ITSM), Configuration Management Database (CMDB), and Autonomous AI Co-Pilot without six-figure vendor lock-in or outdated interfaces.
 
 ---
 
-## 🌟 Why OpenNow?
+## 🌟 Why ZenERP?
 
-Legacy enterprise platforms like **ServiceNow** charge millions annually and trap your data in proprietary clouds. Meanwhile, older open-source alternatives like **GLPI** or **iTop** suffer from cluttered 2000s-era PHP interfaces, rigid database schemas, and zero native AI intelligence.
+Legacy enterprise platforms like **ServiceNow** charge millions annually and trap your data in proprietary clouds. Meanwhile, older open-source alternatives suffer from cluttered interfaces, rigid database schemas, and zero native AI intelligence.
 
-**OpenNow** completely reimagines IT operations:
-- ⚡ **Linear / Vercel-Grade UI**: Ultra-sleek dark glassmorphic design, instant search, and zero-build fast loading.
-- 🧠 **Autonomous AI Co-Pilot (100% Local & Offline)**:
+**ZenERP** completely reimagines enterprise operations:
+- ⚡ **Zen Aesthetic & Ergonomics**: Tranquil `#fafafa` canvas, vibrant aurora gradient sidebar, 75% width Universal Drawer, and responsive design.
+- 🧠 **Autonomous AI Co-Pilot (Local SLM)**:
   - **Instant Incident Triage**: Auto-classifies category, predicts priority (P1-P4), detects affected CIs, and assigns the correct team.
   - **Graph Blast-Radius Calculator**: Computes upstream causes and downstream cascading service impact across your infrastructure.
   - **Runbook Synthesizer**: Generates copy-pasteable diagnostic commands (`kubectl`, `psql`, `curl`) and remediation steps.

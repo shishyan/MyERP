@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""OpenNow - Free, AI-Native Enterprise Service Platform & CMDB Engine
+"""ZenERP - Modern AI-Native Enterprise Service Platform & Autonomous ITSM
 Root server launcher.
 """
 
@@ -28,7 +28,7 @@ if __name__ == "__main__":
             pass
 
     print("=" * 68)
-    print("  [*] Starting OpenNow - AI-Native Enterprise Service Platform")
+    print("  [*] Starting ZenERP - AI-Native Enterprise Service Platform")
     print(f"  [+] Dashboard: http://localhost:{port}")
     print(f"  [+] Interactive API Docs: http://localhost:{port}/docs")
     print("=" * 68)

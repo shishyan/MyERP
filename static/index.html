@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OpenNow — Zen AI-Native Service Platform & Incident Command</title>
-  <meta name="description" content="Zen-like, ultra-fast ServiceNow alternative. Pure #fafafa canvas, vibrant blue-green-purple sidebar, Top 10 ITSM migration studio, light CMDB topology, and autonomous AI triage.">
+  <title>ZenERP — Enterprise Service Platform & Autonomous ITSM</title>
+  <meta name="description" content="ZenERP: Modern AI-native enterprise service platform. Tranquil #fafafa canvas, vibrant blue-green-purple sidebar, full ITSM suite, and autonomous AI copilot.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -19,29 +19,41 @@
     <!-- VERTICAL GRADIENT SIDEBAR (BLUE-GREEN-PURPLE)            -->
     <!-- ======================================================== -->
     <aside class="aurora-sidebar" id="global-sidebar">
-      <!-- Top Brand Container -->
+      <!-- Top Brand Container: ZenERP + Client Icon & Name -->
       <div class="sidebar-brand-row">
-        <div class="brand-link" id="brand-home-btn" title="OpenNow — AI-Native Service Platform">
-          <div class="brand-icon-gem">
-            <svg viewBox="0 0 28 28" fill="none" class="brand-svg">
-              <rect x="2" y="2" width="24" height="24" rx="7" fill="url(#sidebar-gem-grad)" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
-              <path d="M7 14.5L11.5 19L21 9.5" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <div class="brand-link" id="brand-home-btn" title="ZenERP — Enterprise Platform">
+          <div class="brand-icon-gem" title="ZenERP">
+            <svg viewBox="0 0 32 32" fill="none" class="brand-svg">
               <defs>
-                <linearGradient id="sidebar-gem-grad" x1="2" y1="2" x2="26" y2="26" gradientUnits="userSpaceOnUse">
+                <linearGradient id="zenerp-gem-grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
                   <stop stop-color="#38bdf8"/>
-                  <stop offset="0.5" stop-color="#818cf8"/>
+                  <stop offset="0.45" stop-color="#34d399"/>
+                  <stop offset="0.8" stop-color="#818cf8"/>
                   <stop offset="1" stop-color="#c084fc"/>
                 </linearGradient>
               </defs>
+              <rect x="2" y="2" width="28" height="28" rx="8" fill="url(#zenerp-gem-grad)" stroke="rgba(255,255,255,0.35)" stroke-width="1.2"/>
+              <path d="M9 10h14l-11 12h11" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="21" cy="10" r="1.8" fill="#34d399"/>
+              <circle cx="11" cy="22" r="1.8" fill="#38bdf8"/>
             </svg>
-            <span class="brand-live-dot"></span>
+            <span class="brand-live-dot" title="ZenERP Online"></span>
           </div>
           <div class="brand-text-block">
             <div class="brand-title-wrap">
-              <span class="brand-title">OpenNow</span>
-              <span class="badge-zen-ver">v2.4 LTS</span>
+              <span class="brand-title">ZenERP</span>
+              <span class="badge-zen-ver">v3.0</span>
             </div>
-            <span class="brand-subtitle">Zen Enterprise ITSM</span>
+            <div class="brand-client-row" id="brand-client-badge" title="Active Client Tenant: Apex Global">
+              <span class="client-icon-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                  <polyline points="2 17 12 22 22 17"></polyline>
+                  <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+              </span>
+              <span class="client-name-label" id="brand-client-name">Apex Global</span>
+            </div>
           </div>
         </div>
 
@@ -192,30 +204,24 @@
       <!-- Top Zen Header -->
       <header class="zen-header">
         <div class="zen-header-left">
-          <!-- Mobile Sidebar Toggle -->
-          <button class="btn-icon header-sidebar-toggle" id="btn-mobile-sidebar-toggle" title="Toggle Menu">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-          </button>
-
-          <!-- Breadcrumb Title -->
-          <div class="header-breadcrumb">
-            <span class="crumb-root">OpenNow</span>
+          <!-- Proper Hierarchical Breadcrumb Navigation (No duplicate brand name, No duplicate hamburger) -->
+          <nav class="header-breadcrumb" aria-label="Breadcrumb">
+            <span class="crumb-home-icon" id="breadcrumb-home-link" title="Navigate to Overview">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+            </span>
+            <span class="crumb-group" id="header-breadcrumb-group" title="Module Group">Overview</span>
             <span class="crumb-separator">/</span>
-            <span class="crumb-current" id="header-breadcrumb-view">Incident Command</span>
+            <span class="crumb-current" id="header-breadcrumb-view">Executive ITSM Dashboard</span>
             <span class="zen-active-badge" id="zen-mode-badge" style="display: none;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:4px;"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20 5 5 0 0 0 0-10 5 5 0 0 1 0-10z"/></svg>Zen Mode Active
             </span>
-          </div>
+          </nav>
 
-          <!-- Quick Metrics Ticker -->
+          <!-- Quick Metrics Ticker (Enterprise setup removed - managed inside Setup) -->
           <div class="zen-header-stats" id="global-stats-bar">
-            <!-- Dynamic Industry & Company DNA Pill -->
-            <div class="stat-pill stat-pill-industry cursor-pointer" id="header-industry-pill" title="Active Industry Archetype & Compliance Standard (Click to Configure)">
-              <span class="industry-indicator-icon" id="header-industry-icon">💳</span>
-              <span class="stat-label">Industry:</span>
-              <span class="stat-value font-mono text-indigo" id="header-industry-name">FinTech</span>
-              <span class="badge-tag tag-compliance" id="header-industry-compliance">PCI-DSS</span>
-            </div>
 
             <div class="stat-pill" title="Total active incidents currently under management">
               <span class="stat-indicator text-blue">●</span>

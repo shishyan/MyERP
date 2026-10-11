@@ -329,6 +329,35 @@ button, input, select, textarea {
   border-radius: 4px;
 }
 
+.brand-client-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 2px 7px;
+  border-radius: 999px;
+  max-width: 145px;
+  margin-top: 2px;
+}
+
+.client-icon-badge {
+  display: inline-flex;
+  align-items: center;
+  color: #38bdf8;
+  flex-shrink: 0;
+}
+
+.client-name-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+}
+
 .brand-subtitle {
   font-size: 11px;
   color: rgba(255, 255, 255, 0.7);
@@ -598,13 +627,33 @@ button, input, select, textarea {
   font-size: 13.5px;
 }
 
-.crumb-root {
+.crumb-home-icon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--text-zen-muted);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.crumb-home-icon:hover {
+  color: var(--accent-indigo);
+}
+
+.crumb-group {
   font-weight: 500;
   color: var(--text-zen-muted);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.crumb-group:hover {
+  color: var(--text-zen-primary);
 }
 
 .crumb-separator {
-  color: var(--border-zen-bright);
+  color: #cbd5e1;
+  font-size: 12px;
+  user-select: none;
 }
 
 .crumb-current {

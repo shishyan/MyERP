@@ -1717,6 +1717,8 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
     DOM.zenModeBadge = document.getElementById('zen-mode-badge');
     DOM.sidebarZenDot = document.getElementById('sidebar-zen-dot');
     DOM.breadcrumbView = document.getElementById('header-breadcrumb-view');
+    DOM.breadcrumbGroup = document.getElementById('header-breadcrumb-group');
+    DOM.breadcrumbHomeLink = document.getElementById('breadcrumb-home-link');
 
     DOM.navItems = document.querySelectorAll('.nav-item');
     DOM.viewPanels = document.querySelectorAll('.view-panel');
@@ -1894,7 +1896,7 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
     renderAiEvents();
     bindEvents();
     startSlaTicker();
-    showToast('OpenNow Zen Enterprise Platform initialized on #fafafa canvas.', 'success');
+    showToast('ZenERP Enterprise Platform initialized on #fafafa canvas.', 'success');
   }
 
   // =========================================================================
@@ -2297,7 +2299,7 @@ You can submit this request directly via the **Service Catalog & Requests** view
       } else {
         replyText = `### 🤖 Local SLM Assistant (${modelName})
 I have processed your query: *"${escapeHtml(query)}"*
-OpenNow's on-device SLM has evaluated your query against active tickets, CMDB topology, and ITIL runbooks. All systems are operating normally at **98.4% Reliability**.
+ZenERP's on-device SLM has evaluated your query against active tickets, CMDB topology, and ITIL runbooks. All systems are operating normally at **98.4% Reliability**.
 You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, \`REQ-4001\`), calculate blast radius, or fetch diagnostic CLI commands.`;
       }
 
@@ -2321,7 +2323,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             <div class="chat-bubble-row assistant">
               <div class="chat-avatar-pill">SLM</div>
               <div class="chat-bubble-content">
-                <h3>OpenNow Local SLM Engine Ready</h3>
+                <h3>ZenERP Local SLM Engine Ready</h3>
                 <p>Chat session reset. You can ask me to diagnose incidents, check change collisions, or synthesize remediation runbooks.</p>
               </div>
             </div>
@@ -5935,37 +5937,13 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
   function updateHeaderIndustryPill() {
     const dna = state.companyDna;
     if (!dna) return;
-    const icons = {
-      fintech: '💳',
-      healthcare: '🏥',
-      retail: '🛒',
-      saas_ai: '⚡',
-      manufacturing: '🏭',
-      telecom: '📡'
-    };
-    const iconEl = document.getElementById('header-industry-icon');
-    const nameEl = document.getElementById('header-industry-name');
-    const compEl = document.getElementById('header-industry-compliance');
+    const clientNameEl = document.getElementById('brand-client-name');
+    if (clientNameEl && dna.company_name) {
+      clientNameEl.textContent = dna.company_name;
+    }
     const badgeEl = document.getElementById('badge-current-industry');
-
-    if (iconEl) iconEl.textContent = icons[dna.industry_id] || '🏢';
-    if (nameEl) {
-      const shortNames = {
-        fintech: 'FinTech Banking',
-        healthcare: 'Healthcare EHR',
-        retail: 'Retail E-Com',
-        saas_ai: 'Cloud SaaS AI',
-        manufacturing: 'Manufacturing',
-        telecom: 'Telecom 5G'
-      };
-      nameEl.textContent = shortNames[dna.industry_id] || dna.industry_name || 'Enterprise';
-    }
-    if (compEl) {
-      const compShort = (dna.compliance_standard || 'PCI-DSS').split('/')[0].split('•')[0].trim();
-      compEl.textContent = compShort;
-    }
     if (badgeEl) {
-      badgeEl.textContent = dna.industry_id.toUpperCase();
+      badgeEl.textContent = (dna.industry_id || 'ENTERPRISE').toUpperCase();
     }
   }
 
@@ -8245,24 +8223,28 @@ ${notes}`,
       }
     });
 
+    const breadcrumbHierarchy = {
+      'executive-dashboard': { group: 'Overview', view: 'Executive ITSM Dashboard' },
+      'kanban-board': { group: 'Overview', view: 'Executive ITSM Dashboard' },
+      'service-requests': { group: 'Service Requests', view: 'Custom Service Requests' },
+      'service-catalog': { group: 'Service Requests', view: 'Enterprise Service Catalog' },
+      'incident-command': { group: 'ITSM Operations', view: 'Incident Command' },
+      'problem-management': { group: 'ITSM Operations', view: 'Problem Management & KEDB' },
+      'change-management': { group: 'ITSM Operations', view: 'Change Management & CAB' },
+      'knowledge-base': { group: 'Knowledge Management', view: 'Knowledge Base & Runbooks' },
+      'cmdb-topology': { group: 'Technical Infrastructure', view: 'CMDB Topology Graph' },
+      'ai-chat': { group: 'Intelligence', view: 'Local SLM AI Chat Copilot' },
+      'ai-ops': { group: 'Intelligence', view: 'AI Operations Center' },
+      'omnichannel-hub': { group: 'Omnichannel', view: 'Omnichannel Hub (Email & CTI)' },
+      'migration-studio': { group: 'Data Migration', view: 'Top 10 Migration Hub' },
+      'setup': { group: 'Platform Administration', view: 'Enterprise Setup & Configurations' }
+    };
+    const crumb = breadcrumbHierarchy[viewName] || { group: 'Operations', view: viewName };
+    if (DOM.breadcrumbGroup) {
+      DOM.breadcrumbGroup.textContent = crumb.group;
+    }
     if (DOM.breadcrumbView) {
-      const titles = {
-        'incident-command': 'Incident Command',
-        'executive-dashboard': 'Executive ITSM Dashboard',
-        'kanban-board': 'Executive ITSM Dashboard',
-        'service-catalog': 'Enterprise Service Catalog & Requests',
-        'problem-management': 'Problem Management & KEDB',
-        'change-management': 'Change Management & CAB',
-        'omnichannel-hub': 'Omnichannel Hub (Email & CTI)',
-        'service-catalog': 'Enterprise Service Catalog',
-        'service-requests': 'Service Requests & Fulfillment Queue',
-        'knowledge-base': 'Knowledge Base & KCS',
-        'cmdb-topology': 'CMDB Topology Graph',
-        'migration-studio': 'Top 10 Migration Hub',
-        'ai-ops': 'AI Ops Center',
-        'setup': 'Setup / Configurations'
-      };
-      DOM.breadcrumbView.textContent = titles[viewName] || viewName;
+      DOM.breadcrumbView.textContent = crumb.view;
     }
 
     if (viewName === 'setup') {
@@ -8298,17 +8280,30 @@ ${notes}`,
       });
     });
 
-    const headerIndustryPill = document.getElementById('header-industry-pill');
-    if (headerIndustryPill) {
-      headerIndustryPill.addEventListener('click', () => {
-        switchView('setup');
-        state.activeSetupModule = 'dna';
-        renderSetupCenter('dna');
+    if (DOM.breadcrumbHomeLink) {
+      DOM.breadcrumbHomeLink.addEventListener('click', () => switchView('executive-dashboard'));
+    }
+
+    if (DOM.breadcrumbGroup) {
+      DOM.breadcrumbGroup.addEventListener('click', () => {
+        const groupViews = {
+          'Overview': 'executive-dashboard',
+          'Service Requests': 'service-requests',
+          'ITSM Operations': 'incident-command',
+          'Knowledge Management': 'knowledge-base',
+          'Technical Infrastructure': 'cmdb-topology',
+          'Intelligence': 'ai-chat',
+          'Omnichannel': 'omnichannel-hub',
+          'Data Migration': 'migration-studio',
+          'Platform Administration': 'setup'
+        };
+        const targetView = groupViews[DOM.breadcrumbGroup.textContent.trim()] || 'executive-dashboard';
+        switchView(targetView);
       });
     }
 
     if (DOM.brandHomeBtn) {
-      DOM.brandHomeBtn.addEventListener('click', () => switchView('incident-command'));
+      DOM.brandHomeBtn.addEventListener('click', () => switchView('executive-dashboard'));
     }
 
     if (DOM.btnToggleSidebar) {
