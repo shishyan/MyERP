@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenNow — Zen AI-Native Service Platform & Incident Command</title>
+  <meta name="description" content="Zen-like, ultra-fast ServiceNow alternative. Pure #fafafa canvas, vibrant blue-green-purple sidebar, Top 10 ITSM migration studio, light CMDB topology, and autonomous AI triage.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="light-zen-theme">
+
+  <!-- Main App Shell -->
+  <div id="app" class="app-container">
+
+    <!-- ======================================================== -->
+    <!-- VERTICAL GRADIENT SIDEBAR (BLUE-GREEN-PURPLE)            -->
+    <!-- ======================================================== -->
+    <aside class="aurora-sidebar" id="global-sidebar">
+      <!-- Top Brand Container -->
+      <div class="sidebar-brand-row">
+        <div class="brand-link" id="brand-home-btn" title="OpenNow — AI-Native Service Platform">
+          <div class="brand-icon-gem">
+            <svg viewBox="0 0 28 28" fill="none" class="brand-svg">
+              <rect x="2" y="2" width="24" height="24" rx="7" fill="url(#sidebar-gem-grad)" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
+              <path d="M7 14.5L11.5 19L21 9.5" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs>
+                <linearGradient id="sidebar-gem-grad" x1="2" y1="2" x2="26" y2="26" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#38bdf8"/>
+                  <stop offset="0.5" stop-color="#818cf8"/>
+                  <stop offset="1" stop-color="#c084fc"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <span class="brand-live-dot"></span>
+          </div>
+          <div class="brand-text-block">
+            <div class="brand-title-wrap">
+              <span class="brand-title">OpenNow</span>
+              <span class="badge-zen-ver">v2.4 LTS</span>
+            </div>
+            <span class="brand-subtitle">Zen Enterprise ITSM</span>
+          </div>
+        </div>
+
+        <!-- Sidebar Collapse / Expand Toggle -->
+        <button class="sidebar-toggle-btn" id="btn-toggle-sidebar" title="Collapse or Expand Navigation (Ctrl+B)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+      </div>
+
+      <!-- Navigation Menu Items -->
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">OPERATIONS</div>
+
+        <button class="nav-item active" data-view="incident-command" id="nav-btn-incidents" title="Incident Command (Table View)">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </span>
+          <span class="nav-label">Incident Command</span>
+          <span class="nav-pill" id="sidebar-active-tickets-badge">12</span>
+        </button>
+
+        <button class="nav-item" data-view="kanban-board" id="nav-btn-kanban" title="Kanban Board Workspace">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1"/></svg>
+          </span>
+          <span class="nav-label">Kanban Board</span>
+          <span class="nav-pill pill-live">Flow</span>
+        </button>
+
+        <button class="nav-item" data-view="problem-management" id="nav-btn-problems" title="Problem Management & KEDB">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/><path d="M4.93 4.93l4.24 4.24"/></svg>
+          </span>
+          <span class="nav-label">Problem Management</span>
+          <span class="nav-pill pill-purple">KEDB</span>
+        </button>
+
+        <button class="nav-item" data-view="change-management" id="nav-btn-changes" title="Change Management & CAB Approvals">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </span>
+          <span class="nav-label">Change Management</span>
+          <span class="nav-pill pill-gold">CAB</span>
+        </button>
+
+        <button class="nav-item" data-view="omnichannel-hub" id="nav-btn-omnichannel" title="Omnichannel Hub (Email & CTI Screen Pop)">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </span>
+          <span class="nav-label">Omnichannel Hub</span>
+          <span class="nav-pill pill-emerald">CTI</span>
+        </button>
+
+        <div class="nav-section-label mt-3">SERVICE & KNOWLEDGE</div>
+
+        <button class="nav-item" data-view="service-catalog" id="nav-btn-catalog" title="Enterprise Service Catalog & Requests">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          </span>
+          <span class="nav-label">Service Catalog</span>
+        </button>
+
+        <button class="nav-item" data-view="knowledge-base" id="nav-btn-kb" title="Knowledge Base & KCS Articles">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          </span>
+          <span class="nav-label">Knowledge Base</span>
+          <span class="nav-pill pill-purple">KCS</span>
+        </button>
+
+        <button class="nav-item" data-view="cmdb-topology" id="nav-btn-cmdb" title="Interactive CMDB Topology Graph">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><circle cx="6" cy="18" r="3"/><line x1="9" y1="6" x2="15" y2="6"/><line x1="6" y1="9" x2="6" y2="15"/><line x1="18" y1="9" x2="18" y2="15"/><line x1="9" y1="18" x2="15" y2="18"/><line x1="8.5" y1="8.5" x2="15.5" y2="15.5"/></svg>
+          </span>
+          <span class="nav-label">CMDB Topology</span>
+          <span class="nav-pill pill-live" id="sidebar-cmdb-live-badge">Live</span>
+        </button>
+
+        <div class="nav-section-label mt-3">AI & AUTOMATION</div>
+
+        <button class="nav-item" data-view="ai-ops" id="nav-btn-aiops" title="AI Ops Center & Autonomous SRE">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/><path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2"/></svg>
+          </span>
+          <span class="nav-label">AI Ops Center</span>
+          <span class="nav-pill pill-emerald">Auto</span>
+        </button>
+
+        <button class="nav-item" data-view="migration-studio" id="nav-btn-migration" title="Top 10 Native Migration Studio">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </span>
+          <span class="nav-label">Top 10 Migration Hub</span>
+          <span class="nav-pill pill-gold">Top 10</span>
+        </button>
+
+        <div class="nav-section-label mt-3">ADMINISTRATION</div>
+
+        <button class="nav-item" data-view="setup" id="nav-btn-setup" title="Enterprise Setup & Master Data Configuration">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </span>
+          <span class="nav-label">Setup / Configurations</span>
+          <span class="nav-pill pill-purple">ERP</span>
+        </button>
+      </nav>
+
+      <!-- Sidebar Footer (Zen Mode & User Profile) -->
+      <div class="sidebar-footer">
+        <!-- Quick Zen Mode Toggle Pill -->
+        <button class="sidebar-zen-btn" id="btn-sidebar-zen-toggle" title="Toggle Zen Focus Mode (Z)">
+          <span class="zen-lotus-icon">☯</span>
+          <span class="zen-btn-text">Zen Focus Mode</span>
+          <span class="zen-indicator-dot" id="sidebar-zen-dot"></span>
+        </button>
+
+        <!-- System Telemetry Status -->
+        <div class="sidebar-telemetry-box" title="Telemetry ping: 38ms">
+          <span class="telemetry-ping-pulse"></span>
+          <span class="telemetry-text">Engine: <strong>Optimal (38ms)</strong></span>
+        </div>
+
+        <!-- User Profile Pill -->
+        <div class="sidebar-user-card" title="Alex Rivera — Lead Reliability Architect">
+          <div class="user-avatar-pill">AR</div>
+          <div class="user-info-text">
+            <span class="user-name">Alex Rivera</span>
+            <span class="user-role">Lead SRE Architect</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ======================================================== -->
+    <!-- MAIN WORKSPACE CANVAS (#FAFAFA BACKGROUND)              -->
+    <!-- ======================================================== -->
+    <div class="main-workspace" id="main-workspace">
+
+      <!-- Top Zen Header -->
+      <header class="zen-header">
+        <div class="zen-header-left">
+          <!-- Mobile Sidebar Toggle -->
+          <button class="btn-icon header-sidebar-toggle" id="btn-mobile-sidebar-toggle" title="Toggle Menu">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+
+          <!-- Breadcrumb Title -->
+          <div class="header-breadcrumb">
+            <span class="crumb-root">OpenNow</span>
+            <span class="crumb-separator">/</span>
+            <span class="crumb-current" id="header-breadcrumb-view">Incident Command</span>
+            <span class="zen-active-badge" id="zen-mode-badge" style="display: none;">
+              <span>☯</span> Zen Mode Active
+            </span>
+          </div>
+
+          <!-- Quick Metrics Ticker -->
+          <div class="zen-header-stats" id="global-stats-bar">
+            <div class="stat-pill" title="Total active incidents currently under management">
+              <span class="stat-indicator text-blue">●</span>
+              <span class="stat-label">Active:</span>
+              <span class="stat-value font-mono" id="stat-active-incidents">12</span>
+            </div>
+
+            <div class="stat-pill stat-pill-critical" title="P1 Critical severity incidents">
+              <span class="critical-radar-dot"></span>
+              <span class="stat-label">P1 Outages:</span>
+              <span class="stat-value font-mono text-rose" id="stat-p1-count">2</span>
+            </div>
+
+            <div class="stat-pill" title="CMDB Configuration Items operational status">
+              <span class="stat-indicator text-emerald">●</span>
+              <span class="stat-label">CMDB Health:</span>
+              <span class="stat-value font-mono text-emerald" id="stat-cmdb-health">94.8%</span>
+            </div>
+
+            <div class="stat-pill" title="SLA compliance rate">
+              <span class="stat-indicator text-purple">●</span>
+              <span class="stat-label">SLA Rate:</span>
+              <span class="stat-value font-mono text-purple" id="stat-sla-rate">98.2%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="zen-header-right">
+          <!-- Search / Cmd+K Trigger -->
+          <button class="zen-search-btn" id="cmd-palette-btn" title="Open Command Palette (Cmd+K / Ctrl+K)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <span class="search-btn-text">Quick search, CIs, actions...</span>
+            <kbd class="key-badge">⌘K</kbd>
+          </button>
+
+          <!-- Simulate Chaos Button -->
+          <button class="btn btn-zen-subtle" id="btn-chaos-simulate" title="Inject simulated production outage">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span>Simulate Chaos</span>
+          </button>
+
+          <!-- Zen Focus Mode Toggle Header Button -->
+          <button class="btn-zen-mode" id="btn-zen-mode-toggle" title="Toggle Zen Focus Mode (hides chrome for calm, tranquil focus)">
+            <span class="zen-icon">☯</span>
+            <span class="zen-label">Zen Mode</span>
+          </button>
+
+          <!-- New Incident Action Button -->
+          <button class="btn btn-zen-primary" id="btn-create-incident-trigger">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span>New Incident</span>
+          </button>
+
+          <!-- Notifications Bell -->
+          <button class="btn-icon btn-bell" id="btn-notifications" title="System alerts and AI events">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <span class="notification-badge">3</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Scrollable Content Area (#FAFAFA) -->
+      <main class="content-viewport">
+
+        <!-- ======================================================== -->
+        <!-- VIEW 1: INCIDENT COMMAND (DEFAULT TABLE VIEW)            -->
+        <!-- ======================================================== -->
+        <section id="view-incident-command" class="view-panel active">
+          <!-- Toolbar Filter Controls -->
+          <div class="zen-toolbar">
+            <div class="toolbar-left">
+              <!-- Search Filter -->
+              <div class="zen-input-wrap">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="text" id="ticket-filter-search" placeholder="Filter title, ID, service, team..." autocomplete="off">
+                <button class="clear-search-btn" id="ticket-search-clear" style="display: none;">&times;</button>
+              </div>
+
+              <!-- Priority Quick Chips -->
+              <div class="filter-chips-row">
+                <span class="filter-caption">Priority:</span>
+                <button class="filter-chip active" data-filter-priority="ALL">All</button>
+                <button class="filter-chip chip-p1" data-filter-priority="P1">
+                  <span class="dot-p1"></span> P1 Critical
+                </button>
+                <button class="filter-chip chip-p2" data-filter-priority="P2">
+                  <span class="dot-p2"></span> P2 High
+                </button>
+                <button class="filter-chip chip-p3" data-filter-priority="P3">
+                  <span class="dot-p3"></span> P3 Moderate
+                </button>
+                <button class="filter-chip chip-p4" data-filter-priority="P4">
+                  <span class="dot-p4"></span> P4 Low
+                </button>
+              </div>
+
+              <!-- Team Select Filter -->
+              <div class="select-filter-wrap">
+                <select id="team-filter-select" class="zen-select">
+                  <option value="ALL">All Assignment Teams</option>
+                  <option value="SRE-Core">SRE Core</option>
+                  <option value="Database-Ops">Database Ops</option>
+                  <option value="Payment-Platform">Payment Platform</option>
+                  <option value="Cloud-Infra">Cloud Infra</option>
+                  <option value="Security-SecOps">SecOps / IAM</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="toolbar-right">
+              <!-- SLA Alert Pill -->
+              <div class="sla-warning-indicator" id="sla-urgent-alert" title="Incidents requiring immediate mitigation">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span id="sla-urgent-text">1 Incident Near Breach (&lt;30m)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Default Table View Container -->
+          <div id="table-container" class="table-view-wrapper" style="display: block;">
+            <div class="zen-card table-card">
+              <table class="zen-data-table">
+                <thead>
+                  <tr>
+                    <th width="110">Incident ID</th>
+                    <th width="100">Priority</th>
+                    <th>Incident Title &amp; Symptoms</th>
+                    <th width="200">Affected CI</th>
+                    <th width="160">Assignment Team</th>
+                    <th width="130">Status</th>
+                    <th width="140">SLA Countdown</th>
+                    <th width="90" class="text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="incidents-table-body">
+                  <!-- Populated by app.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 1B: KANBAN BOARD WORKSPACE (DEDICATED MENU ITEM)    -->
+        <!-- ======================================================== -->
+        <section id="view-kanban-board" class="view-panel">
+          <!-- Toolbar Filter Controls for Kanban -->
+          <div class="zen-toolbar">
+            <div class="toolbar-left">
+              <div class="zen-input-wrap">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="text" id="kanban-filter-search" placeholder="Search cards by keyword, team, CI..." autocomplete="off">
+              </div>
+              <div class="filter-chips-row">
+                <span class="filter-caption">Priority:</span>
+                <button class="filter-chip active kanban-p-chip" data-filter-priority="ALL">All</button>
+                <button class="filter-chip chip-p1 kanban-p-chip" data-filter-priority="P1">P1 Critical</button>
+                <button class="filter-chip chip-p2 kanban-p-chip" data-filter-priority="P2">P2 High</button>
+                <button class="filter-chip chip-p3 kanban-p-chip" data-filter-priority="P3">P3 Mod</button>
+              </div>
+            </div>
+            <div class="toolbar-right">
+              <span class="badge-tag">Drag &amp; Drop ITIL Flow</span>
+            </div>
+          </div>
+
+          <!-- Dynamic Kanban Board Container -->
+          <div id="kanban-container" class="kanban-board-wrapper" style="display: grid;">
+            <!-- Column 1: New / Triage -->
+            <div class="kanban-column" data-status="NEW">
+              <div class="column-header">
+                <div class="col-title-wrap">
+                  <span class="col-status-indicator indicator-new"></span>
+                  <h3 class="col-title">New / Triaging</h3>
+                  <span class="col-count font-mono" id="col-count-NEW">0</span>
+                </div>
+                <button class="col-add-btn" data-status-default="NEW" title="Add incident to this stage">+</button>
+              </div>
+              <div class="kanban-cards-list dropzone" id="cards-NEW"></div>
+            </div>
+
+            <!-- Column 2: In Progress -->
+            <div class="kanban-column" data-status="IN_PROGRESS">
+              <div class="column-header">
+                <div class="col-title-wrap">
+                  <span class="col-status-indicator indicator-inprogress"></span>
+                  <h3 class="col-title">In Progress / Mitigating</h3>
+                  <span class="col-count font-mono" id="col-count-IN_PROGRESS">0</span>
+                </div>
+                <button class="col-add-btn" data-status-default="IN_PROGRESS" title="Add incident to this stage">+</button>
+              </div>
+              <div class="kanban-cards-list dropzone" id="cards-IN_PROGRESS"></div>
+            </div>
+
+            <!-- Column 3: On Hold -->
+            <div class="kanban-column" data-status="ON_HOLD">
+              <div class="column-header">
+                <div class="col-title-wrap">
+                  <span class="col-status-indicator indicator-onhold"></span>
+                  <h3 class="col-title">On Hold / Paused</h3>
+                  <span class="col-count font-mono" id="col-count-ON_HOLD">0</span>
+                </div>
+                <button class="col-add-btn" data-status-default="ON_HOLD" title="Add incident to this stage">+</button>
+              </div>
+              <div class="kanban-cards-list dropzone" id="cards-ON_HOLD"></div>
+            </div>
+
+            <!-- Column 4: Resolved -->
+            <div class="kanban-column" data-status="RESOLVED">
+              <div class="column-header">
+                <div class="col-title-wrap">
+                  <span class="col-status-indicator indicator-resolved"></span>
+                  <h3 class="col-title">Resolved / Mitigated</h3>
+                  <span class="col-count font-mono" id="col-count-RESOLVED">0</span>
+                </div>
+                <button class="col-add-btn" data-status-default="RESOLVED" title="Add incident to this stage">+</button>
+              </div>
+              <div class="kanban-cards-list dropzone" id="cards-RESOLVED"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 1C: PROBLEM MANAGEMENT (KEDB & 5-WHYS ANALYZER)     -->
+        <!-- ======================================================== -->
+        <section id="view-problem-management" class="view-panel">
+          <div class="problem-workspace">
+            <div class="zen-hero-banner">
+              <div class="hero-left">
+                <div class="hero-tag">
+                  <span class="tag-sparkle">🔍</span>
+                  <span>ITIL 4 Problem Management &amp; Known Error Database</span>
+                </div>
+                <h2>Problem Management &amp; KEDB</h2>
+                <p>Identify underlying root causes behind recurring incidents, maintain the Known Error Database (KEDB) with validated workarounds, and step through interactive 5-Whys causal chains.</p>
+              </div>
+              <div class="hero-right">
+                <div class="hero-metric-card">
+                  <span class="hero-m-val text-indigo font-mono" id="stat-total-problems">3 Problems</span>
+                  <span class="hero-m-label">Active Under Investigation</span>
+                </div>
+                <div class="hero-metric-card">
+                  <span class="hero-m-val text-rose font-mono" id="stat-kedb-count">2 KEDB</span>
+                  <span class="hero-m-label">Known Error Workarounds</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Problem Toolbar & KEDB Toggle -->
+            <div class="zen-toolbar mt-3">
+              <div class="toolbar-left">
+                <div class="zen-input-wrap">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                  <input type="text" id="problem-filter-search" placeholder="Search problems, root causes, workarounds...">
+                </div>
+                <div class="filter-chips-row">
+                  <button class="filter-chip active" id="btn-filter-problems-all">All Problems</button>
+                  <button class="filter-chip chip-p1" id="btn-toggle-kedb">
+                    <span class="badge-gem-dot"></span> Show KEDB Known Errors Only
+                  </button>
+                </div>
+              </div>
+              <div class="toolbar-right">
+                <button class="btn btn-sm btn-zen-primary" id="btn-create-problem-prompt">+ Log New Problem</button>
+              </div>
+            </div>
+
+            <!-- Problem Cards List -->
+            <div class="problem-cards-grid" id="problem-cards-container">
+              <!-- Rendered dynamically by app.js -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 1D: CHANGE MANAGEMENT (CAB APPROVALS & RISK SCORES) -->
+        <!-- ======================================================== -->
+        <section id="view-change-management" class="view-panel">
+          <div class="change-workspace">
+            <div class="zen-hero-banner">
+              <div class="hero-left">
+                <div class="hero-tag">
+                  <span class="tag-sparkle">🛡️</span>
+                  <span>ITIL 4 Change Enablement &amp; CAB Governance</span>
+                </div>
+                <h2>Change Management &amp; CAB Advisory</h2>
+                <p>Review Request for Changes (RFCs), calculate multi-factor blast radius risk scores, and execute Change Advisory Board (CAB) voting workflows prior to production rollout.</p>
+              </div>
+              <div class="hero-right">
+                <div class="hero-metric-card">
+                  <span class="hero-m-val text-amber font-mono" id="stat-pending-cab">2 Pending</span>
+                  <span class="hero-m-label">CAB Decisions Required</span>
+                </div>
+                <div class="hero-metric-card">
+                  <span class="hero-m-val text-emerald font-mono">98.9%</span>
+                  <span class="hero-m-label">Change Success Rate</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Change Filter Toolbar -->
+            <div class="zen-toolbar mt-3">
+              <div class="toolbar-left">
+                <div class="zen-input-wrap">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                  <input type="text" id="change-filter-search" placeholder="Search RFC title, service, change lead...">
+                </div>
+                <div class="filter-chips-row">
+                  <button class="filter-chip active change-type-chip" data-type="ALL">All RFCs</button>
+                  <button class="filter-chip change-type-chip" data-type="Normal">Normal</button>
+                  <button class="filter-chip change-type-chip" data-type="Emergency">Emergency</button>
+                  <button class="filter-chip change-type-chip" data-type="Standard">Standard</button>
+                </div>
+              </div>
+              <div class="toolbar-right">
+                <button class="btn btn-sm btn-zen-primary" id="btn-create-rfc-prompt">+ New Change Request (RFC)</button>
+              </div>
+            </div>
+
+            <!-- Changes Table Card -->
+            <div class="changes-table-card">
+              <table class="zen-data-table">
+                <thead>
+                  <tr>
+                    <th width="110">Change ID</th>
+                    <th width="100">Type</th>
+                    <th>RFC Title &amp; Target Service</th>
+                    <th width="160">Risk Score</th>
+                    <th width="150">CAB Status</th>
+                    <th width="160">Scheduled Window</th>
+                    <th width="160" class="text-right">CAB Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="changes-table-body">
+                  <!-- Populated by app.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 1E: OMNICHANNEL HUB (EMAIL & CTI PHONE SCREEN POP)  -->
+        <!-- ======================================================== -->
+        <section id="view-omnichannel-hub" class="view-panel">
+          <div class="omnichannel-workspace">
+            <div class="zen-hero-banner">
+              <div class="hero-left">
+                <div class="hero-tag">
+                  <span class="tag-sparkle">📡</span>
+                  <span>Unified Omnichannel Intake Engine</span>
+                </div>
+                <h2>Omnichannel Hub: Email &amp; CTI Softphone</h2>
+                <p>Experience unified incident ingestion across touchpoints: simulate incoming monitoring and VIP emails with automatic NLP parsing, or test live CTI Softphone Screen Pops with caller profile matching and 1-click incident creation.</p>
+              </div>
+              <div class="hero-right">
+                <div class="hero-metric-card">
+                  <span class="hero-m-val text-indigo font-mono">100% Inbound</span>
+                  <span class="hero-m-label">Channel Automation</span>
+                </div>
+                <div class="hero-metric-card">
+                  <span class="hero-m-val text-emerald font-mono">0.8s</span>
+                  <span class="hero-m-label">Screen Pop Latency</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="omnichannel-grid">
+              <!-- Channel 1: Email-to-Ticket Simulator -->
+              <div class="omni-card">
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="font-size:20px;">✉️</span>
+                    <h3 style="font-size:14px; font-weight:700;">Email-to-Ticket Inbound Simulator</h3>
+                  </div>
+                  <span class="badge-tag">support@opennow.io</span>
+                </div>
+                <p class="text-xs text-muted">Simulate an incoming email payload to test automatic classification, category extraction, and priority calculation.</p>
+
+                <form id="form-simulate-email" style="display:flex; flex-direction:column; gap:10px; margin-top:8px;">
+                  <div class="form-row-2">
+                    <div>
+                      <label class="text-xs text-muted">From (Sender)</label>
+                      <input type="email" id="email-sim-from" class="zen-form-control" value="alerts@datadog.com" required style="height:32px;">
+                    </div>
+                    <div>
+                      <label class="text-xs text-muted">Target Mailbox</label>
+                      <select id="email-sim-mailbox" class="zen-select w-full" style="height:32px;">
+                        <option value="support@opennow.io">support@opennow.io (Default)</option>
+                        <option value="critical-ops@opennow.io">critical-ops@opennow.io (P1 Bypass)</option>
+                        <option value="security-alerts@opennow.io">security-alerts@opennow.io (SecOps)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="text-xs text-muted">Subject Line</label>
+                    <input type="text" id="email-sim-subject" class="zen-form-control" value="CRITICAL: Aurora PostgreSQL Replica IOPS Exhaustion" required style="height:32px;">
+                  </div>
+
+                  <div>
+                    <label class="text-xs text-muted">Email Message Body / Trace</label>
+                    <textarea id="email-sim-body" class="zen-form-control form-textarea" rows="3" required style="font-size:12px;">Alert triggered: RDS cluster Aurora us-east-1 replica lag exceeded 180 seconds. Disk read latency spiked above 45ms. Automated connection pool exhaustion warning.</textarea>
+                  </div>
+
+                  <div style="display:flex; align-items:center; justify-content:space-between; margin-top:4px;">
+                    <span class="text-xs text-muted">NLP Parser matches CI &amp; assigns SLA instantly</span>
+                    <button type="submit" class="btn btn-sm btn-zen-primary">⚡ Ingest &amp; Parse Inbound Email</button>
+                  </div>
+                </form>
+
+                <!-- Parsed Email Result Preview -->
+                <div id="email-parse-result" style="display:none; background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:12px;">
+                  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+                    <strong style="font-size:12px; color:#047857;">✓ Email Ingested &amp; Dispatched!</strong>
+                    <span class="badge-tag font-mono" id="email-parse-ticket-id">INC-9099</span>
+                  </div>
+                  <p class="text-xs text-secondary" id="email-parse-summary"></p>
+                </div>
+              </div>
+
+              <!-- Channel 2: CTI Phone Screen Pop & Softphone Logger -->
+              <div class="omni-card">
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="font-size:20px;">📞</span>
+                    <h3 style="font-size:14px; font-weight:700;">CTI Phone Screen Pop &amp; Softphone</h3>
+                  </div>
+                  <span class="badge-tag" style="background:#dcfce7; color:#166534; border-color:#86efac;">● WebRTC Ready</span>
+                </div>
+                <p class="text-xs text-muted">Real-time incoming call recognition with caller identity matching, CMDB history, and live call logging.</p>
+
+                <!-- Live Screen Pop Card -->
+                <div class="cti-screenpop-box">
+                  <div class="cti-pop-head">
+                    <div class="cti-caller-pill">
+                      <div class="cti-avatar">SL</div>
+                      <div>
+                        <strong style="font-size:13.5px; color:#0f172a; display:block;">Sarah Lin</strong>
+                        <span class="text-xs text-muted">VP of Infrastructure &amp; Cloud Ops</span>
+                      </div>
+                    </div>
+                    <div class="cti-call-timer" id="cti-call-timer">00:48</div>
+                  </div>
+
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:12px; background:rgba(255,255,255,0.7); padding:8px 10px; border-radius:6px;">
+                    <div>
+                      <span class="text-xs text-muted">Caller ID:</span>
+                      <strong class="font-mono" style="display:block;">+1 (415) 555-0199</strong>
+                    </div>
+                    <div>
+                      <span class="text-xs text-muted">Associated CI:</span>
+                      <strong class="text-indigo" style="display:block;">EKS Core Cluster (CI-K8S-006)</strong>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="text-xs text-muted">Live Call Notes / Technician Notes</label>
+                    <textarea id="cti-call-notes" class="zen-form-control form-textarea" rows="2" style="font-size:12px;" placeholder="Caller reporting sudden pod evictions in payment namespace...">Sarah Lin calling about payment namespace degradation during flash sale.</textarea>
+                  </div>
+
+                  <div class="cti-actions-bar">
+                    <button class="btn btn-sm btn-zen-primary" id="btn-convert-call-incident">⚡ Convert Call to Incident</button>
+                    <button class="btn btn-sm btn-zen-outline" id="btn-log-call-worklog">Log to Worklog</button>
+                    <button class="btn btn-sm btn-zen-subtle" id="btn-simulate-new-call">Simulate New Ring</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 1F: KNOWLEDGE BASE (KCS SEARCHABLE ARTICLES)        -->
+        <!-- ======================================================== -->
+        <section id="view-knowledge-base" class="view-panel">
+          <div class="kb-workspace">
+            <div class="zen-hero-banner">
+              <div class="hero-left">
+                <div class="hero-tag">
+                  <span class="tag-sparkle">📚</span>
+                  <span>Knowledge-Centered Service (KCS) Verified Library</span>
+                </div>
+                <h2>Knowledge Base &amp; SRE Runbooks</h2>
+                <p>Access peer-reviewed remediation procedures, PostgreSQL and Kubernetes recovery runbooks, and ITIL known error resolutions with 1-click step-by-step guidance.</p>
+              </div>
+              <div class="hero-right">
+                <div class="hero-metric-card">
+                  <span class="hero-m-val text-indigo font-mono">14 Articles</span>
+                  <span class="hero-m-label">Verified &amp; Active</span>
+                </div>
+                <div class="hero-metric-card">
+                  <span class="hero-m-val text-emerald font-mono">97.4%</span>
+                  <span class="hero-m-label">Resolution Helpfulness</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- KB Search & Category Chips -->
+            <div class="zen-toolbar mt-3">
+              <div class="toolbar-left">
+                <div class="zen-input-wrap" style="width:340px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                  <input type="text" id="kb-filter-search" placeholder="Search knowledge base articles, commands, runbooks...">
+                </div>
+                <div class="filter-chips-row">
+                  <button class="filter-chip active kb-cat-chip" data-kb-cat="ALL">All Categories</button>
+                  <button class="filter-chip kb-cat-chip" data-kb-cat="Databases">Databases</button>
+                  <button class="filter-chip kb-cat-chip" data-kb-cat="Cloud & Infra">Cloud &amp; Infra</button>
+                  <button class="filter-chip kb-cat-chip" data-kb-cat="Security">Security</button>
+                </div>
+              </div>
+              <div class="toolbar-right">
+                <button class="btn btn-sm btn-zen-primary" id="btn-create-article-prompt">+ Publish Article</button>
+              </div>
+            </div>
+
+            <!-- Articles Grid -->
+            <div class="kb-grid" id="kb-articles-container">
+              <!-- Rendered dynamically by app.js -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 2: INTERACTIVE CMDB<!-- VIEW 2: INTERACTIVE CMDB TOPOLOGY GRAPH (LIGHT MODE)     -->
+        <!-- ======================================================== -->
+        <section id="view-cmdb-topology" class="view-panel">
+          <div class="cmdb-workspace">
+            <!-- CMDB Controls Bar -->
+            <div class="zen-toolbar cmdb-toolbar">
+              <div class="toolbar-left">
+                <div class="cmdb-title-group">
+                  <h3>Enterprise CMDB Topology Graph</h3>
+                  <span class="badge-tag">Light Mode • Bezier Interconnects</span>
+                </div>
+
+                <div class="filter-chips-row ml-4">
+                  <span class="filter-caption">Tier:</span>
+                  <button class="filter-chip active" data-cmdb-tier="ALL">All Tiers</button>
+                  <button class="filter-chip" data-cmdb-tier="Edge">Edge CDN</button>
+                  <button class="filter-chip" data-cmdb-tier="Gateway">API Gateways</button>
+                  <button class="filter-chip" data-cmdb-tier="Service">Microservices</button>
+                  <button class="filter-chip" data-cmdb-tier="Data">Databases & Cache</button>
+                  <button class="filter-chip" data-cmdb-tier="Cloud">Kubernetes Infra</button>
+                </div>
+              </div>
+
+              <div class="toolbar-right">
+                <!-- Blast Radius Simulation Trigger -->
+                <button class="btn btn-warning-outline" id="btn-blast-simulate" title="Simulate cascading downstream failure across CMDB dependency tree">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
+                  <span>Simulate Blast Radius</span>
+                </button>
+
+                <!-- Zoom Controls -->
+                <div class="graph-zoom-group">
+                  <button class="btn-icon-sm" id="btn-graph-zoom-in" title="Zoom In">+</button>
+                  <button class="btn-icon-sm" id="btn-graph-zoom-out" title="Zoom Out">−</button>
+                  <button class="btn-icon-sm" id="btn-graph-reset" title="Reset View">⟲</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- CMDB Canvas & Slide Inspector -->
+            <div class="cmdb-stage-container">
+              <div class="cmdb-graph-canvas-area" id="cmdb-canvas-wrapper">
+                <svg id="cmdb-svg-canvas" width="100%" height="100%">
+                  <defs>
+                    <filter id="glow-rose" x="-20%" y="-20%" width="140%" height="140%">
+                      <feGaussianBlur stdDeviation="5" result="blur"/>
+                      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                    </filter>
+                    <filter id="glow-indigo" x="-20%" y="-20%" width="140%" height="140%">
+                      <feGaussianBlur stdDeviation="4" result="blur"/>
+                      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                    </filter>
+                    <marker id="arrow-default" viewBox="0 0 10 10" refX="24" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#94a3b8"/>
+                    </marker>
+                    <marker id="arrow-blast" viewBox="0 0 10 10" refX="24" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#e11d48"/>
+                    </marker>
+                    <marker id="arrow-active" viewBox="0 0 10 10" refX="24" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#4f46e5"/>
+                    </marker>
+                  </defs>
+
+                  <!-- Light Grid Pattern -->
+                  <pattern id="graph-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <circle cx="2" cy="2" r="1.2" fill="rgba(0, 0, 0, 0.08)" />
+                  </pattern>
+                  <rect width="100%" height="100%" fill="url(#graph-grid)"/>
+
+                  <!-- Graph Viewport Layer -->
+                  <g id="cmdb-viewport-layer">
+                    <g id="cmdb-edges-group"></g>
+                    <g id="cmdb-nodes-group"></g>
+                  </g>
+                </svg>
+
+                <!-- Floating Legend -->
+                <div class="graph-legend-card">
+                  <div class="legend-header">Topology Legend</div>
+                  <div class="legend-items">
+                    <div class="legend-row"><span class="legend-dot status-healthy"></span> Healthy (Operational)</div>
+                    <div class="legend-row"><span class="legend-dot status-degraded"></span> Degraded (Latency / Warn)</div>
+                    <div class="legend-row"><span class="legend-dot status-critical"></span> Critical Outage (Active P1)</div>
+                    <div class="legend-row"><span class="legend-line line-flow"></span> Dynamic Bezier Mesh</div>
+                  </div>
+                  <div class="legend-hint">💡 Drag canvas to pan • Click any node to inspect telemetry & dependencies</div>
+                </div>
+              </div>
+
+              <!-- Node Inspector Panel -->
+              <div class="cmdb-node-inspector" id="cmdb-inspector-panel">
+                <div class="inspector-header">
+                  <div class="inspector-title-row">
+                    <div class="ci-icon-box" id="inspector-ci-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                    </div>
+                    <div>
+                      <h3 id="inspector-ci-name">Postgres Primary (us-east-1)</h3>
+                      <span class="badge-tag" id="inspector-ci-type">Database Tier</span>
+                    </div>
+                  </div>
+                  <button class="btn-icon-sm" id="btn-close-inspector">&times;</button>
+                </div>
+
+                <div class="inspector-body">
+                  <!-- Health Status Banner -->
+                  <div class="inspector-status-banner" id="inspector-status-banner">
+                    <div class="status-indicator-box">
+                      <span class="radar-ping" id="inspector-radar-ping"></span>
+                      <strong id="inspector-status-text">CRITICAL OUTAGE</strong>
+                    </div>
+                    <span class="font-mono text-sm" id="inspector-uptime-text">Uptime: 98.42%</span>
+                  </div>
+
+                  <!-- Telemetry Gauges -->
+                  <div class="inspector-metrics-grid">
+                    <div class="telemetry-card">
+                      <span class="metric-title">CPU Utilization</span>
+                      <span class="metric-val text-rose" id="inspector-metric-cpu">98.4%</span>
+                      <div class="metric-bar-bg"><div class="metric-bar-fill fill-rose" id="inspector-bar-cpu" style="width: 98%;"></div></div>
+                    </div>
+                    <div class="telemetry-card">
+                      <span class="metric-title">Memory Pressure</span>
+                      <span class="metric-val text-amber" id="inspector-metric-mem">88.1%</span>
+                      <div class="metric-bar-bg"><div class="metric-bar-fill fill-amber" id="inspector-bar-mem" style="width: 88%;"></div></div>
+                    </div>
+                    <div class="telemetry-card">
+                      <span class="metric-title">p99 Latency</span>
+                      <span class="metric-val text-rose" id="inspector-metric-latency">1,480ms</span>
+                      <div class="metric-bar-bg"><div class="metric-bar-fill fill-rose" id="inspector-bar-latency" style="width: 92%;"></div></div>
+                    </div>
+                    <div class="telemetry-card">
+                      <span class="metric-title">Error Rate (5xx)</span>
+                      <span class="metric-val text-rose" id="inspector-metric-errors">18.6%</span>
+                      <div class="metric-bar-bg"><div class="metric-bar-fill fill-rose" id="inspector-bar-errors" style="width: 74%;"></div></div>
+                    </div>
+                  </div>
+
+                  <!-- CI Details -->
+                  <div class="inspector-section">
+                    <div class="section-heading">Configuration Item Details</div>
+                    <div class="ci-detail-pairs">
+                      <div class="pair-row"><span class="pair-k">CI ID:</span><span class="pair-v font-mono" id="inspector-ci-id">CI-DB-001</span></div>
+                      <div class="pair-row"><span class="pair-k">Owner Team:</span><span class="pair-v" id="inspector-ci-team">@database-sre</span></div>
+                      <div class="pair-row"><span class="pair-k">Environment:</span><span class="pair-v"><span class="badge-tag">Production</span></span></div>
+                      <div class="pair-row"><span class="pair-k">Cloud Provider:</span><span class="pair-v" id="inspector-ci-cloud">AWS us-east-1a (RDS Aurora)</span></div>
+                    </div>
+                  </div>
+
+                  <!-- Dependency Topology -->
+                  <div class="inspector-section">
+                    <div class="section-heading">Dependency Topology</div>
+                    <div class="dependency-block">
+                      <div class="dep-subhead">
+                        <span>Upstream Callers (Depends On Me):</span>
+                        <span class="badge-count" id="inspector-upstream-count">1</span>
+                      </div>
+                      <div class="dep-chips-list" id="inspector-upstream-list"></div>
+                    </div>
+
+                    <div class="dependency-block mt-3">
+                      <div class="dep-subhead">
+                        <span>Downstream Services (I Call):</span>
+                        <span class="badge-count" id="inspector-downstream-count">1</span>
+                      </div>
+                      <div class="dep-chips-list" id="inspector-downstream-list"></div>
+                    </div>
+                  </div>
+
+                  <!-- Active Incidents -->
+                  <div class="inspector-section">
+                    <div class="section-heading">Active Incidents on this Node</div>
+                    <div class="inspector-incidents-list" id="inspector-active-incidents"></div>
+                  </div>
+
+                  <div class="inspector-actions mt-4">
+                    <button class="btn btn-zen-primary w-full" id="inspector-create-ticket-btn">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                      <span>Create Incident for this CI</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 3: TOP 10 NATIVE MIGRATION HUB                      -->
+        <!-- ======================================================== -->
+        <section id="view-migration-studio" class="view-panel">
+          <div class="migration-workspace">
+            
+            <!-- Hero Banner -->
+            <div class="zen-hero-banner">
+              <div class="hero-left">
+                <div class="hero-tag">
+                  <span class="tag-sparkle">✦</span>
+                  <span>Zero-Downtime Autonomous ITSM Migration Engine</span>
+                </div>
+                <h2>Native Migration Studio: Top 10 Enterprise Platforms</h2>
+                <p>Seamlessly transition from legacy ServiceNow, Jira, Zendesk, BMC Helix, and 6 other major platforms to OpenNow. AI automatically normalizes relational schemas, reconciles sys_id foreign keys, binds CMDB topologies, and preserves historical journal timelines.</p>
+              </div>
+              <div class="hero-right">
+                <div class="hero-metric-card">
+                  <span class="hero-m-val text-emerald font-mono">10 / 10</span>
+                  <span class="hero-m-label">Platforms Supported</span>
+                </div>
+                <div class="hero-metric-card">
+                  <span class="hero-m-val text-purple font-mono">100%</span>
+                  <span class="hero-m-label">FK Integrity Assurance</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Top 10 Platform Selector Grid -->
+            <div class="migration-platforms-section">
+              <div class="section-header-row">
+                <div class="sh-left">
+                  <h3>Select Target Migration Platform</h3>
+                  <p>Choose any of the top 10 enterprise platforms to load an authentic schema sample with full relational tables.</p>
+                </div>
+                <div class="sh-right">
+                  <span class="badge-tag">1-Click Instant Preview</span>
+                </div>
+              </div>
+
+              <div class="platform-cards-grid" id="platform-selector-grid">
+                <!-- 1. ServiceNow -->
+                <div class="platform-card" data-platform="servicenow">
+                  <div class="p-card-header">
+                    <div class="p-logo p-snow">SN</div>
+                    <div class="p-meta">
+                      <h4>1. ServiceNow</h4>
+                      <span class="p-format-tag">sys_id XML / JSON Table API</span>
+                    </div>
+                  </div>
+                  <p class="p-desc">Ingests full incident, problem, sys_user, cmdb_ci, and sys_journal_field records with sys_id foreign-key resolution.</p>
+                  <div class="p-tables-pills">
+                    <span>incident</span><span>sys_user</span><span>cmdb_ci</span><span>sys_journal</span>
+                  </div>
+                  <button class="btn-sample-load" data-preset="servicenow">
+                    <span>⚡ Load Authentic Enterprise Sample</span>
+                  </button>
+                </div>
+
+                <!-- 2. Jira Service Management -->
+                <div class="platform-card" data-platform="jira">
+                  <div class="p-card-header">
+                    <div class="p-logo p-jira">JSM</div>
+                    <div class="p-meta">
+                      <h4>2. Jira Service Management</h4>
+                      <span class="p-format-tag">JSM Cloud / Server REST JSON</span>
+                    </div>
+                  </div>
+                  <p class="p-desc">Converts Jira Issue Types (Bug/Incident), Assets Object Schemas, Custom Fields, Component CIs, and ChangeLogs.</p>
+                  <div class="p-tables-pills">
+                    <span>Issues</span><span>Assets CMDB</span><span>ChangeLog</span><span>Teams</span>
+                  </div>
+                  <button class="btn-sample-load" data-preset="jira">
+                    <span>⚡ Load Authentic Enterprise Sample</span>
+                  </button>
+                </div>
+
+                <!-- 3. Zendesk -->
+                <div class="platform-card" data-platform="zendesk">
+                  <div class="p-card-header">
+                    <div class="p-logo p-zendesk">ZD</div>
+                    <div class="p-meta">
+                      <h4>3. Zendesk Support</h4>
+                      <span class="p-format-tag">Zendesk JSON API Export</span>
+                    </div>
+                  </div>
+                  <p class="p-desc">Normalizes tickets, organization hierarchy as CMDB assets, user requester profiles, audit logs, and public/private comments.</p>
+                  <div class="p-tables-pills">
+                    <span>Tickets</span><span>Organizations</span><span>Requesters</span><span>Audits</span>
+                  </div>
+                  <button class="btn-sample-load" data-preset="zendesk">
+                    <span>⚡ Load Authentic Enterprise Sample</span>
+                  </button>
+                </div>
+
+                <!-- 4. Freshservice -->
+                <div class="platform-card" data-platform="freshservice">
+                  <div class="p-card-header">
+                    <div class="p-logo p-fresh">FS</div>
+                    <div class="p-meta">
+                      <h4>4. Freshservice ITSM</h4>
+                      <span class="p-format-tag">Enterprise XML / JSON Dump</span>
+                    </div>
+                  </div>
+                  <p class="p-desc">Transforms Freshservice incident tickets, CMDB asset relationship maps, department routing, and agent conversation threads.</p>
+                  <div class="p-tables-pills">
+                    <span>Incidents</span><span>CMDB Assets</span><span>Relationships</span><span>Conversations</span>
+                  </div>
+                  <button class="btn-sample-load" data-preset="freshservice">
+                    <span>⚡ Load Authentic Enterprise Sample</span>
+                  </button>
+                </div>
+
+                <!-- 5. BMC Helix / Remedy -->
+                <div class="platform-card" data-platform="bmc">
+                  <div class="p-card-header">
+                    <div class="p-logo p-bmc">BMC</div>
+                    <div class="p-meta">
+                      <h4>5. BMC Helix / Remedy</h4>
+                      <span class="p-format-tag">ARS ARX / XML Data Extract</span>
+                    </div>
+                  </div>
+                  <p class="p-desc">Maps HPD:Help Desk tickets, BMC.ASSET:BaseElement CIs, CTM:People callers, and HPD:WorkLog journal histories.</p>
+                  <div class="p-tables-pills">
+                    <span>HPD:HelpDesk</span><span>BaseElement</span><span>SupportGroups</span><span>WorkLog</span>
+                  </div>
+                  <button class="btn-sample-load" data-preset="bmc">
+                    <span>⚡ Load Authentic Enterprise Sample</span>
+                  </button>
+                </div>
+
+                <!-- 6. Salesforce Service Cloud -->
+                <div class="platform-card" data-platform="salesforce">
+                  <div class="p-card-header">
+                    <div class="p-logo p-sf">SF</div>
+                    <div class="p-meta">
+                      <h4>6. Salesforce Service Cloud</h4>
+                      <span class="p-format-tag">SOQL Cases & Assets Extract</span>
+                    </div>
+                  </div>
+                  <p class="p-desc">Translates Case objects, Queue routing, Contact callers, Asset Configuration Items, and CaseComment feeds into OpenNow.</p>
+                  <div class="p-tables-pills">
+                    <span>Case</span><span>Asset</span><span>Contact</span><span>CaseComment</span>
+                  </div>
+                  <button class="btn-sample-load" data-preset="salesforce">
+                    <span>⚡ Load Authentic Enterprise Sample</span>
+                  </button>
+                </div>
+
+                <!-- 7. Cherwell / Ivanti -->
+                <div class="platform-card" data-platform="cherwell">
+                  <div class="p-card-header">
+                    <div class="p-logo p-cherwell">CH</div>
+                    <div class="p-meta">
+                      <h4>7. Cherwell / Ivanti</h4>
+                      <span class="p-format-tag">CSM Relational JSON Dump</span>
+                    </div>
+                  </div>
+                  <p class="p-desc">Resolves Cherwell Incident Business Objects, ConfigItem link tables, TeamDef ownership, and IncidentHistory logs.</p>
+                  <div class="p-tables-pills">
+                    <span>Incident</span><span>ConfigItem</span><span>TeamDef</span><span>History</span>
+                  </div>
+                  <button class="btn-sample-load" data-preset="cherwell">
+                    <span>⚡ Load Authentic Enterprise Sample</span>
+                  </button>
+                </div>
+
+                <!-- 8. ManageEngine ServiceDesk Plus -->
+                <div class="platform-card" data-platform="manageengine">
+                  <div class="p-card-header">
+                    <div class="p-logo p-me">ME</div>
+                    <div class="p-meta">
+                      <h4>8. ManageEngine SDP</h4>
+                      <span class="p-format-tag">SDP Relational XML Export</span>
+                    </div>
+                  </div>
+                  <p class="p-desc">Converts WorkOrder tickets, CIRelation graph edges, AaaUser requester mappings, and WorkOrderNotes.</p>
+                  <div class="p-tables-pills">
+                    <span>WorkOrder</span><span>CI Entities</span><span>CIRelations</span><span>WorkNotes</span>
+                  </div>
+                  <button class="btn-sample-load" data-preset="manageengine">
+                    <span>⚡ Load Authentic Enterprise Sample</span>
+                  </button>
+                </div>
+
+                <!-- 9. GLPI -->
+                <div class="platform-card" data-platform="glpi">
+                  <div class="p-card-header">
+                    <div class="p-logo p-glpi">GL</div>
+                    <div class="p-meta">
+                      <h4>9. GLPI Open Source</h4>
+                      <span class="p-format-tag">MariaDB / JSON SQL Dump</span>
+                    </div>
+                  </div>
+                  <p class="p-desc">Normalizes glpi_tickets, glpi_items hardware/software inventory, glpi_users, and glpi_itilfollowups.</p>
+                  <div class="p-tables-pills">
+                    <span>glpi_tickets</span><span>glpi_items</span><span>glpi_users</span><span>itilfollowup</span>
+                  </div>
+                  <button class="btn-sample-load" data-preset="glpi">
+                    <span>⚡ Load Authentic Enterprise Sample</span>
+                  </button>
+                </div>
+
+                <!-- 10. OTRS / Znuny -->
+                <div class="platform-card" data-platform="otrs">
+                  <div class="p-card-header">
+                    <div class="p-logo p-otrs">OT</div>
+                    <div class="p-meta">
+                      <h4>10. OTRS / Znuny</h4>
+                      <span class="p-format-tag">Postmaster & Ticket SQL/JSON</span>
+                    </div>
+                  </div>
+                  <p class="p-desc">Extracts ticket tn numbers, queue assignments, configitem ITSM linkages, and article communication bodies.</p>
+                  <div class="p-tables-pills">
+                    <span>ticket</span><span>configitem</span><span>queue</span><span>article</span>
+                  </div>
+                  <button class="btn-sample-load" data-preset="otrs">
+                    <span>⚡ Load Authentic Enterprise Sample</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Custom File Dropzone -->
+            <div class="custom-upload-card zen-card">
+              <div class="upload-dropzone" id="migration-file-dropzone">
+                <input type="file" id="migration-file-input" accept=".csv,.json,.xml,.xlsx,.sql" style="display:none;">
+                <div class="drop-icon-box">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                </div>
+                <h4>Or Drop Your Own Custom Export File Here</h4>
+                <p>Supports <strong>XML, JSON, CSV, and SQL Dumps</strong> from any ITSM platform. OpenNow's AI auto-infers column semantics.</p>
+                <button type="button" class="btn btn-zen-outline btn-sm mt-3" id="btn-browse-file">Browse File on Disk</button>
+              </div>
+            </div>
+
+            <!-- Dynamic Migration Analysis & Relational Schema Visualizer -->
+            <div class="migration-results-container" id="migration-analysis-result" style="display: none;">
+              
+              <!-- Source Summary Banner -->
+              <div class="zen-card mig-summary-card">
+                <div class="mig-summary-top">
+                  <div class="mig-summary-brand">
+                    <span class="live-pulse-dot"></span>
+                    <h3 id="mig-source-title">ServiceNow Tokyo Instance Export Detected</h3>
+                    <span class="badge-tag" id="mig-entity-type">Incidents & ITIL Tasks</span>
+                  </div>
+                  <div class="mig-summary-scores">
+                    <div class="score-pill">
+                      <span class="score-label">Data Quality Score:</span>
+                      <span class="score-val text-emerald font-mono" id="mig-quality-score">98/100</span>
+                    </div>
+                    <div class="score-pill">
+                      <span class="score-label">Auto-Mapped Fields:</span>
+                      <span class="score-val text-purple font-mono" id="mig-mapped-count">8 / 8 (100%)</span>
+                    </div>
+                    <div class="score-pill">
+                      <span class="score-label">Records Ingestable:</span>
+                      <span class="score-val font-mono" id="mig-record-count">50 Records</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- AI Strategy Notice -->
+                <div class="ai-strategy-notice" id="mig-ai-strategy-notice">
+                  <span class="ai-star-sparkle">✦</span>
+                  <span><strong>AI Strategy Engine:</strong> Automated translation of ServiceNow <code>u_urgency=1</code> mapped to OpenNow <code>P1 Critical</code>. Automated regex normalized caller email domains and mapped <code>cmdb_ci</code> relations directly to your live CMDB topology!</span>
+                </div>
+              </div>
+
+              <!-- ======================================================== -->
+              <!-- MULTI-TABLE RELATIONAL SCHEMA VISUALIZER                 -->
+              <!-- ======================================================== -->
+              <div class="zen-card schema-visualizer-card">
+                <div class="visualizer-header">
+                  <div class="vh-left">
+                    <h4>Multi-Table Relational Schema Visualizer</h4>
+                    <span>Inspect mapped relational dependencies between Users, Groups, Tasks, CIs, and Journal entries</span>
+                  </div>
+                  <div class="schema-tabs-row" id="schema-tabs-container">
+                    <button class="schema-tab active" data-schema-tab="tasks">Tasks / Incidents</button>
+                    <button class="schema-tab" data-schema-tab="users">Users & Callers</button>
+                    <button class="schema-tab" data-schema-tab="groups">Groups / Teams</button>
+                    <button class="schema-tab" data-schema-tab="cmdb">CMDB Items</button>
+                    <button class="schema-tab" data-schema-tab="relations">CI Dependencies</button>
+                    <button class="schema-tab" data-schema-tab="journal">Journal Notes</button>
+                  </div>
+                </div>
+
+                <div class="schema-tab-content-area" id="schema-tab-content">
+                  <!-- Rendered dynamically by app.js based on selected tab and platform -->
+                </div>
+              </div>
+
+              <!-- Field Mapping & Normalization Confidence Table -->
+              <div class="zen-card mapping-card">
+                <div class="card-subhead">
+                  <h4>AI Intelligent Field Mapping & Normalization Matrix</h4>
+                  <span class="badge-tag">Confidence Score Matrix</span>
+                </div>
+                <div class="table-scroll-wrap">
+                  <table class="zen-data-table mapping-table">
+                    <thead>
+                      <tr>
+                        <th width="220">Legacy Source Column</th>
+                        <th width="40" class="text-center">→</th>
+                        <th width="220">Target OpenNow Property</th>
+                        <th width="150">AI Confidence</th>
+                        <th>Sample Ingested Value Preview</th>
+                      </tr>
+                    </thead>
+                    <tbody id="mig-mapping-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Live Record Conversion Preview Cards -->
+              <div class="zen-card preview-card">
+                <div class="card-subhead">
+                  <h4>Live Converted Record Preview (OpenNow Normalized Schema)</h4>
+                  <span>Normalized in-memory sample records ready for live ingestion</span>
+                </div>
+                <div class="preview-cards-grid" id="mig-preview-cards-container"></div>
+              </div>
+
+              <!-- Migration Execution CTA Bar & Progress -->
+              <div class="zen-card mig-cta-card">
+                <div class="cta-top-row">
+                  <div class="cta-left">
+                    <span class="status-indicator-dot">●</span>
+                    <span class="font-mono text-secondary" id="mig-status-text">Ready to ingest into OpenNow live database...</span>
+                  </div>
+                  <div class="cta-right">
+                    <button class="btn btn-zen-subtle" id="btn-cancel-migration">Reset & Choose Another</button>
+                    <button class="btn btn-zen-primary" id="btn-execute-migration">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                      <span>Execute Full Migration</span>
+                    </button>
+                    <button class="btn btn-zen-outline" id="btn-view-ingested-tickets" style="display: none;">
+                      <span>View Ingested Tickets in Incident Command →</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Migration Progress Bar with Live Integrity Checks -->
+                <div class="mig-progress-section" id="mig-progress-wrap" style="display: none;">
+                  <div class="progress-info-row">
+                    <span id="mig-progress-label">Migrating records and binding relational foreign keys...</span>
+                    <span class="font-mono text-emerald" id="mig-progress-pct">0%</span>
+                  </div>
+                  <div class="zen-progress-track">
+                    <div class="zen-progress-fill" id="mig-progress-fill" style="width: 0%;"></div>
+                  </div>
+
+                  <!-- Live Integrity Checks Grid -->
+                  <div class="integrity-checks-row mt-3">
+                    <div class="check-pill"><span class="check-icon">✓</span> Records Imported: <strong id="integ-records" class="font-mono">1,240 / 1,240</strong></div>
+                    <div class="check-pill"><span class="check-icon">✓</span> Foreign Keys Resolved: <strong id="integ-fk" class="font-mono">45 / 45</strong></div>
+                    <div class="check-pill"><span class="check-icon">✓</span> Orphaned Records: <strong id="integ-orphans" class="font-mono text-emerald">0</strong></div>
+                    <div class="check-pill"><span class="check-icon">✓</span> SLA Clocks Calibrated: <strong class="font-mono text-purple">100%</strong></div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 4: AI OPS CENTER & AUTONOMOUS SRE AGENTS            -->
+        <!-- ======================================================== -->
+        <section id="view-ai-ops" class="view-panel">
+          <div class="ai-ops-workspace">
+            <div class="zen-hero-banner">
+              <div class="hero-left">
+                <div class="hero-tag">
+                  <span class="tag-sparkle">✦</span>
+                  <span>OpenNow Autonomous SRE Fleet Active</span>
+                </div>
+                <h2>Continuous AI Telemetry Triage & Self-Healing</h2>
+                <p>Autonomous agents observing telemetry streams, executing runbooks, calculating blast radii, and drafting stakeholder communications with sub-second latency.</p>
+              </div>
+              <div class="hero-right">
+                <div class="hero-metric-card">
+                  <span class="hero-m-val text-emerald font-mono">99.4%</span>
+                  <span class="hero-m-label">Triage Accuracy</span>
+                </div>
+                <div class="hero-metric-card">
+                  <span class="hero-m-val text-purple font-mono">4.2 min</span>
+                  <span class="hero-m-label">MTTR Target</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Active AI Agents Cards -->
+            <div class="ai-agents-grid">
+              <div class="zen-card agent-card">
+                <div class="agent-head">
+                  <div class="agent-gem gem-sentinel">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/></svg>
+                  </div>
+                  <div>
+                    <h4>Sentinel-Triage AI</h4>
+                    <span class="agent-status-online">● Active & Listening</span>
+                  </div>
+                </div>
+                <p class="agent-desc">Continuously analyzes alert payloads from Datadog, Prometheus, & CloudWatch. Predicts severity and routes to the right SRE on-call rotation in &lt;1.2 seconds.</p>
+                <div class="agent-foot">
+                  <span>Triaged Today: <strong>142 Incidents</strong></span>
+                  <span class="font-mono text-emerald">100% SLA</span>
+                </div>
+              </div>
+
+              <div class="zen-card agent-card">
+                <div class="agent-head">
+                  <div class="agent-gem gem-blast">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  </div>
+                  <div>
+                    <h4>Blast Radius Analyzer</h4>
+                    <span class="agent-status-online">● Graph Traverser</span>
+                  </div>
+                </div>
+                <p class="agent-desc">Performs recursive graph traversal on the OpenNow CMDB to calculate downstream financial and customer impact whenever any CI signals degraded health.</p>
+                <div class="agent-foot">
+                  <span>Topologies Evaluated: <strong>48 Nodes</strong></span>
+                  <span class="font-mono text-purple">0ms cache</span>
+                </div>
+              </div>
+
+              <div class="zen-card agent-card">
+                <div class="agent-head">
+                  <div class="agent-gem gem-runbook">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                  </div>
+                  <div>
+                    <h4>Runbook Synthesizer</h4>
+                    <span class="agent-status-online">● Ready to Remediate</span>
+                  </div>
+                </div>
+                <p class="agent-desc">Generates exact kubectl, AWS CLI, and SQL diagnostic scripts customized to failing pods or database locks, ready for 1-click execution.</p>
+                <div class="agent-foot">
+                  <span>Remediations Drafted: <strong>38</strong></span>
+                  <span class="font-mono text-emerald">94% Zero-touch</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Real-Time AI Autonomous Log Stream -->
+            <div class="zen-card ai-stream-card mt-4">
+              <div class="stream-head">
+                <div class="title-with-pulse">
+                  <span class="live-pulse-dot"></span>
+                  <h3>Autonomous AI SRE Activity Stream</h3>
+                </div>
+                <span class="badge-tag">Real-Time Event Stream</span>
+              </div>
+              <div class="ai-events-console" id="ai-events-stream-list"></div>
+            </div>
+          </div>
+        </section>
+
+                <!-- ======================================================== -->
+        <!-- VIEW 5: SERVICE CATALOG & REQUEST FULFILLMENT            -->
+        <!-- ======================================================== -->
+        <section id="view-service-catalog" class="view-panel">
+          <div class="catalog-workspace">
+            <div class="catalog-header">
+              <h2>Enterprise Service Catalog</h2>
+              <p>One-click standardized operational and IT requests with pre-baked AI approval workflows</p>
+            </div>
+
+            <div class="catalog-grid">
+              <!-- IT & Workstation Services -->
+              <div class="zen-card catalog-card" data-template="laptop-prov">
+                <div class="catalog-icon-box bg-indigo-subtle">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+                </div>
+                <h3>Developer Laptop Provisioning</h3>
+                <p>Standard Apple MacBook Pro M3 Max (36GB RAM, 1TB SSD) configured with enterprise MDM, Xcode, and Docker pre-loaded.</p>
+                <button class="btn btn-zen-outline btn-sm mt-3 btn-catalog-request" data-template="laptop-prov">Request Laptop</button>
+              </div>
+
+              <div class="zen-card catalog-card" data-template="cloud-iam">
+                <div class="catalog-icon-box bg-purple-subtle">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <h3>Production Cloud IAM Access</h3>
+                <p>Time-bound, just-in-time privileged AWS / GCP IAM role assumption with automated 4-hour revocation timer.</p>
+                <button class="btn btn-zen-outline btn-sm mt-3 btn-catalog-request" data-template="cloud-iam">Request Access</button>
+              </div>
+
+              <div class="zen-card catalog-card" data-template="vpn-access">
+                <div class="catalog-icon-box bg-emerald-subtle">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </div>
+                <h3>Corporate Zero-Trust VPN</h3>
+                <p>Generate WireGuard &amp; Zscaler cryptographic profile for secure remote staging and production VPC peering.</p>
+                <button class="btn btn-zen-outline btn-sm mt-3 btn-catalog-request" data-template="vpn-access">Deploy VPN Profile</button>
+              </div>
+
+              <div class="zen-card catalog-card" data-template="sw-licenses">
+                <div class="catalog-icon-box bg-amber-subtle">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                </div>
+                <h3>Enterprise Software Licenses</h3>
+                <p>Instant seat assignment for JetBrains All-Products Pack, Datadog SRE seat, GitHub Copilot Enterprise, or Figma Pro.</p>
+                <button class="btn btn-zen-outline btn-sm mt-3 btn-catalog-request" data-template="sw-licenses">Assign License</button>
+              </div>
+
+              <!-- Operational Services -->
+              <div class="zen-card catalog-card" data-template="db-failover">
+                <div class="catalog-icon-box bg-rose-subtle">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                </div>
+                <h3>Emergency DB Failover</h3>
+                <p>Promote standby replica to primary cluster in AWS RDS Aurora with automated connection pool drain.</p>
+                <button class="btn btn-zen-outline btn-sm mt-3 btn-catalog-request" data-template="db-failover">Deploy Request</button>
+              </div>
+
+              <div class="zen-card catalog-card" data-template="redis-scale">
+                <div class="catalog-icon-box bg-amber-subtle">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                </div>
+                <h3>Redis Cluster Reshard &amp; Flush</h3>
+                <p>Increase memory allocation, evict expired cache keys, and add 2 read-replicas to prevent OOM cascade.</p>
+                <button class="btn btn-zen-outline btn-sm mt-3 btn-catalog-request" data-template="redis-scale">Deploy Request</button>
+              </div>
+
+              <div class="zen-card catalog-card" data-template="cert-rotation">
+                <div class="catalog-icon-box bg-emerald-subtle">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </div>
+                <h3>TLS/SSL Certificate Renewal</h3>
+                <p>Trigger Let's Encrypt / DigiCert automated re-issuance and reload Envoy &amp; Kong ingress proxies.</p>
+                <button class="btn btn-zen-outline btn-sm mt-3 btn-catalog-request" data-template="cert-rotation">Deploy Request</button>
+              </div>
+
+              <div class="zen-card catalog-card" data-template="traffic-shift">
+                <div class="catalog-icon-box bg-purple-subtle">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
+                </div>
+                <h3>Global Traffic Reroute (Cloudflare)</h3>
+                <p>Drain traffic away from degraded us-east-1 region to eu-central-1 via Anycast DNS routing.</p>
+                <button class="btn btn-zen-outline btn-sm mt-3 btn-catalog-request" data-template="traffic-shift">Deploy Request</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 6: ENTERPRISE SETUP & MASTER DATA CONFIGURATION    -->
+        <!-- ======================================================== -->
+        <section id="view-setup" class="view-panel">
+          <div class="setup-workspace">
+            
+            <!-- Hero Banner -->
+            <div class="zen-hero-banner setup-hero">
+              <div class="hero-left">
+                <div class="hero-tag">
+                  <span class="tag-sparkle">⚙️</span>
+                  <span>ERP Master Data &amp; ITIL 4 Governance Engine</span>
+                </div>
+                <h2>Enterprise Setup &amp; Configuration Center</h2>
+                <p>Architect and calibrate your service desk governance: 3-tier taxonomies, interactive Impact × Urgency priority matrices, business hours SLA timers, resolution code master data, technician labor rates, and event-driven automation rules. Changes propagate in real time across the entire platform.</p>
+              </div>
+              <div class="hero-right">
+                <div class="hero-metric-card">
+                  <span class="hero-m-val text-indigo font-mono" id="setup-stat-categories">4 Categories</span>
+                  <span class="hero-m-label">Active Taxonomies</span>
+                </div>
+                <div class="hero-metric-card">
+                  <span class="hero-m-val text-emerald font-mono" id="setup-stat-rules">4 Rules</span>
+                  <span class="hero-m-label">Active Automations</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Zoho / Odoo Style Setup Layout: Vertical Sidebar + Content Canvas -->
+            <div class="setup-layout-container">
+              <!-- Secondary Sidebar (Width ~240px) -->
+              <aside class="setup-secondary-sidebar">
+                <div class="setup-sidebar-header">
+                  <span class="setup-sidebar-tag">CONFIGURATION MODULES</span>
+                  <h3 class="setup-sidebar-title">Service Desk ERP</h3>
+                </div>
+                <nav class="setup-vertical-nav">
+                  <button class="setup-vertical-tab active" data-setup-tab="taxonomy">
+                    <span class="vtab-icon">🏷️</span>
+                    <div class="vtab-text">
+                      <span class="vtab-title">1. Taxonomy &amp; Categories</span>
+                      <span class="vtab-subtitle">3-Tier Master Data</span>
+                    </div>
+                    <span class="tab-count-badge font-mono" id="badge-count-taxonomy">4</span>
+                  </button>
+
+                  <button class="setup-vertical-tab" data-setup-tab="matrix">
+                    <span class="vtab-icon">⚡</span>
+                    <div class="vtab-text">
+                      <span class="vtab-title">2. Priority Matrix</span>
+                      <span class="vtab-subtitle">Impact × Urgency Grid</span>
+                    </div>
+                    <span class="tab-count-badge font-mono">12</span>
+                  </button>
+
+                  <button class="setup-vertical-tab" data-setup-tab="sla">
+                    <span class="vtab-icon">⏱️</span>
+                    <div class="vtab-text">
+                      <span class="vtab-title">3. SLA Policies &amp; Hours</span>
+                      <span class="vtab-subtitle">Schedules &amp; Pause Rules</span>
+                    </div>
+                    <span class="tab-count-badge font-mono">4</span>
+                  </button>
+
+                  <button class="setup-vertical-tab" data-setup-tab="resolutions">
+                    <span class="vtab-icon">✓</span>
+                    <div class="vtab-text">
+                      <span class="vtab-title">4. Resolution Codes</span>
+                      <span class="vtab-subtitle">Closure &amp; Root Causes</span>
+                    </div>
+                    <span class="tab-count-badge font-mono" id="badge-count-resolutions">6</span>
+                  </button>
+
+                  <button class="setup-vertical-tab" data-setup-tab="technicians">
+                    <span class="vtab-icon">👥</span>
+                    <div class="vtab-text">
+                      <span class="vtab-title">5. Technicians &amp; Rates</span>
+                      <span class="vtab-subtitle">Roster &amp; Labor Billing</span>
+                    </div>
+                    <span class="tab-count-badge font-mono" id="badge-count-techs">5</span>
+                  </button>
+
+                  <button class="setup-vertical-tab" data-setup-tab="rules">
+                    <span class="vtab-icon">⚙️</span>
+                    <div class="vtab-text">
+                      <span class="vtab-title">6. Business Rules</span>
+                      <span class="vtab-subtitle">Event-Driven Automation</span>
+                    </div>
+                    <span class="tab-count-badge font-mono" id="badge-count-rules">4</span>
+                  </button>
+
+                  <button class="setup-vertical-tab" data-setup-tab="email-channels">
+                    <span class="vtab-icon">✉️</span>
+                    <div class="vtab-text">
+                      <span class="vtab-title">7. Email Channels</span>
+                      <span class="vtab-subtitle">Inbound Mailboxes</span>
+                    </div>
+                    <span class="tab-count-badge font-mono" id="badge-count-email">2</span>
+                  </button>
+
+                  <button class="setup-vertical-tab" data-setup-tab="phone-cti">
+                    <span class="vtab-icon">📞</span>
+                    <div class="vtab-text">
+                      <span class="vtab-title">8. Phone &amp; CTI</span>
+                      <span class="vtab-subtitle">Softphone Integration</span>
+                    </div>
+                    <span class="tab-count-badge font-mono">Live</span>
+                  </button>
+                </nav>
+              </aside>
+
+              <!-- Content Canvas (flex: 1) -->
+              <div class="setup-main-canvas">
+                <!-- Active Setup Module Content Area -->
+                <div class="setup-content-area" id="setup-modules-container">
+                  <!-- Rendered dynamically by app.js -->
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- RELATIONAL TICKET INSPECTION DRAWER (LINEAR STYLE)       -->
+    <!-- ======================================================== -->
+    <div class="drawer-backdrop" id="drawer-backdrop"></div>
+    <aside class="slideover-drawer" id="ticket-slideover">
+      <div class="drawer-inner" id="drawer-content-container">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </aside>
+
+        <!-- ======================================================== -->
+    <!-- CREATE TICKET MODAL WITH VERTICAL ZEN FLOW & AI COPILOT  -->
+    <!-- ======================================================== -->
+    <div class="modal-backdrop" id="create-modal-backdrop">
+      <div class="modal-dialog create-ticket-modal-card">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="badge-gem-dot"></span>
+            <h3>File Production Incident</h3>
+            <span class="badge-tag">Zen Single-Flow Triage</span>
+          </div>
+          <button class="btn-icon-sm" id="btn-close-create-modal">&times;</button>
+        </div>
+
+        <div class="modal-body-vertical">
+          <form id="form-create-ticket" class="create-form-vertical">
+            <div class="form-group">
+              <label for="input-ticket-title">Incident Title <span class="required">*</span></label>
+              <input type="text" id="input-ticket-title" class="zen-form-control" placeholder="e.g., PostgreSQL Lock Contention causing 504 on checkout" required>
+            </div>
+
+            <div class="form-group">
+              <div class="label-with-ai-hint">
+                <label for="input-ticket-desc">Detailed Symptoms &amp; Telemetry <span class="required">*</span></label>
+                <span class="ai-typing-indicator" id="ai-typing-status" style="display: none;">
+                  <span class="ai-sparkle-dot"></span> AI Copilot analyzing...
+                </span>
+              </div>
+              <textarea id="input-ticket-desc" class="zen-form-control form-textarea" rows="3" placeholder="Paste alert traces, stack errors, affected endpoints, or customer impact..." required></textarea>
+            </div>
+
+            <!-- 3-Tier Cascading Classification (Zoho SDP & GLPI) -->
+            <div class="classification-fieldset">
+              <div class="field-section-heading">
+                <span class="fs-icon">🏷️</span>
+                <span>Three-Tier ITIL Classification</span>
+              </div>
+              <div class="form-row-3">
+                <div class="form-group">
+                  <label for="select-ticket-category">Category <span class="required">*</span></label>
+                  <select id="select-ticket-category" class="zen-form-control zen-select" required></select>
+                </div>
+                <div class="form-group">
+                  <label for="select-ticket-subcategory">Subcategory <span class="required">*</span></label>
+                  <select id="select-ticket-subcategory" class="zen-form-control zen-select" required></select>
+                </div>
+                <div class="form-group">
+                  <label for="select-ticket-item">Item <span class="required">*</span></label>
+                  <select id="select-ticket-item" class="zen-form-control zen-select" required></select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Impact x Urgency Priority Matrix -->
+            <div class="priority-matrix-fieldset">
+              <div class="field-section-heading">
+                <span class="fs-icon">⚡</span>
+                <span>Priority Matrix (Impact × Urgency)</span>
+              </div>
+              <div class="form-row-3">
+                <div class="form-group">
+                  <label for="select-ticket-impact">Impact</label>
+                  <select id="select-ticket-impact" class="zen-form-control zen-select">
+                    <option value="Enterprise" selected>Enterprise (High / Org-wide)</option>
+                    <option value="Department">Department (Medium / Service)</option>
+                    <option value="Single User">Single User (Low / Localized)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="select-ticket-urgency">Urgency</label>
+                  <select id="select-ticket-urgency" class="zen-form-control zen-select">
+                    <option value="Critical">Critical (Immediate Outage)</option>
+                    <option value="High" selected>High (Severe Disruption)</option>
+                    <option value="Medium">Medium (Workaround Exists)</option>
+                    <option value="Low">Low (Minor / Inquiry)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Calculated Priority</label>
+                  <div class="priority-matrix-badge-box" id="create-priority-preview-box">
+                    <span class="priority-pill pill-p1" id="create-priority-preview-badge">P1</span>
+                    <span class="matrix-calc-label" id="create-priority-calc-label">Enterprise × High = P1 Critical</span>
+                  </div>
+                  <input type="hidden" id="select-ticket-priority" value="P1">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="select-ticket-ci">Affected Configuration Item (CI)</label>
+                <select id="select-ticket-ci" class="zen-form-control zen-select">
+                  <option value="CI-DB-001">PostgreSQL Primary (us-east-1)</option>
+                  <option value="CI-PAY-003">Payment Gateway Service</option>
+                  <option value="CI-CACHE-002">Redis Session Cache</option>
+                  <option value="CI-AUTH-004">Auth0 &amp; JWT Token Service</option>
+                  <option value="CI-INGRESS-005">Kong API Gateway Ingress</option>
+                  <option value="CI-K8S-006">EKS Core Cluster (us-east-1)</option>
+                  <option value="CI-KAFKA-007">Kafka Order Event Bus</option>
+                  <option value="CI-CDN-008">Cloudflare Global Edge</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="select-ticket-team">Assignment Group</label>
+                <select id="select-ticket-team" class="zen-form-control zen-select">
+                  <option value="Database-Ops">Database Ops</option>
+                  <option value="SRE-Core" selected>SRE Core</option>
+                  <option value="Payment-Platform">Payment Platform</option>
+                  <option value="Cloud-Infra">Cloud Infra</option>
+                  <option value="Security-SecOps">SecOps / IAM</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-actions-bar">
+              <button type="button" class="btn btn-zen-subtle" id="btn-cancel-create">Cancel</button>
+              <button type="submit" class="btn btn-zen-primary">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <span>Dispatch Incident</span>
+              </button>
+            </div>
+          </form>
+
+          <!-- Modernized Live AI Assist Widget (Vertical Scroll at Bottom) -->
+          <div class="create-ai-bottom-widget">
+            <div class="ai-bottom-head">
+              <div class="ai-bottom-head-left">
+                <div class="ai-bottom-sparkle-gem">✦</div>
+                <div class="ai-bottom-titles">
+                  <h4>Live AI Triage Copilot</h4>
+                  <span>Streaming analysis as you describe the issue</span>
+                </div>
+              </div>
+              <span class="badge-tag">Zero-Touch Intelligence</span>
+            </div>
+
+            <div class="ai-copilot-body-bottom" id="live-ai-copilot-content">
+              <div class="ai-empty-prompt">
+                <div class="ai-pulsing-rings">
+                  <div class="ring-1"></div>
+                  <div class="ring-2"></div>
+                </div>
+                <p>Type into the title or description to activate real-time AI root-cause hypothesis, severity calculation, and related historical incident matching.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESOLUTION MODAL (ITIL / ZOHO SDP / GLPI)                -->
+    <!-- ======================================================== -->
+    <div class="modal-backdrop" id="resolution-modal-backdrop">
+      <div class="modal-dialog resolution-modal-card">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="badge-gem-dot dot-emerald"></span>
+            <h3 id="res-modal-title">Resolve Incident</h3>
+            <span class="badge-tag">Service Restoration</span>
+          </div>
+          <button class="btn-icon-sm" id="btn-close-resolution-modal">&times;</button>
+        </div>
+
+        <form id="form-resolve-ticket" class="modal-form-body">
+          <input type="hidden" id="resolve-ticket-id">
+          
+          <div class="form-group">
+            <label for="select-resolution-code">Resolution Code <span class="required">*</span></label>
+            <select id="select-resolution-code" class="zen-form-control zen-select" required>
+              <option value="Software Patch / Deploy" selected>Software Patch / Deploy (Hotfix / Rollback)</option>
+              <option value="Workaround Applied">Workaround Applied (Traffic Reroute / Cache Flush)</option>
+              <option value="Configuration Tuning">Configuration / Parameter Tuning</option>
+              <option value="Hardware Fix / Replacement">Hardware Fix / Replacement</option>
+              <option value="User Training / Doc Update">User Training / Doc Update</option>
+              <option value="Third-Party Vendor Resolved">Third-Party Vendor Resolved (AWS/Stripe)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="input-root-cause">Root Cause Summary <span class="required">*</span></label>
+            <textarea id="input-root-cause" class="zen-form-control form-textarea" rows="3" placeholder="Describe the verified root cause and technical remediation taken to eliminate the defect..." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="input-preventive-action">Preventive Action / Future Hardening</label>
+            <textarea id="input-preventive-action" class="zen-form-control form-textarea" rows="2" placeholder="e.g., Added connection pool threshold alarm in Datadog; scheduled vacuum during low-traffic window..."></textarea>
+          </div>
+
+          <div class="fcr-checkbox-box">
+            <label class="custom-checkbox-label">
+              <input type="checkbox" id="check-fcr" class="zen-checkbox">
+              <div class="checkbox-text-group">
+                <span class="font-bold">First Call Resolution (FCR)</span>
+                <span class="text-xs text-muted">Incident was fully resolved on initial triage without secondary escalation.</span>
+              </div>
+            </label>
+          </div>
+
+          <div class="form-actions-bar mt-4">
+            <button type="button" class="btn btn-zen-subtle" id="btn-cancel-resolution">Cancel</button>
+            <button type="submit" class="btn btn-zen-primary btn-resolve-confirm">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Confirm Resolution &amp; Mitigate</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- HOLD REASON MODAL (PAUSE SLA - ZOHO SDP / GLPI)          -->
+    <!-- ======================================================== -->
+    <div class="modal-backdrop" id="hold-modal-backdrop">
+      <div class="modal-dialog hold-modal-card">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="badge-gem-dot dot-amber"></span>
+            <h3 id="hold-modal-title">Put Incident on Hold</h3>
+            <span class="badge-tag">Pause SLA Timer</span>
+          </div>
+          <button class="btn-icon-sm" id="btn-close-hold-modal">&times;</button>
+        </div>
+
+        <form id="form-hold-ticket" class="modal-form-body">
+          <input type="hidden" id="hold-ticket-id">
+
+          <div class="sla-pause-notice">
+            <span class="pause-icon">⏸️</span>
+            <div class="pause-notice-text">
+              <strong>SLA Clock Pausing:</strong> Placing this incident on hold suspends the active SLA countdown timer. The accumulated paused duration will be tracked and excluded from SLA target breach calculations.
+            </div>
+          </div>
+          
+          <div class="form-group mt-3">
+            <label for="select-hold-reason">Hold Reason / Dependency <span class="required">*</span></label>
+            <select id="select-hold-reason" class="zen-form-control zen-select" required>
+              <option value="Pending Customer" selected>Pending Customer (Awaiting end-user input or diagnostic logs)</option>
+              <option value="Pending Vendor">Pending Vendor (Awaiting third-party provider or upstream SLA)</option>
+              <option value="Pending Change Approval">Pending Change Approval (Emergency CAB or Change Window scheduled)</option>
+              <option value="Pending Hardware Parts">Pending Hardware Parts (Datacenter physical component delivery)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="input-hold-notes">Hold Justification &amp; Next Check-in <span class="required">*</span></label>
+            <textarea id="input-hold-notes" class="zen-form-control form-textarea" rows="3" placeholder="Provide context on why work cannot proceed and expected resumption time..." required></textarea>
+          </div>
+
+          <div class="form-actions-bar mt-4">
+            <button type="button" class="btn btn-zen-subtle" id="btn-cancel-hold">Cancel</button>
+            <button type="submit" class="btn btn-amber-primary btn-hold-confirm">
+              <span>⏸️ Confirm Hold &amp; Pause SLA</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- COMMAND PALETTE (CMD+K / CTRL+K MODAL)                   -->
+    <!-- ======================================================== -->
+    <div class="cmd-palette-backdrop" id="cmd-palette-modal">
+      <div class="cmd-palette-dialog">
+        <div class="cmd-input-bar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="cmd-palette-input" placeholder="Type a command, incident key, or search CI topology..." autofocus>
+          <kbd class="key-badge">ESC</kbd>
+        </div>
+
+        <div class="cmd-results-list" id="cmd-results-container"></div>
+
+        <div class="cmd-footer-shortcuts">
+          <div class="shortcut-tip"><kbd>↑</kbd><kbd>↓</kbd> to navigate</div>
+          <div class="shortcut-tip"><kbd>↵</kbd> to select</div>
+          <div class="shortcut-tip"><kbd>esc</kbd> to close</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating Zen Mode Restore Pill -->
+    <div class="zen-floating-pill" id="zen-floating-restore" style="display: none;">
+      <span class="zen-icon">☯</span>
+      <span>Zen Focus Mode</span>
+      <button class="btn-zen-exit" id="btn-zen-exit" title="Exit Zen Mode">Exit (Z)</button>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div class="toasts-container" id="toasts-container"></div>
+
+  </div>
+
+  <script src="app.js"></script>
+    <!-- ======================================================== -->
+    <!-- 5-WHYS ROOT CAUSE ANALYZER MODAL                         -->
+    <!-- ======================================================== -->
+    <div class="modal-backdrop" id="whys-modal-backdrop">
+      <div class="modal-dialog resolution-modal-card" style="width: 620px;">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="badge-gem-dot dot-purple"></span>
+            <h3 id="whys-modal-title">Interactive 5-Whys Root Cause Analyzer</h3>
+          </div>
+          <button class="btn-icon-sm" id="btn-close-whys-modal">&times;</button>
+        </div>
+        <div class="modal-form-body" id="whys-modal-body">
+          <!-- Populated by app.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- KNOWLEDGE BASE ARTICLE READER MODAL                      -->
+    <!-- ======================================================== -->
+    <div class="modal-backdrop" id="kb-reader-backdrop">
+      <div class="modal-dialog resolution-modal-card" style="width: 720px; max-height: 85vh;">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="badge-gem-dot dot-emerald"></span>
+            <h3 id="kb-modal-title">Knowledge Base Article</h3>
+          </div>
+          <button class="btn-icon-sm" id="btn-close-kb-modal">&times;</button>
+        </div>
+        <div class="modal-form-body" id="kb-modal-body" style="overflow-y: auto;">
+          <!-- Populated by app.js -->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
