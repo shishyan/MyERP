@@ -159,6 +159,12 @@ button, input, select, textarea {
   width: var(--sidebar-collapsed-width) !important;
   min-width: var(--sidebar-collapsed-width) !important;
   overflow-x: hidden !important;
+  cursor: pointer !important;
+  transition: width var(--transition-smooth), min-width var(--transition-smooth), box-shadow 0.2s ease;
+}
+
+.aurora-sidebar.collapsed:hover {
+  box-shadow: 6px 0 24px rgba(13, 148, 136, 0.3), 2px 0 10px rgba(15, 23, 42, 0.25);
 }
 
 .aurora-sidebar.collapsed .brand-text-block,
@@ -177,11 +183,23 @@ button, input, select, textarea {
   justify-content: center !important;
   align-items: center !important;
   padding: 14px 0 !important;
+  cursor: pointer !important;
 }
 
 .aurora-sidebar.collapsed .brand-link {
   margin: 0 auto !important;
   justify-content: center !important;
+  cursor: pointer !important;
+}
+
+.aurora-sidebar.collapsed .brand-icon-gem {
+  cursor: pointer !important;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease;
+}
+
+.aurora-sidebar.collapsed:hover .brand-icon-gem {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6));
 }
 
 .aurora-sidebar.collapsed .sidebar-nav {
@@ -259,6 +277,7 @@ button, input, select, textarea {
   justify-content: space-between;
   padding: 18px 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  cursor: pointer;
 }
 
 .brand-link {

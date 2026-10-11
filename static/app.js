@@ -1948,9 +1948,23 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
     }
   }
 
-  function toggleSidebarCollapse() {
-    state.sidebarCollapsed = !state.sidebarCollapsed;
+  function toggleSidebarCollapse(forceState) {
+    if (typeof forceState === 'boolean') {
+      state.sidebarCollapsed = forceState;
+    } else {
+      state.sidebarCollapsed = !state.sidebarCollapsed;
+    }
     DOM.sidebar.classList.toggle('collapsed', state.sidebarCollapsed);
+
+    if (state.sidebarCollapsed) {
+      DOM.sidebar.setAttribute('title', 'Click anywhere on this strip to expand navigation (Ctrl+B)');
+      if (DOM.brandHomeBtn) DOM.brandHomeBtn.setAttribute('title', 'Click to expand menu (Ctrl+B)');
+      if (DOM.btnToggleSidebar) DOM.btnToggleSidebar.setAttribute('title', 'Expand Navigation (Ctrl+B)');
+    } else {
+      DOM.sidebar.removeAttribute('title');
+      if (DOM.brandHomeBtn) DOM.brandHomeBtn.setAttribute('title', 'ZenERP — Click to collapse navigation');
+      if (DOM.btnToggleSidebar) DOM.btnToggleSidebar.setAttribute('title', 'Collapse Navigation (Ctrl+B)');
+    }
   }
 
   // =========================================================================
@@ -8380,6 +8394,10 @@ ${notes}`,
       item.addEventListener('click', () => {
         const view = item.getAttribute('data-view');
         switchView(view);
+        // If sidebar is collapsed, clicking an item switches view AND expands the menu
+        if (state.sidebarCollapsed) {
+          toggleSidebarCollapse(false);
+        }
       });
     });
 
@@ -8405,13 +8423,40 @@ ${notes}`,
       });
     }
 
-    if (DOM.brandHomeBtn) {
-      DOM.brandHomeBtn.addEventListener('click', () => switchView('executive-dashboard'));
+    // Left Strip Bar and Left Strip Icon Expand / Collapse Interactions:
+    // 1. When sidebar is collapsed: Clicking the left strip icon or ANYWHERE on the left strip bar expands the menu.
+    // 2. When sidebar is expanded: Clicking the left strip icon, brand row, toggle button, or sidebar background collapses the menu.
+    if (DOM.sidebar) {
+      DOM.sidebar.addEventListener('click', (e) => {
+        // CASE 1: Sidebar is currently COLLAPSED
+        if (state.sidebarCollapsed) {
+          toggleSidebarCollapse(false); // Expand menu
+          return;
+        }
+
+        // CASE 2: Sidebar is currently EXPANDED
+        // Toggle collapse when clicking the collapse arrow button:
+        if (e.target.closest('#btn-toggle-sidebar')) {
+          e.stopPropagation();
+          toggleSidebarCollapse(true);
+          return;
+        }
+
+        // Toggle collapse when clicking the left strip brand icon, title, or client badge:
+        if (e.target.closest('.sidebar-brand-row') || e.target.closest('#brand-home-btn')) {
+          e.stopPropagation();
+          toggleSidebarCollapse(true);
+          return;
+        }
+
+        // Toggle collapse when clicking anywhere on the sidebar's empty background / strip bar:
+        const isInteractive = e.target.closest('.nav-item, button, a, input, select, textarea, .sidebar-user-card, .sidebar-telemetry-box');
+        if (!isInteractive) {
+          toggleSidebarCollapse(true);
+        }
+      });
     }
 
-    if (DOM.btnToggleSidebar) {
-      DOM.btnToggleSidebar.addEventListener('click', toggleSidebarCollapse);
-    }
     if (DOM.btnMobileSidebarToggle) {
       DOM.btnMobileSidebarToggle.addEventListener('click', () => {
         DOM.sidebar.classList.toggle('mobile-open');
