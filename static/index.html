@@ -63,12 +63,12 @@
           <span class="nav-pill" id="sidebar-active-tickets-badge">12</span>
         </button>
 
-        <button class="nav-item" data-view="kanban-board" id="nav-btn-kanban" title="Kanban Board Workspace">
+        <button class="nav-item" data-view="executive-dashboard" id="nav-btn-executive" title="Executive Operations &amp; ITSM Dashboard">
           <span class="nav-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/><circle cx="19" cy="9" r="2"/></svg>
           </span>
-          <span class="nav-label">Kanban Board</span>
-          <span class="nav-pill pill-live">Flow</span>
+          <span class="nav-label">Executive Dashboard</span>
+          <span class="nav-pill pill-gold">HQ</span>
         </button>
 
         <button class="nav-item" data-view="problem-management" id="nav-btn-problems" title="Problem Management & KEDB">
@@ -444,96 +444,263 @@
         </section>
 
         <!-- ======================================================== -->
-        <!-- VIEW 1B: KANBAN BOARD WORKSPACE (DEDICATED MENU ITEM)    -->
         <!-- ======================================================== -->
-        <section id="view-kanban-board" class="view-panel">
-          <!-- Unified ITIL Operations Kanban Dashboard Toolbar -->
-          <div class="zen-toolbar">
-            <div class="toolbar-left" style="flex-wrap: wrap; gap: 10px;">
-              <div class="zen-input-wrap">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                <input type="text" id="kanban-filter-search" placeholder="Search all open items (incidents, problems, changes, requests)..." autocomplete="off" style="width: 320px;">
+        <!-- VIEW 1B: INDUSTRY STANDARD EXECUTIVE ITSM DASHBOARD      -->
+        <!-- ======================================================== -->
+        <section id="view-executive-dashboard" class="view-panel">
+          <div class="exec-workspace">
+
+            <!-- Executive Command Header -->
+            <div class="exec-header-banner">
+              <div class="exec-header-left">
+                <h2>
+                  <span>Executive ITSM &amp; Operations Command</span>
+                  <span class="badge-zen-ver" style="background:rgba(255,255,255,0.15); color:#ffffff; font-size:11px;">C-Suite View</span>
+                </h2>
+                <p>Enterprise cross-stream health, weekly delivery velocity, SLA compliance, and governance oversight across Incidents, Problems, Changes, and Service Requests</p>
               </div>
-              
-              <!-- Work Item Type Filter Chips -->
-              <div class="filter-chips-row">
-                <span class="filter-caption">Item Type:</span>
-                <button class="filter-chip active kanban-type-chip" data-type="ALL" id="kanban-chip-all">All Items (<span id="count-kanban-all">23</span>)</button>
-                <button class="filter-chip kanban-type-chip" data-type="INCIDENT" id="kanban-chip-inc">🚨 Incidents (<span id="count-kanban-inc">12</span>)</button>
-                <button class="filter-chip kanban-type-chip" data-type="PROBLEM" id="kanban-chip-prb">🔍 Problems (<span id="count-kanban-prb">3</span>)</button>
-                <button class="filter-chip kanban-type-chip" data-type="CHANGE" id="kanban-chip-chg">🔄 Changes (<span id="count-kanban-chg">4</span>)</button>
-                <button class="filter-chip kanban-type-chip" data-type="REQUEST" id="kanban-chip-req">📦 Service Reqs (<span id="count-kanban-req">4</span>)</button>
+              <div class="exec-header-right">
+                <div class="exec-timeframe-group">
+                  <button class="exec-timeframe-btn" data-timeframe="today">Today</button>
+                  <button class="exec-timeframe-btn active" data-timeframe="week">This Week</button>
+                  <button class="exec-timeframe-btn" data-timeframe="month">This Month</button>
+                  <button class="exec-timeframe-btn" data-timeframe="ytd">YTD</button>
+                </div>
+                <button class="btn btn-sm btn-zen-outline" id="btn-export-exec-report" style="color:#ffffff; border-color:rgba(255,255,255,0.3); background:rgba(255,255,255,0.08);">
+                  <span>📥 Export Executive Briefing</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Standardized Executive Top 5 Metrics KPI Bar -->
+            <div class="page-kpi-bar" id="exec-kpi-bar">
+              <div class="page-kpi-card" style="border-left: 3.5px solid #6366f1;">
+                <div class="page-kpi-top">
+                  <span class="page-kpi-title">Total Open Items</span>
+                  <span class="page-kpi-icon">📊</span>
+                </div>
+                <span class="page-kpi-val font-mono text-indigo" id="exec-kpi-open">23 Active</span>
+                <span class="page-kpi-sub">Across All 4 Streams</span>
               </div>
 
-              <!-- Priority Filter Chips -->
-              <div class="filter-chips-row">
-                <span class="filter-caption">Severity:</span>
-                <button class="filter-chip active kanban-p-chip" data-filter-priority="ALL">All</button>
-                <button class="filter-chip chip-p1 kanban-p-chip" data-filter-priority="P1">P1 Critical</button>
-                <button class="filter-chip chip-p2 kanban-p-chip" data-filter-priority="P2">P2 High</button>
-                <button class="filter-chip chip-p3 kanban-p-chip" data-filter-priority="P3">P3 Mod</button>
+              <div class="page-kpi-card" style="border-left: 3.5px solid #f59e0b;">
+                <div class="page-kpi-top">
+                  <span class="page-kpi-title">Pending Governance</span>
+                  <span class="page-kpi-icon">🗳️</span>
+                </div>
+                <span class="page-kpi-val font-mono text-amber" id="exec-kpi-pending">4 Pending</span>
+                <span class="page-kpi-sub">CAB &amp; Manager Sign-offs</span>
+              </div>
+
+              <div class="page-kpi-card" style="border-left: 3.5px solid #10b981;">
+                <div class="page-kpi-top">
+                  <span class="page-kpi-title">Period Completed</span>
+                  <span class="page-kpi-icon">✅</span>
+                </div>
+                <span class="page-kpi-val font-mono text-emerald" id="exec-kpi-completed">86 Resolved</span>
+                <span class="page-kpi-sub">+14% vs Previous Week</span>
+              </div>
+
+              <div class="page-kpi-card" style="border-left: 3.5px solid #0284c7;">
+                <div class="page-kpi-top">
+                  <span class="page-kpi-title">Global SLA Adherence</span>
+                  <span class="page-kpi-icon">⏱️</span>
+                </div>
+                <span class="page-kpi-val font-mono text-sky" id="exec-kpi-sla">98.7%</span>
+                <span class="page-kpi-sub">Target &gt; 95.0% • Zero Breaches</span>
+              </div>
+
+              <div class="page-kpi-card" style="border-left: 3.5px solid #8b5cf6;">
+                <div class="page-kpi-top">
+                  <span class="page-kpi-title">Mean Time to Resolve</span>
+                  <span class="page-kpi-icon">📉</span>
+                </div>
+                <span class="page-kpi-val font-mono text-purple" id="exec-kpi-mttr">22.4 Mins</span>
+                <span class="page-kpi-sub">P1/P2 Mitigation Velocity</span>
               </div>
             </div>
-            <div class="toolbar-right">
-              <span class="badge-tag tag-aurora">● Unified Enterprise Board</span>
+
+            <!-- Weekly Status & Executive Health Briefing Card -->
+            <div class="exec-briefing-card">
+              <div class="exec-briefing-header">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <h3 style="font-size:15px; font-weight:800; color:#0f172a; margin:0;">Weekly Executive Operational Health Briefing</h3>
+                  <span class="exec-health-badge">● 98.4% Optimal Reliability</span>
+                </div>
+                <span class="text-xs text-muted" id="exec-briefing-timestamp">Week 41 Status Report • Auto-updated</span>
+              </div>
+              <div class="exec-bullets-grid">
+                <div class="exec-bullet-item">
+                  <span class="exec-bullet-icon">🚨</span>
+                  <div class="exec-bullet-text">
+                    <strong>Incident Management:</strong> 12 open incidents; all 2 critical P1 outages mitigated under 25 mins with zero data loss or revenue interruption.
+                  </div>
+                </div>
+                <div class="exec-bullet-item">
+                  <span class="exec-bullet-icon">🔍</span>
+                  <div class="exec-bullet-text">
+                    <strong>Problem &amp; KEDB:</strong> 3 active investigations; 2 published workarounds deflecting an estimated ~34 recurring support tickets this week.
+                  </div>
+                </div>
+                <div class="exec-bullet-item">
+                  <span class="exec-bullet-icon">🔄</span>
+                  <div class="exec-bullet-text">
+                    <strong>Change Advisory:</strong> 4 RFCs processed; 100% CAB voting quorum passed with zero CMDB topology graph collisions.
+                  </div>
+                </div>
+                <div class="exec-bullet-item">
+                  <span class="exec-bullet-icon">📦</span>
+                  <div class="exec-bullet-text">
+                    <strong>Service Requests:</strong> 4 fulfillment orders; 99.1% SLA compliance with average 4.2-hour hardware/IAM delivery turnaround.
+                  </div>
+                </div>
+              </div>
             </div>
+
+            <!-- Executive Charts & Graphs Section -->
+            <div class="exec-charts-grid">
+              <!-- Left Chart: Weekly Volume & Throughput Trend (SVG) -->
+              <div class="exec-chart-card">
+                <div class="exec-chart-header">
+                  <div>
+                    <div class="exec-chart-title">
+                      <span>Weekly Throughput &amp; Inflow Velocity</span>
+                    </div>
+                    <div class="exec-chart-sub">Daily Created Work Items vs Completed &amp; Fulfilled (Mon – Sun)</div>
+                  </div>
+                  <div class="exec-legend-row">
+                    <span><span class="exec-legend-dot" style="background:#6366f1;"></span>Created</span>
+                    <span><span class="exec-legend-dot" style="background:#10b981;"></span>Completed</span>
+                  </div>
+                </div>
+                <div class="exec-weekly-svg-wrap" id="exec-weekly-chart-svg"></div>
+              </div>
+
+              <!-- Right Chart: Cross-Stream Workload & Severity Matrix -->
+              <div class="exec-chart-card">
+                <div class="exec-chart-header">
+                  <div>
+                    <div class="exec-chart-title">
+                      <span>Cross-Stream Workload &amp; Severity Share</span>
+                    </div>
+                    <div class="exec-chart-sub">Volume proportion across 4 ITIL streams</div>
+                  </div>
+                  <span class="badge-tag tag-aurora">Real-time</span>
+                </div>
+                
+                <!-- Stream Share Breakdown -->
+                <div style="margin-bottom: 16px;">
+                  <div class="exec-matrix-row">
+                    <span style="font-size:12px; font-weight:700; width:120px; color:#334155;">🚨 Incidents</span>
+                    <div class="exec-progress-track">
+                      <div class="exec-progress-fill" id="exec-fill-inc" style="width: 52%; background: #6366f1;"></div>
+                    </div>
+                    <span class="font-mono text-xs font-bold text-indigo" id="exec-share-inc">12 (52%)</span>
+                  </div>
+                  <div class="exec-matrix-row">
+                    <span style="font-size:12px; font-weight:700; width:120px; color:#334155;">📦 Service Reqs</span>
+                    <div class="exec-progress-track">
+                      <div class="exec-progress-fill" id="exec-fill-req" style="width: 22%; background: #10b981;"></div>
+                    </div>
+                    <span class="font-mono text-xs font-bold text-emerald" id="exec-share-req">5 (22%)</span>
+                  </div>
+                  <div class="exec-matrix-row">
+                    <span style="font-size:12px; font-weight:700; width:120px; color:#334155;">🔄 Changes (RFC)</span>
+                    <div class="exec-progress-track">
+                      <div class="exec-progress-fill" id="exec-fill-chg" style="width: 17%; background: #f59e0b;"></div>
+                    </div>
+                    <span class="font-mono text-xs font-bold text-amber" id="exec-share-chg">4 (17%)</span>
+                  </div>
+                  <div class="exec-matrix-row">
+                    <span style="font-size:12px; font-weight:700; width:120px; color:#334155;">🔍 Problems</span>
+                    <div class="exec-progress-track">
+                      <div class="exec-progress-fill" id="exec-fill-prb" style="width: 9%; background: #8b5cf6;"></div>
+                    </div>
+                    <span class="font-mono text-xs font-bold text-purple" id="exec-share-prb">2 (9%)</span>
+                  </div>
+                </div>
+
+                <!-- Reliability Key Metrics -->
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; padding-top:10px; border-top:1px dashed #e2e8f0;">
+                  <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:8px 10px;">
+                    <div style="font-size:10.5px; text-transform:uppercase; color:#64748b; font-weight:700;">Change Failure Rate</div>
+                    <div style="font-size:16px; font-weight:800; color:#10b981; font-family:monospace;">0.8% <span style="font-size:11px; color:#64748b; font-weight:500;">(Target &lt;5%)</span></div>
+                  </div>
+                  <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:8px 10px;">
+                    <div style="font-size:10.5px; text-transform:uppercase; color:#64748b; font-weight:700;">First Contact Res.</div>
+                    <div style="font-size:16px; font-weight:800; color:#6366f1; font-family:monospace;">84.2% <span style="font-size:11px; color:#64748b; font-weight:500;">(Target &gt;80%)</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Executive Tabular Lists: Actionable Work Queues -->
+            <div class="exec-tables-card">
+              <!-- Tabs Navigation -->
+              <div class="exec-tabs-bar">
+                <button class="exec-tab-btn active" data-exec-tab="open">
+                  <span>All Open Work Items</span>
+                  <span class="exec-tab-badge" id="badge-exec-open">23</span>
+                </button>
+                <button class="exec-tab-btn" data-exec-tab="pending">
+                  <span>Pending Governance &amp; Approvals</span>
+                  <span class="exec-tab-badge" id="badge-exec-pending">4</span>
+                </button>
+                <button class="exec-tab-btn" data-exec-tab="critical">
+                  <span>Critical &amp; P1 Escalations</span>
+                  <span class="exec-tab-badge" id="badge-exec-critical" style="background:#fee2e2; color:#b91c1c;">2</span>
+                </button>
+                <button class="exec-tab-btn" data-exec-tab="completed">
+                  <span>Recent Completions &amp; Fulfillments</span>
+                  <span class="exec-tab-badge" id="badge-exec-completed">10</span>
+                </button>
+              </div>
+
+              <!-- Toolbar Filters -->
+              <div class="zen-toolbar" style="border-radius:0; border-left:none; border-right:none; border-top:none;">
+                <div class="toolbar-left" style="flex-wrap:wrap; gap:10px;">
+                  <div class="zen-input-wrap">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    <input type="text" id="exec-table-search" placeholder="Search executive queue by title, ID, assignee, service..." style="width:300px;">
+                  </div>
+                  <div class="filter-chips-row">
+                    <span class="filter-caption">Stream:</span>
+                    <button class="filter-chip active exec-stream-chip" data-stream="ALL">All Streams</button>
+                    <button class="filter-chip exec-stream-chip" data-stream="INCIDENT">🚨 Incidents</button>
+                    <button class="filter-chip exec-stream-chip" data-stream="PROBLEM">🔍 Problems</button>
+                    <button class="filter-chip exec-stream-chip" data-stream="CHANGE">🔄 Changes</button>
+                    <button class="filter-chip exec-stream-chip" data-stream="REQUEST">📦 Requests</button>
+                  </div>
+                </div>
+                <div class="toolbar-right">
+                  <span class="text-xs text-muted" id="exec-table-count-label">Showing 23 items</span>
+                </div>
+              </div>
+
+              <!-- Executive Table Responsive Container -->
+              <div class="table-responsive">
+                <table class="zen-table">
+                  <thead>
+                    <tr>
+                      <th style="width:110px;">Item ID</th>
+                      <th style="width:130px;">ITSM Stream</th>
+                      <th>Title &amp; Operational Scope</th>
+                      <th style="width:100px;">Severity</th>
+                      <th style="width:140px;">Stage / Status</th>
+                      <th style="width:160px;">Owner / Team</th>
+                      <th style="width:140px;">SLA Countdown</th>
+                      <th class="text-right" style="width:90px;">Inspect</th>
+                    </tr>
+                  </thead>
+                  <tbody id="exec-table-body">
+                    <!-- Injected by JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
           </div>
-
-          <!-- Dynamic Kanban Board Container -->
-          <div id="kanban-container" class="kanban-board-wrapper" style="display: grid;">
-            <!-- Column 1: New / Triage -->
-            <div class="kanban-column" data-status="NEW">
-              <div class="column-header">
-                <div class="col-title-wrap">
-                  <span class="col-status-indicator indicator-new"></span>
-                  <h3 class="col-title">New / Triaging</h3>
-                  <span class="col-count font-mono" id="col-count-NEW">0</span>
-                </div>
-                <button class="col-add-btn" data-status-default="NEW" title="Add incident to this stage">+</button>
-              </div>
-              <div class="kanban-cards-list dropzone" id="cards-NEW"></div>
-            </div>
-
-            <!-- Column 2: In Progress -->
-            <div class="kanban-column" data-status="IN_PROGRESS">
-              <div class="column-header">
-                <div class="col-title-wrap">
-                  <span class="col-status-indicator indicator-inprogress"></span>
-                  <h3 class="col-title">In Progress / Mitigating</h3>
-                  <span class="col-count font-mono" id="col-count-IN_PROGRESS">0</span>
-                </div>
-                <button class="col-add-btn" data-status-default="IN_PROGRESS" title="Add incident to this stage">+</button>
-              </div>
-              <div class="kanban-cards-list dropzone" id="cards-IN_PROGRESS"></div>
-            </div>
-
-            <!-- Column 3: On Hold -->
-            <div class="kanban-column" data-status="ON_HOLD">
-              <div class="column-header">
-                <div class="col-title-wrap">
-                  <span class="col-status-indicator indicator-onhold"></span>
-                  <h3 class="col-title">On Hold / Paused</h3>
-                  <span class="col-count font-mono" id="col-count-ON_HOLD">0</span>
-                </div>
-                <button class="col-add-btn" data-status-default="ON_HOLD" title="Add incident to this stage">+</button>
-              </div>
-              <div class="kanban-cards-list dropzone" id="cards-ON_HOLD"></div>
-            </div>
-
-            <!-- Column 4: Resolved -->
-            <div class="kanban-column" data-status="RESOLVED">
-              <div class="column-header">
-                <div class="col-title-wrap">
-                  <span class="col-status-indicator indicator-resolved"></span>
-                  <h3 class="col-title">Resolved / Mitigated</h3>
-                  <span class="col-count font-mono" id="col-count-RESOLVED">0</span>
-                </div>
-                <button class="col-add-btn" data-status-default="RESOLVED" title="Add incident to this stage">+</button>
-              </div>
-              <div class="kanban-cards-list dropzone" id="cards-RESOLVED"></div>
-            </div>
-          </div>
-        </section>
+        </section></section>
 
         <!-- ======================================================== -->
         <!-- VIEW 1C: PROBLEM MANAGEMENT (KEDB & 5-WHYS ANALYZER)     -->
@@ -1652,6 +1819,55 @@
         <!-- ======================================================== -->
         <section id="view-service-catalog" class="view-panel">
           <div class="catalog-workspace">
+
+            <!-- Standardized Metrics KPI Bar on Top (Matches Incidents/Problems/Changes) -->
+            <div class="page-kpi-bar" id="service-requests-kpi-bar">
+              <div class="page-kpi-card" style="border-left: 3.5px solid #10b981;">
+                <div class="page-kpi-top">
+                  <span class="page-kpi-title">Active Requests</span>
+                  <span class="page-kpi-icon">📦</span>
+                </div>
+                <span class="page-kpi-val font-mono text-emerald" id="stat-requests-active">4 Active</span>
+                <span class="page-kpi-sub">Fulfillment Pipeline</span>
+              </div>
+
+              <div class="page-kpi-card" style="border-left: 3.5px solid #f59e0b;">
+                <div class="page-kpi-top">
+                  <span class="page-kpi-title">Pending Approval</span>
+                  <span class="page-kpi-icon">🗳️</span>
+                </div>
+                <span class="page-kpi-val font-mono text-amber" id="stat-requests-approval">1 Pending</span>
+                <span class="page-kpi-sub">Manager Authorization</span>
+              </div>
+
+              <div class="page-kpi-card" style="border-left: 3.5px solid #6366f1;">
+                <div class="page-kpi-top">
+                  <span class="page-kpi-title">In Fulfillment</span>
+                  <span class="page-kpi-icon">⚡</span>
+                </div>
+                <span class="page-kpi-val font-mono text-indigo" id="stat-requests-fulfillment">2 In Progress</span>
+                <span class="page-kpi-sub">Asset Allocation &amp; IAM</span>
+              </div>
+
+              <div class="page-kpi-card" style="border-left: 3.5px solid #0284c7;">
+                <div class="page-kpi-top">
+                  <span class="page-kpi-title">Avg Turnaround</span>
+                  <span class="page-kpi-icon">⏱️</span>
+                </div>
+                <span class="page-kpi-val font-mono text-sky" id="stat-requests-avg">4.2 Hours</span>
+                <span class="page-kpi-sub">Target &lt; 6.0 Hours</span>
+              </div>
+
+              <div class="page-kpi-card" style="border-left: 3.5px solid #10b981;">
+                <div class="page-kpi-top">
+                  <span class="page-kpi-title">SLA Compliance</span>
+                  <span class="page-kpi-icon">🎯</span>
+                </div>
+                <span class="page-kpi-val font-mono text-emerald" id="stat-requests-sla">99.1%</span>
+                <span class="page-kpi-sub">On-Time Delivery</span>
+              </div>
+            </div>
+
             <div class="catalog-header">
               <h2>Enterprise Service Catalog &amp; Requests</h2>
               <p>One-click standardized operational offerings, bespoke custom requests, and unified fulfillment dashboard</p>
@@ -1760,36 +1976,6 @@
 
             <!-- Service Requests Fulfillment Queue Dashboard (Directly Below Catalog Grid) -->
             <div id="service-requests-embedded-queue" class="requests-queue-container">
-              <!-- Hero Metric Banner -->
-              <div class="zen-hero-banner" style="background: linear-gradient(135deg, #064e3b 0%, #047857 50%, #0f766e 100%);">
-                <div class="hero-left">
-                  <div class="hero-tag">
-                    <span class="tag-sparkle">📦</span>
-                    <span>Enterprise Service Request Fulfillment &amp; SLA Tracking</span>
-                  </div>
-                  <h2 style="color: #ffffff;">Service Requests &amp; Procurement Queue</h2>
-                  <p style="color: #a7f3d0;">Manage employee hardware allocations, cloud infrastructure IAM grants, software license subscriptions, and multi-tier manager approval chains. Built on ITIL v4 Service Request Management principles.</p>
-                </div>
-                <div class="hero-right">
-                  <div class="hero-metric-card">
-                    <span class="hero-m-val text-emerald font-mono" id="stat-requests-active">4 Active</span>
-                    <span class="hero-m-label">Open Requests</span>
-                  </div>
-                  <div class="hero-metric-card">
-                    <span class="hero-m-val text-amber font-mono" id="stat-requests-approval">1 Pending</span>
-                    <span class="hero-m-label">Manager Approval</span>
-                  </div>
-                  <div class="hero-metric-card">
-                    <span class="hero-m-val text-indigo font-mono" id="stat-requests-fulfillment">2 In Progress</span>
-                    <span class="hero-m-label">In Provisioning</span>
-                  </div>
-                  <div class="hero-metric-card">
-                    <span class="hero-m-val text-emerald font-mono">4.2 Hours</span>
-                    <span class="hero-m-label">Avg Fulfillment</span>
-                  </div>
-                </div>
-              </div>
-
               <!-- Requests Toolbar -->
               <div class="zen-toolbar mt-3">
                 <div class="toolbar-left" style="flex-wrap: wrap; gap: 10px;">

@@ -1884,8 +1884,10 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
     });
     initSetupCenter();
     renderTickets();
+    renderExecutiveDashboard();
     renderProblemManagement();
     renderChangeManagement();
+    renderServiceRequests();
     renderKnowledgeBase();
     renderOmnichannelHub();
     setupCmdbGraph();
@@ -2003,7 +2005,362 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
   // UNIFIED ENTERPRISE KANBAN OPERATIONS DASHBOARD (ALL OPEN WORK ITEMS)
   // =========================================================================
 
+  // =========================================================================
+  // INDUSTRY STANDARD EXECUTIVE ITSM DASHBOARD
+  // =========================================================================
+
+  function renderExecWeeklyChart() {
+    const container = document.getElementById('exec-weekly-chart-svg');
+    if (!container) return;
+
+    const days = [
+      { day: 'Mon', created: 16, resolved: 14 },
+      { day: 'Tue', created: 22, resolved: 20 },
+      { day: 'Wed', created: 18, resolved: 19 },
+      { day: 'Thu', created: 25, resolved: 23 },
+      { day: 'Fri', created: 19, resolved: 22 },
+      { day: 'Sat', created: 8,  resolved: 9 },
+      { day: 'Sun', created: 5,  resolved: 6 }
+    ];
+
+    const maxVal = 28;
+    const w = 560;
+    const h = 200;
+    const padX = 40;
+    const padY = 25;
+    const chartW = w - padX * 2;
+    const chartH = h - padY * 2;
+    const colW = chartW / days.length;
+
+    let barsHtml = '';
+    let linePoints = [];
+
+    days.forEach((d, idx) => {
+      const cx = padX + idx * colW + colW / 2;
+      const barW = 14;
+
+      const hCreated = (d.created / maxVal) * chartH;
+      const yCreated = padY + chartH - hCreated;
+
+      const hResolved = (d.resolved / maxVal) * chartH;
+      const yResolved = padY + chartH - hResolved;
+
+      barsHtml += `<rect x="${cx - barW - 2}" y="${yCreated}" width="${barW}" height="${hCreated}" rx="3" fill="#6366f1" opacity="0.85"><title>${d.day} Created: ${d.created}</title></rect>`;
+      barsHtml += `<rect x="${cx + 2}" y="${yResolved}" width="${barW}" height="${hResolved}" rx="3" fill="#10b981" opacity="0.9"><title>${d.day} Resolved: ${d.resolved}</title></rect>`;
+      barsHtml += `<text x="${cx}" y="${h - 6}" font-size="11" font-weight="700" fill="#64748b" text-anchor="middle" font-family="sans-serif">${d.day}</text>`;
+
+      linePoints.push(`${cx},${yResolved}`);
+    });
+
+    const svg = `
+      <svg viewBox="0 0 ${w} ${h}" width="100%" height="100%" style="overflow:visible;">
+        <line x1="${padX}" y1="${padY}" x2="${w - padX}" y2="${padY}" stroke="#e2e8f0" stroke-dasharray="3 3"/>
+        <line x1="${padX}" y1="${padY + chartH / 2}" x2="${w - padX}" y2="${padY + chartH / 2}" stroke="#e2e8f0" stroke-dasharray="3 3"/>
+        <line x1="${padX}" y1="${padY + chartH}" x2="${w - padX}" y2="${padY + chartH}" stroke="#cbd5e1" stroke-width="1.5"/>
+
+        ${barsHtml}
+
+        <polyline points="${linePoints.join(' ')}" fill="none" stroke="#047857" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        ${linePoints.map(pt => {
+          const [px, py] = pt.split(',');
+          return `<circle cx="${px}" cy="${py}" r="3.5" fill="#ffffff" stroke="#047857" stroke-width="2"/>`;
+        }).join('')}
+      </svg>
+    `;
+
+    container.innerHTML = svg;
+  }
+
+  function renderExecTable(allWorkItems, openItems, pendingItems, criticalItems, completedItems) {
+    const tbody = document.getElementById('exec-table-body');
+    const countLabel = document.getElementById('exec-table-count-label');
+    if (!tbody) return;
+
+    let targetItems = [];
+    if (state.activeExecTab === 'pending') {
+      targetItems = pendingItems;
+    } else if (state.activeExecTab === 'critical') {
+      targetItems = criticalItems;
+    } else if (state.activeExecTab === 'completed') {
+      targetItems = completedItems;
+    } else {
+      targetItems = openItems;
+    }
+
+    if (state.activeExecStream && state.activeExecStream !== 'ALL') {
+      targetItems = targetItems.filter(i => i.stream === state.activeExecStream);
+    }
+
+    if (state.execSearchQuery) {
+      const q = state.execSearchQuery;
+      targetItems = targetItems.filter(i => 
+        i.id.toLowerCase().includes(q) ||
+        i.title.toLowerCase().includes(q) ||
+        i.lead.toLowerCase().includes(q) ||
+        i.stream.toLowerCase().includes(q)
+      );
+    }
+
+    if (countLabel) {
+      countLabel.textContent = `Showing ${targetItems.length} items`;
+    }
+
+    if (targetItems.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="8" style="text-align:center; padding:32px; color:#64748b; font-size:13px;">
+            ✓ No items matching current executive filter.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = targetItems.map(item => {
+      const pClass = (item.priority || 'P3').toLowerCase();
+      let streamBadge = `<span class="badge-tag" style="background:#fee2e2; color:#b91c1c; font-weight:700;">🚨 INCIDENT</span>`;
+      if (item.stream === 'PROBLEM') {
+        streamBadge = `<span class="badge-tag" style="background:#e0e7ff; color:#3730a3; font-weight:700;">🔍 PROBLEM</span>`;
+      } else if (item.stream === 'CHANGE') {
+        streamBadge = `<span class="badge-tag" style="background:#fef3c7; color:#92400e; font-weight:700;">🔄 CHANGE</span>`;
+      } else if (item.stream === 'REQUEST') {
+        streamBadge = `<span class="badge-tag" style="background:#dcfce7; color:#166534; font-weight:700;">📦 REQUEST</span>`;
+      }
+
+      return `
+        <tr data-item-id="${item.id}" style="cursor:pointer;">
+          <td class="font-mono text-indigo font-bold">${item.id}</td>
+          <td>${streamBadge}</td>
+          <td>
+            <div style="font-weight:700; color:var(--text-zen-primary); font-size:13px;">${escapeHtml(item.title)}</div>
+          </td>
+          <td>
+            <span class="priority-pill pill-${pClass}">${item.priority}</span>
+          </td>
+          <td>
+            <span class="badge-tag">${escapeHtml(item.statusLabel || item.status)}</span>
+          </td>
+          <td>
+            <div style="font-weight:600; font-size:12px; color:#334155;">${escapeHtml(item.lead)}</div>
+          </td>
+          <td class="${item.slaClass}">${escapeHtml(item.slaText)}</td>
+          <td class="text-right">
+            <button class="btn btn-icon-sm btn-inspect-exec" data-item-id="${item.id}" title="Inspect in Universal Drawer">➔</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    tbody.querySelectorAll('tr').forEach(row => {
+      row.addEventListener('click', () => {
+        const id = row.getAttribute('data-item-id');
+        if (id) openTicketDrawer(id);
+      });
+    });
+  }
+
+  function renderExecutiveDashboard() {
+    if (!state.activeExecTab) state.activeExecTab = 'open';
+    if (!state.activeExecStream) state.activeExecStream = 'ALL';
+    if (!state.activeExecTimeframe) state.activeExecTimeframe = 'week';
+
+    const incs = state.incidents || [];
+    const prbs = state.problems || [];
+    const chgs = state.changes || [];
+    const reqs = state.serviceRequests || [];
+
+    const allWorkItems = [];
+
+    incs.forEach(inc => {
+      const isResolved = inc.status === 'RESOLVED' || inc.status === 'CLOSED';
+      allWorkItems.push({
+        id: inc.id,
+        stream: 'INCIDENT',
+        streamLabel: '🚨 INCIDENT',
+        title: inc.title,
+        priority: inc.priority || 'P3',
+        status: inc.status,
+        statusLabel: formatStatusLabel(inc.status),
+        lead: inc.team || inc.lead || 'SRE Platform',
+        isPending: inc.status === 'ON_HOLD' || inc.isPaused,
+        isCritical: inc.priority === 'P1' || inc.priority === 'P2',
+        isCompleted: isResolved,
+        slaText: (inc.status === 'ON_HOLD' || inc.isPaused) ? `⏸ Paused` : isResolved ? '✓ Met SLA' : `⏱ ${formatSlaTime(inc.slaSecondsRemaining)}`,
+        slaClass: isResolved ? 'text-emerald font-semibold' : inc.slaSecondsRemaining <= 0 ? 'text-rose font-bold' : 'text-indigo font-mono',
+        raw: inc
+      });
+    });
+
+    prbs.forEach(p => {
+      const isResolved = p.status === 'Resolved' || p.status === 'Closed';
+      allWorkItems.push({
+        id: p.id,
+        stream: 'PROBLEM',
+        streamLabel: '🔍 PROBLEM',
+        title: p.title,
+        priority: 'P2',
+        status: p.status,
+        statusLabel: p.status,
+        lead: 'Problem Ops / Lead',
+        isPending: false,
+        isCritical: false,
+        isCompleted: isResolved,
+        slaText: p.isKedb ? '★ KEDB Active' : 'Investigating',
+        slaClass: 'text-purple font-semibold',
+        raw: p
+      });
+    });
+
+    chgs.forEach(chg => {
+      const isApproved = chg.cabStatus && chg.cabStatus.includes('Approved');
+      const isImplemented = chg.cabStatus === 'Implemented' || chg.cabStatus === 'Verified' || chg.cabStatus === 'Closed';
+      const isPending = chg.cabStatus && (chg.cabStatus.includes('Pending') || chg.cabStatus.includes('Revision'));
+      allWorkItems.push({
+        id: chg.id,
+        stream: 'CHANGE',
+        streamLabel: '🔄 CHANGE',
+        title: chg.title,
+        priority: chg.type === 'Emergency' ? 'P1' : 'P2',
+        status: chg.cabStatus || 'Draft',
+        statusLabel: chg.cabStatus || 'Draft',
+        lead: chg.lead || 'Release Lead',
+        isPending: isPending,
+        isCritical: chg.type === 'Emergency' || chg.riskScore > 50,
+        isCompleted: isImplemented,
+        slaText: chg.scheduled || 'Scheduled Window',
+        slaClass: isImplemented ? 'text-emerald' : 'text-amber',
+        raw: chg
+      });
+    });
+
+    reqs.forEach(req => {
+      const isDelivered = req.status === 'RESOLVED';
+      const isPending = req.status === 'NEW';
+      allWorkItems.push({
+        id: req.id,
+        stream: 'REQUEST',
+        streamLabel: '📦 SERVICE REQ',
+        title: req.title,
+        priority: req.priority || 'P3',
+        status: req.status,
+        statusLabel: req.stage || req.status,
+        lead: req.requesterName || req.assignedTeam,
+        isPending: isPending,
+        isCritical: req.priority === 'P1',
+        isCompleted: isDelivered,
+        slaText: req.slaDue || '4.2h Due',
+        slaClass: isDelivered ? 'text-emerald font-semibold' : 'text-indigo font-mono',
+        raw: req
+      });
+    });
+
+    const openItems = allWorkItems.filter(i => !i.isCompleted);
+    const pendingItems = allWorkItems.filter(i => i.isPending && !i.isCompleted);
+    const criticalItems = allWorkItems.filter(i => i.isCritical && !i.isCompleted);
+    const completedItems = allWorkItems.filter(i => i.isCompleted);
+
+    const elOpen = document.getElementById('exec-kpi-open');
+    if (elOpen) elOpen.textContent = `${openItems.length} Active`;
+    const elPending = document.getElementById('exec-kpi-pending');
+    if (elPending) elPending.textContent = `${pendingItems.length} Pending`;
+    const elCompleted = document.getElementById('exec-kpi-completed');
+    if (elCompleted) elCompleted.textContent = `${completedItems.length + 84} Resolved`;
+    const elSla = document.getElementById('exec-kpi-sla');
+    if (elSla) elSla.textContent = `98.7%`;
+    const elMttr = document.getElementById('exec-kpi-mttr');
+    if (elMttr) elMttr.textContent = `22.4 Mins`;
+
+    const totalOpen = Math.max(1, openItems.length);
+    const incOpenCount = openItems.filter(i => i.stream === 'INCIDENT').length;
+    const reqOpenCount = openItems.filter(i => i.stream === 'REQUEST').length;
+    const chgOpenCount = openItems.filter(i => i.stream === 'CHANGE').length;
+    const prbOpenCount = openItems.filter(i => i.stream === 'PROBLEM').length;
+
+    const incPct = Math.round((incOpenCount / totalOpen) * 100);
+    const reqPct = Math.round((reqOpenCount / totalOpen) * 100);
+    const chgPct = Math.round((chgOpenCount / totalOpen) * 100);
+    const prbPct = Math.max(0, 100 - incPct - reqPct - chgPct);
+
+    const elFillInc = document.getElementById('exec-fill-inc');
+    if (elFillInc) elFillInc.style.width = `${incPct}%`;
+    const elShareInc = document.getElementById('exec-share-inc');
+    if (elShareInc) elShareInc.textContent = `${incOpenCount} (${incPct}%)`;
+
+    const elFillReq = document.getElementById('exec-fill-req');
+    if (elFillReq) elFillReq.style.width = `${reqPct}%`;
+    const elShareReq = document.getElementById('exec-share-req');
+    if (elShareReq) elShareReq.textContent = `${reqOpenCount} (${reqPct}%)`;
+
+    const elFillChg = document.getElementById('exec-fill-chg');
+    if (elFillChg) elFillChg.style.width = `${chgPct}%`;
+    const elShareChg = document.getElementById('exec-share-chg');
+    if (elShareChg) elShareChg.textContent = `${chgOpenCount} (${chgPct}%)`;
+
+    const elFillPrb = document.getElementById('exec-fill-prb');
+    if (elFillPrb) elFillPrb.style.width = `${prbPct}%`;
+    const elSharePrb = document.getElementById('exec-share-prb');
+    if (elSharePrb) elSharePrb.textContent = `${prbOpenCount} (${prbPct}%)`;
+
+    const bOpen = document.getElementById('badge-exec-open');
+    if (bOpen) bOpen.textContent = openItems.length;
+    const bPending = document.getElementById('badge-exec-pending');
+    if (bPending) bPending.textContent = pendingItems.length;
+    const bCritical = document.getElementById('badge-exec-critical');
+    if (bCritical) bCritical.textContent = criticalItems.length;
+    const bCompleted = document.getElementById('badge-exec-completed');
+    if (bCompleted) bCompleted.textContent = completedItems.length;
+
+    renderExecWeeklyChart();
+    renderExecTable(allWorkItems, openItems, pendingItems, criticalItems, completedItems);
+
+    document.querySelectorAll('.exec-tab-btn').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.exec-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.activeExecTab = btn.getAttribute('data-exec-tab');
+        renderExecTable(allWorkItems, openItems, pendingItems, criticalItems, completedItems);
+      };
+    });
+
+    document.querySelectorAll('.exec-stream-chip').forEach(chip => {
+      chip.onclick = () => {
+        document.querySelectorAll('.exec-stream-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        state.activeExecStream = chip.getAttribute('data-stream');
+        renderExecTable(allWorkItems, openItems, pendingItems, criticalItems, completedItems);
+      };
+    });
+
+    const searchInput = document.getElementById('exec-table-search');
+    if (searchInput && !searchInput.dataset.bound) {
+      searchInput.dataset.bound = 'true';
+      searchInput.addEventListener('input', () => {
+        state.execSearchQuery = searchInput.value.toLowerCase().trim();
+        renderExecTable(allWorkItems, openItems, pendingItems, criticalItems, completedItems);
+      });
+    }
+
+    document.querySelectorAll('.exec-timeframe-btn').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.exec-timeframe-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.activeExecTimeframe = btn.getAttribute('data-timeframe');
+        showToast(`Executive timeframe updated to: ${btn.textContent}`, 'info');
+      };
+    });
+
+    const exportBtn = document.getElementById('btn-export-exec-report');
+    if (exportBtn && !exportBtn.dataset.bound) {
+      exportBtn.dataset.bound = 'true';
+      exportBtn.onclick = () => {
+        showToast('Generated Executive Briefing PDF report (Week 41 ITSM & Velocity). Downloading...', 'success');
+      };
+    }
+  }
+
+
   function renderUnifiedKanbanBoard() {
+    renderExecutiveDashboard();
     // 1. Aggregate All Open Work Items Across 4 ITIL Streams
     const allWorkItems = [];
 
@@ -2182,13 +2539,17 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
 
     let requests = state.serviceRequests || [];
     
-    // Update KPI Header Metrics
+    // Update Standardized KPI Header Metrics
     const statActive = document.getElementById('stat-requests-active');
     if (statActive) statActive.textContent = `${requests.filter(r => r.status !== 'RESOLVED').length} Active`;
     const statAppr = document.getElementById('stat-requests-approval');
     if (statAppr) statAppr.textContent = `${requests.filter(r => r.status === 'NEW').length} Pending`;
     const statFulfill = document.getElementById('stat-requests-fulfillment');
     if (statFulfill) statFulfill.textContent = `${requests.filter(r => r.status === 'IN_PROGRESS').length} In Progress`;
+    const statAvg = document.getElementById('stat-requests-avg');
+    if (statAvg) statAvg.textContent = '4.2 Hours';
+    const statSla = document.getElementById('stat-requests-sla');
+    if (statSla) statSla.textContent = '99.1%';
 
     // Filter Stage
     if (state.requestsStageFilter && state.requestsStageFilter !== 'ALL') {
@@ -7703,7 +8064,8 @@ ${notes}`,
     if (DOM.breadcrumbView) {
       const titles = {
         'incident-command': 'Incident Command',
-        'kanban-board': 'Unified Operations Kanban',
+        'executive-dashboard': 'Executive ITSM Dashboard',
+        'kanban-board': 'Executive ITSM Dashboard',
         'problem-management': 'Problem Management & KEDB',
         'change-management': 'Change Management & CAB',
         'omnichannel-hub': 'Omnichannel Hub (Email & CTI)',
@@ -7730,8 +8092,8 @@ ${notes}`,
       renderOmnichannelHub();
     } else if (viewName === 'service-catalog' || viewName === 'service-requests') {
       renderServiceRequests();
-    } else if (viewName === 'kanban-board') {
-      renderUnifiedKanbanBoard();
+    } else if (viewName === 'executive-dashboard' || viewName === 'kanban-board') {
+      renderExecutiveDashboard();
     } else if (viewName === 'incident-command') {
       renderTickets();
     }
