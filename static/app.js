@@ -522,6 +522,19 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
     activeSchemaTab: 'tasks',
     activeDrawerTab: 'overview',
 
+    // Company DNA & Industry Archetype
+    industry: 'fintech',
+    companyDna: {
+      industry_id: 'fintech',
+      industry_name: 'FinTech, Banking & Capital Markets',
+      sub_industry: 'Payment Processing & Acquiring',
+      offering: 'Global Payment Gateway & Card Settlement',
+      tech_stack: 'Kafka, PostgreSQL Aurora, Redis, HSM, Kubernetes, Go',
+      compliance_framework: 'PCI-DSS Level 1 / SOC2 Type II',
+      downtime_cost_per_minute: 18500
+    },
+    industryBlueprints: [],
+
     // ERP Setup & Master Data
     taxonomy: JSON.parse(JSON.stringify(DEFAULT_TAXONOMY)),
     priorityMatrix: JSON.parse(JSON.stringify(DEFAULT_PRIORITY_MATRIX)),
@@ -531,7 +544,7 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
     rootCauses: [...DEFAULT_ROOT_CAUSES],
     technicians: JSON.parse(JSON.stringify(DEFAULT_TECHNICIANS)),
     businessRules: JSON.parse(JSON.stringify(DEFAULT_BUSINESS_RULES)),
-    activeSetupModule: 'taxonomy',
+    activeSetupModule: 'dna',
     selectedTreeCat: 'Database & Storage',
     selectedTreeSubcat: 'PostgreSQL Aurora',
 
@@ -1863,6 +1876,12 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
 
   function initApp() {
     cacheDom();
+    fetchCompanyDna().then(() => {
+      updateHeaderIndustryPill();
+      if (state.activeSetupModule === 'dna') {
+        renderSetupCenter('dna');
+      }
+    });
     initSetupCenter();
     renderTickets();
     renderProblemManagement();
@@ -4886,6 +4905,474 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
   // VIEW 6: ENTERPRISE SETUP & MASTER DATA CONFIGURATION CENTER
   // =========================================================================
 
+  const DEFAULT_INDUSTRY_BLUEPRINTS = [
+    {
+      id: 'fintech',
+      name: 'FinTech, Banking & Capital Markets',
+      icon: '💳',
+      theme: 'bp-theme-fintech',
+      sub_industries: ['Payment Processing & Acquiring', 'Neo-Banking & Core Ledgers', 'Algorithmic Trading & WealthTech', 'Lending & Mortgage Underwriting'],
+      primary_offering: 'High-Throughput Payment Authorization Rails & Settlement Ledger',
+      tech_stack: 'Kafka, PostgreSQL Aurora, Redis, HSM, AWS GovCloud, Cloudflare Anycast, Go',
+      compliance_standard: 'PCI-DSS Level 1 / SOX 404 / GLBA',
+      downtime_cost_per_minute: 18500,
+      sla_p1_resolve_hours: 0.5,
+      sla_p1_response_mins: 5,
+      key_cis: ['Core Banking Ledger', 'Card Ingress 3DS Gateway', 'Thales Luna HSM Vault', 'Kafka Payment Event Bus']
+    },
+    {
+      id: 'healthcare',
+      name: 'Healthcare & Life Sciences',
+      icon: '🏥',
+      theme: 'bp-theme-healthcare',
+      sub_industries: ['Hospital Electronic Health Records (EHR)', 'IoMT Bedside Telemetry & ICU', 'PACS / DICOM Diagnostic Imaging', 'Telemedicine & Clinical Operations'],
+      primary_offering: 'Clinical Care EHR Platform & IoMT Critical Care Telemetry',
+      tech_stack: 'HL7 / FHIR v4, DICOM PACS, Epic Interconnect, PostgreSQL, MQTT, Kubernetes',
+      compliance_standard: 'HIPAA / HITECH / FDA 21 CFR Part 11',
+      downtime_cost_per_minute: 24000,
+      sla_p1_resolve_hours: 0.25,
+      sla_p1_response_mins: 3,
+      key_cis: ['Epic FHIR Integration Gateway', 'DICOM PACS Imaging Store', 'Bedside Vitals IoMT Broker', 'Pharmacy Dispense Engine']
+    },
+    {
+      id: 'retail',
+      name: 'E-Commerce, Omnichannel Retail & Logistics',
+      icon: '🛒',
+      theme: 'bp-theme-retail',
+      sub_industries: ['Omnichannel Direct-to-Consumer (D2C)', 'Warehouse Management & Automated WMS', 'Point-of-Sale (POS) & Store Systems', 'Order Fulfillment & Global Shipping'],
+      primary_offering: 'Global Multi-Region E-Commerce Storefront & Real-Time Checkout',
+      tech_stack: 'Next.js, Stripe, Elasticsearch, Redis Inventory Cluster, Kafka, Kubernetes',
+      compliance_standard: 'PCI-DSS Level 1 / SOC2 Type II',
+      downtime_cost_per_minute: 14000,
+      sla_p1_resolve_hours: 1.0,
+      sla_p1_response_mins: 10,
+      key_cis: ['Cart & Checkout API', 'Real-Time Inventory Lock Engine', 'Elasticsearch Catalog Cluster', 'Stripe Payment Ingress']
+    },
+    {
+      id: 'saas_ai',
+      name: 'Cloud Tech, Developer SaaS & Autonomous AI',
+      icon: '⚡',
+      theme: 'bp-theme-saas_ai',
+      sub_industries: ['LLM Inference & Autonomous Agent Platform', 'Vector Search & Embeddings Infrastructure', 'DevSecOps & Cloud Platform (PaaS)', 'API Management & Developer Ecosystem'],
+      primary_offering: 'Low-Latency LLM Inference API & Agent Orchestration Mesh',
+      tech_stack: 'NVIDIA H100 GPUs, Qdrant Vector DB, vLLM, Envoy Ingress, Kubernetes, Prometheus',
+      compliance_standard: 'SOC2 Type II / ISO 27001 / FedRAMP',
+      downtime_cost_per_minute: 11000,
+      sla_p1_resolve_hours: 0.75,
+      sla_p1_response_mins: 8,
+      key_cis: ['NVIDIA H100 GPU Cluster', 'Qdrant Vector DB Cluster', 'vLLM Inference Gateway', 'Envoy Service Mesh Ingress']
+    },
+    {
+      id: 'manufacturing',
+      name: 'Manufacturing & Industrial IoT',
+      icon: '🏭',
+      theme: 'bp-theme-manufacturing',
+      sub_industries: ['Automotive & Aerospace Robotics', 'SCADA & Industrial Control Systems', 'MES Plant Floor Execution', 'Supply Chain Telemetry & Predictive Maintenance'],
+      primary_offering: 'Automated Robotics Assembly Line & SCADA Telemetry Controller',
+      tech_stack: 'Siemens S7 PLCs, OPC-UA, MQTT Sparkplug B, Historian InfluxDB, Node-RED',
+      compliance_standard: 'ISA-95 / IEC 62443 / ISO 9001',
+      downtime_cost_per_minute: 26000,
+      sla_p1_resolve_hours: 0.33,
+      sla_p1_response_mins: 5,
+      key_cis: ['SCADA Supervisory System', 'Siemens S7 Assembly Line PLC', 'MQTT Sparkplug Edge Broker', 'Historian InfluxDB Time-Series']
+    },
+    {
+      id: 'telecom',
+      name: 'Telecommunications & 5G Carrier Operations',
+      icon: '📡',
+      theme: 'bp-theme-telecom',
+      sub_industries: ['5G Standalone (SA) Mobile Packet Core', 'Fiber Broadband & ISP Transport Network', 'VoLTE / VoNR & E911 Emergency Services', 'BGP Carrier Peering & Edge CDN'],
+      primary_offering: '5G Standalone Packet Core & Tier-1 BGP Border Peering',
+      tech_stack: '5G SA UPF/AMF Core, Cisco 8000 BGP, Open5GS, Kamailio SIP, eBPF, PTP IEEE 1588',
+      compliance_standard: 'FCC Title 47 / 3GPP Rel-16 / ETSI NFV',
+      downtime_cost_per_minute: 21000,
+      sla_p1_resolve_hours: 0.25,
+      sla_p1_response_mins: 3,
+      key_cis: ['5G Standalone UPF Packet Core', 'Cisco 8000 Tier-1 BGP Border', 'VoLTE E911 Emergency Core', 'Kamailio SIP Proxy Cluster']
+    }
+  ];
+
+  async function fetchCompanyDna() {
+    try {
+      const [curRes, bpRes] = await Promise.all([
+        fetch('/api/v2/industry/current'),
+        fetch('/api/v2/industry/blueprints')
+      ]);
+      if (curRes.ok) {
+        const curData = await curRes.json();
+        if (curData.status === 'success' && curData.dna) {
+          state.companyDna = curData.dna;
+          state.industry = curData.dna.industry_id;
+          updateHeaderIndustryPill();
+        }
+      }
+      if (bpRes.ok) {
+        const bpData = await bpRes.json();
+        if (bpData.status === 'success' && bpData.blueprints) {
+          state.industryBlueprints = bpData.blueprints;
+        }
+      }
+    } catch (e) {
+      console.warn('Company DNA API unavailable; using defaults.', e);
+    }
+  }
+
+  function updateHeaderIndustryPill() {
+    const dna = state.companyDna;
+    if (!dna) return;
+    const icons = {
+      fintech: '💳',
+      healthcare: '🏥',
+      retail: '🛒',
+      saas_ai: '⚡',
+      manufacturing: '🏭',
+      telecom: '📡'
+    };
+    const iconEl = document.getElementById('header-industry-icon');
+    const nameEl = document.getElementById('header-industry-name');
+    const compEl = document.getElementById('header-industry-compliance');
+    const badgeEl = document.getElementById('badge-current-industry');
+
+    if (iconEl) iconEl.textContent = icons[dna.industry_id] || '🏢';
+    if (nameEl) {
+      const shortNames = {
+        fintech: 'FinTech Banking',
+        healthcare: 'Healthcare EHR',
+        retail: 'Retail E-Com',
+        saas_ai: 'Cloud SaaS AI',
+        manufacturing: 'Manufacturing',
+        telecom: 'Telecom 5G'
+      };
+      nameEl.textContent = shortNames[dna.industry_id] || dna.industry_name || 'Enterprise';
+    }
+    if (compEl) {
+      const compShort = (dna.compliance_standard || 'PCI-DSS').split('/')[0].split('•')[0].trim();
+      compEl.textContent = compShort;
+    }
+    if (badgeEl) {
+      badgeEl.textContent = dna.industry_id.toUpperCase();
+    }
+  }
+
+  async function applyIndustryBlueprint(industryId, customPayload = null) {
+    try {
+      showToast(`Recalibrating OpenNow to ${industryId.toUpperCase()}...`, 'info');
+      const payload = customPayload || { industry_id: industryId };
+      const res = await fetch('/api/v2/industry/apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (res.ok && data.status === 'success') {
+        state.companyDna = data.dna;
+        state.industry = data.dna.industry_id;
+        if (data.taxonomies) {
+          state.taxonomy = data.taxonomies;
+        }
+        if (data.blueprint && data.blueprint.cmdb_nodes) {
+          state.cmdbNodes = data.blueprint.cmdb_nodes.map(node => ({
+            id: node.id,
+            name: node.name,
+            type: node.ci_type || node.type,
+            env: 'Production',
+            health: node.health_status || node.health || 'healthy',
+            tier: node.tier || 'Tier 1',
+            ip: node.ip_address || '10.0.1.10',
+            team: node.owner_team || node.provider || 'Core-Ops',
+            upstream: node.upstream_deps || [],
+            downstream: node.downstream_deps || [],
+            incidents: 0
+          }));
+        }
+        updateHeaderIndustryPill();
+        renderSetupCenter('dna');
+        if (state.currentView === 'cmdb-topology') {
+          setupCmdbGraph();
+        }
+        showToast(`🏢 OpenNow successfully calibrated to ${data.dna.industry_name}!`, 'success');
+      } else {
+        showToast(data.detail || 'Failed to apply blueprint', 'error');
+      }
+    } catch (e) {
+      showToast(`Error applying blueprint: ${e.message}`, 'error');
+    }
+  }
+
+  // --- Module 0: Company DNA & Adaptive Industry Blueprints ---
+  function renderModuleCompanyDna() {
+    const dna = state.companyDna || {
+      industry_id: 'fintech',
+      industry_name: 'FinTech, Banking & Capital Markets',
+      sub_industry: 'Payment Processing & Acquiring',
+      primary_offering: 'High-Throughput Payment Authorization Rails & Settlement Ledger',
+      tech_stack: 'Kafka, PostgreSQL Aurora, Redis, HSM, AWS GovCloud, Cloudflare Anycast, Go',
+      compliance_standard: 'PCI-DSS Level 1 / SOX 404 / GLBA',
+      downtime_cost_per_minute: 18500
+    };
+
+    const blueprints = state.industryBlueprints && state.industryBlueprints.length > 0 ? state.industryBlueprints : DEFAULT_INDUSTRY_BLUEPRINTS;
+    const costPerMin = parseFloat(dna.downtime_cost_per_minute) || 18500;
+    const costPerHour = costPerMin * 60;
+    const costPerDay = costPerMin * 1440;
+
+    return `
+      <div class="dna-workspace-container">
+        <!-- Active DNA Hero Strip -->
+        <div class="dna-hero-card">
+          <div class="dna-hero-left">
+            <div class="dna-hero-pill-badge">
+              <span class="live-pulse-dot" style="background:#2563eb;"></span>
+              <span>ACTIVE COMPANY DNA ARCHETYPE</span>
+            </div>
+            <h3 class="dna-hero-title">${escapeHtml(dna.industry_name)}</h3>
+            <p class="dna-hero-desc">
+              <strong>Offering:</strong> ${escapeHtml(dna.primary_offering || 'Enterprise Mission-Critical Services')} • 
+              <strong>Sub-Industry:</strong> ${escapeHtml(dna.sub_industry || 'Tier 1 Operations')} • 
+              <strong>Stack:</strong> ${escapeHtml(dna.tech_stack || 'Distributed Microservices, Multi-AZ Database, Cloud Mesh')}
+            </p>
+          </div>
+          <div class="dna-hero-metrics">
+            <div class="dna-metric-box metric-alert">
+              <span class="dna-metric-val font-mono">$${costPerMin.toLocaleString()}</span>
+              <span class="dna-metric-sub">Downtime Cost / Min</span>
+            </div>
+            <div class="dna-metric-box">
+              <span class="dna-metric-val font-mono">$${Math.round(costPerHour / 1000)}k</span>
+              <span class="dna-metric-sub">Hourly Outage Risk</span>
+            </div>
+            <div class="dna-metric-box">
+              <span class="dna-metric-val" style="font-size:14px; font-weight:800; color:#4f46e5;">${escapeHtml((dna.compliance_standard || 'PCI-DSS').split('/')[0].trim())}</span>
+              <span class="dna-metric-sub">Primary Standard</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: 6 Enterprise Blueprints Catalog -->
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:14px;">
+            <div>
+              <h4 style="font-size:16px; font-weight:800; color:#0f172a;">Adaptive Enterprise Blueprints</h4>
+              <p style="font-size:12.5px; color:#64748b; margin-top:2px;">Switching blueprints automatically reconfigures 3-tier taxonomies, CMDB topology nodes, SLA countdown timers, and financial downtime risk across OpenNow.</p>
+            </div>
+            <span class="badge-tag tag-aurora">6 Validated Archetypes</span>
+          </div>
+
+          <div class="dna-blueprints-grid">
+            ${blueprints.map(bp => {
+              const isActive = dna.industry_id === bp.id;
+              const bpCost = parseFloat(bp.downtime_cost_per_minute) || 15000;
+              const themeClass = bp.theme || `bp-theme-${bp.id}`;
+              const subTags = Array.isArray(bp.sub_industries) ? bp.sub_industries.slice(0, 3) : ['Core Operations', 'Edge Rails'];
+              const keyCis = bp.key_cis || (bp.cmdb_nodes ? bp.cmdb_nodes.slice(0, 3).map(n => n.name) : ['Core Service', 'Database Gateway']);
+
+              return `
+                <div class="blueprint-card ${themeClass} ${isActive ? 'active' : ''}" data-bp-id="${bp.id}">
+                  <div>
+                    <div class="bp-header">
+                      <div class="bp-icon-wrap">${bp.icon || '🏢'}</div>
+                      <div class="bp-title-wrap">
+                        <h4 class="bp-name">${escapeHtml(bp.name)}</h4>
+                        <span class="bp-compliance-badge">${escapeHtml(bp.compliance_standard || 'Enterprise Governance')}</span>
+                      </div>
+                      ${isActive ? '<span class="bp-active-indicator"><span class="bp-active-pulse"></span>Active</span>' : ''}
+                    </div>
+
+                    <p class="bp-desc">${escapeHtml(bp.primary_offering || 'Enterprise service platform architecture with mission-critical SLA models.')}</p>
+
+                    <div class="bp-specs-list font-mono">
+                      <div class="bp-spec-row">
+                        <span class="bp-spec-key">Downtime Risk:</span>
+                        <span class="bp-spec-val text-rose font-bold">$${bpCost.toLocaleString()}/min</span>
+                      </div>
+                      <div class="bp-spec-row">
+                        <span class="bp-spec-key">P1 Target SLA:</span>
+                        <span class="bp-spec-val text-emerald font-bold">${bp.sla_p1_resolve_hours ? (bp.sla_p1_resolve_hours * 60) + 'm' : '30m'} resolve (${bp.sla_p1_response_mins || 5}m ack)</span>
+                      </div>
+                      <div class="bp-spec-row">
+                        <span class="bp-spec-key">Core CMDB Nodes:</span>
+                        <span class="bp-spec-val" title="${keyCis.join(', ')}">${escapeHtml(keyCis.slice(0, 2).join(' • '))}</span>
+                      </div>
+                    </div>
+
+                    <div class="bp-tags-wrap">
+                      ${subTags.map(st => `<span class="bp-tag">${escapeHtml(st)}</span>`).join('')}
+                    </div>
+                  </div>
+
+                  <div class="bp-footer">
+                    <button class="btn-apply-blueprint" data-bp-id="${bp.id}">
+                      ${isActive ? '✓ Blueprint Currently Active' : '⚡ 1-Click Apply Blueprint'}
+                    </button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+
+        <!-- Section: Company DNA Calibration & Financial Risk Engine -->
+        <div class="dna-tailoring-panel">
+          <div class="dna-panel-header">
+            <h4 class="dna-panel-title">Custom Company DNA Calibration &amp; Exposure Engine</h4>
+            <p class="dna-panel-sub">Fine-tune your company's sub-industry, offering title, core infrastructure stack, and financial downtime rate. Live calculation updates business interruption exposure in real time.</p>
+          </div>
+
+          <form id="form-dna-recalibrate" class="dna-form-grid">
+            <div class="form-group">
+              <label class="text-xs text-muted font-bold">Industry Archetype</label>
+              <select id="dna-select-industry" class="zen-select w-full" style="height:36px;">
+                ${blueprints.map(bp => `<option value="${bp.id}" ${bp.id === dna.industry_id ? 'selected' : ''}>${bp.icon || '🏢'} ${escapeHtml(bp.name)}</option>`).join('')}
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="text-xs text-muted font-bold">Sub-Industry / Domain Specialty</label>
+              <input type="text" id="dna-input-subindustry" class="zen-form-control" value="${escapeHtml(dna.sub_industry || '')}" placeholder="e.g. Payment Processing, Card Ingress, Neonatal Telemetry" style="height:36px;">
+            </div>
+
+            <div class="form-group dna-form-full">
+              <label class="text-xs text-muted font-bold">Primary Company Offering / Flagship Service</label>
+              <input type="text" id="dna-input-offering" class="zen-form-control" value="${escapeHtml(dna.primary_offering || '')}" placeholder="e.g. OpenPay Global Clearing & Settlement Rails" style="height:36px;">
+            </div>
+
+            <div class="form-group dna-form-full">
+              <label class="text-xs text-muted font-bold">Core Technology Stack</label>
+              <input type="text" id="dna-input-techstack" class="zen-form-control font-mono" value="${escapeHtml(dna.tech_stack || '')}" placeholder="e.g. Kafka, PostgreSQL Aurora, Redis, Kubernetes, HSMs, AWS GovCloud" style="height:36px;">
+            </div>
+
+            <div class="form-group">
+              <label class="text-xs text-muted font-bold">Compliance &amp; Regulatory Standard</label>
+              <input type="text" id="dna-input-compliance" class="zen-form-control" value="${escapeHtml(dna.compliance_standard || 'PCI-DSS Level 1 / SOC2 Type II')}" placeholder="e.g. PCI-DSS Level 1, HIPAA, SOC2 Type II, ISO 27001" style="height:36px;">
+            </div>
+
+            <div class="form-group">
+              <label class="text-xs text-muted font-bold">Financial Downtime Cost Rate ($ / Minute)</label>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <input type="number" id="dna-input-cost" class="zen-form-control font-mono" value="${costPerMin}" min="100" max="1000000" step="500" style="height:36px;">
+                <span class="text-xs text-muted">USD / min</span>
+              </div>
+            </div>
+
+            <!-- Dynamic Outage Exposure Calculator Callout -->
+            <div class="dna-downtime-calculator-card">
+              <div class="calc-left">
+                <h4>⚠️ Calculated Business Interruption Exposure</h4>
+                <p>Real-time ITIL v4 downtime financial risk projection modeled against current SLA targets.</p>
+              </div>
+              <div class="calc-rates font-mono">
+                <div class="calc-rate-box">
+                  <span class="calc-rate-val" id="calc-exp-min">$${costPerMin.toLocaleString()}</span>
+                  <span class="calc-rate-label">Per Minute</span>
+                </div>
+                <div class="calc-rate-box">
+                  <span class="calc-rate-val" id="calc-exp-hour">$${costPerHour.toLocaleString()}</span>
+                  <span class="calc-rate-label">1-Hour Outage</span>
+                </div>
+                <div class="calc-rate-box">
+                  <span class="calc-rate-val" id="calc-exp-day">$${costPerDay.toLocaleString()}</span>
+                  <span class="calc-rate-label">24-Hour Outage</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="dna-form-full mt-2" style="display:flex; justify-content:flex-end;">
+              <button type="submit" class="btn btn-zen-primary" id="btn-save-dna-custom" style="padding:10px 22px; font-weight:800;">
+                <span>🚀 Save DNA &amp; Recalibrate OpenNow</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    `;
+  }
+
+  function bindModuleCompanyDnaEvents() {
+    // 1-Click apply buttons on blueprint cards
+    document.querySelectorAll('.btn-apply-blueprint').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const bpId = btn.getAttribute('data-bp-id');
+        if (bpId) {
+          applyIndustryBlueprint(bpId);
+        }
+      });
+    });
+
+    document.querySelectorAll('.blueprint-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const bpId = card.getAttribute('data-bp-id');
+        if (bpId && state.companyDna?.industry_id !== bpId) {
+          applyIndustryBlueprint(bpId);
+        }
+      });
+    });
+
+    // Dynamic cost calculator input listener
+    const costInput = document.getElementById('dna-input-cost');
+    if (costInput) {
+      costInput.addEventListener('input', () => {
+        const val = parseFloat(costInput.value) || 0;
+        const hr = val * 60;
+        const dy = val * 1440;
+        const elMin = document.getElementById('calc-exp-min');
+        const elHr = document.getElementById('calc-exp-hour');
+        const elDy = document.getElementById('calc-exp-day');
+        if (elMin) elMin.textContent = `$${val.toLocaleString()}`;
+        if (elHr) elHr.textContent = `$${hr.toLocaleString()}`;
+        if (elDy) elDy.textContent = `$${dy.toLocaleString()}`;
+      });
+    }
+
+    // Auto-fill sub-industry when archetype changes in dropdown
+    const indSelect = document.getElementById('dna-select-industry');
+    if (indSelect) {
+      indSelect.addEventListener('change', () => {
+        const bpId = indSelect.value;
+        const blueprints = state.industryBlueprints && state.industryBlueprints.length > 0 ? state.industryBlueprints : DEFAULT_INDUSTRY_BLUEPRINTS;
+        const bp = blueprints.find(b => b.id === bpId);
+        if (bp) {
+          const subInput = document.getElementById('dna-input-subindustry');
+          const offInput = document.getElementById('dna-input-offering');
+          const techInput = document.getElementById('dna-input-techstack');
+          const compInput = document.getElementById('dna-input-compliance');
+          const cInput = document.getElementById('dna-input-cost');
+          if (subInput && bp.sub_industries && bp.sub_industries.length) subInput.value = bp.sub_industries[0];
+          if (offInput) offInput.value = bp.primary_offering || '';
+          if (techInput) techInput.value = bp.tech_stack || '';
+          if (compInput) compInput.value = bp.compliance_standard || '';
+          if (cInput) {
+            cInput.value = bp.downtime_cost_per_minute || 15000;
+            cInput.dispatchEvent(new Event('input'));
+          }
+        }
+      });
+    }
+
+    // Custom DNA form submission
+    const formDna = document.getElementById('form-dna-recalibrate');
+    if (formDna) {
+      formDna.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const indId = document.getElementById('dna-select-industry')?.value || 'fintech';
+        const sub = document.getElementById('dna-input-subindustry')?.value || '';
+        const off = document.getElementById('dna-input-offering')?.value || '';
+        const tech = document.getElementById('dna-input-techstack')?.value || '';
+        const comp = document.getElementById('dna-input-compliance')?.value || '';
+        const cost = parseFloat(document.getElementById('dna-input-cost')?.value) || 18500;
+
+        applyIndustryBlueprint(indId, {
+          industry_id: indId,
+          sub_industry: sub,
+          primary_offering: off,
+          tech_stack: tech,
+          compliance_standard: comp,
+          downtime_cost_per_minute: cost
+        });
+      });
+    }
+  }
+
   function initSetupCenter() {
     DOM.setupNavTabs = document.querySelectorAll('.setup-vertical-tab');
     DOM.setupNavTabs.forEach(tab => {
@@ -4896,10 +5383,10 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
       });
     });
 
-    renderSetupCenter(state.activeSetupModule || 'taxonomy');
+    renderSetupCenter(state.activeSetupModule || 'dna');
   }
 
-  function renderSetupCenter(module = state.activeSetupModule || 'taxonomy') {
+  function renderSetupCenter(module = state.activeSetupModule || 'dna') {
     state.activeSetupModule = module;
 
     // Update active tab styles
@@ -4934,7 +5421,10 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
     const container = document.getElementById('setup-modules-container');
     if (!container) return;
 
-    if (module === 'taxonomy') {
+    if (module === 'dna') {
+      container.innerHTML = renderModuleCompanyDna();
+      bindModuleCompanyDnaEvents();
+    } else if (module === 'taxonomy') {
       container.innerHTML = renderModuleTaxonomy();
       bindModuleTaxonomyEvents();
     } else if (module === 'matrix') {
@@ -6635,7 +7125,7 @@ ${notes}`,
     }
 
     if (viewName === 'setup') {
-      renderSetupCenter(state.activeSetupModule || 'taxonomy');
+      renderSetupCenter(state.activeSetupModule || 'dna');
     } else if (viewName === 'problem-management') {
       renderProblemManagement();
     } else if (viewName === 'change-management') {
@@ -6664,6 +7154,15 @@ ${notes}`,
         switchView(view);
       });
     });
+
+    const headerIndustryPill = document.getElementById('header-industry-pill');
+    if (headerIndustryPill) {
+      headerIndustryPill.addEventListener('click', () => {
+        switchView('setup');
+        state.activeSetupModule = 'dna';
+        renderSetupCenter('dna');
+      });
+    }
 
     if (DOM.brandHomeBtn) {
       DOM.brandHomeBtn.addEventListener('click', () => switchView('incident-command'));

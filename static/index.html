@@ -209,6 +209,14 @@
 
           <!-- Quick Metrics Ticker -->
           <div class="zen-header-stats" id="global-stats-bar">
+            <!-- Dynamic Industry & Company DNA Pill -->
+            <div class="stat-pill stat-pill-industry cursor-pointer" id="header-industry-pill" title="Active Industry Archetype & Compliance Standard (Click to Configure)">
+              <span class="industry-indicator-icon" id="header-industry-icon">💳</span>
+              <span class="stat-label">Industry:</span>
+              <span class="stat-value font-mono text-indigo" id="header-industry-name">FinTech</span>
+              <span class="badge-tag tag-compliance" id="header-industry-compliance">PCI-DSS</span>
+            </div>
+
             <div class="stat-pill" title="Total active incidents currently under management">
               <span class="stat-indicator text-blue">●</span>
               <span class="stat-label">Active:</span>
@@ -1599,10 +1607,19 @@
                   <h3 class="setup-sidebar-title">Service Desk ERP</h3>
                 </div>
                 <nav class="setup-vertical-nav">
-                  <button class="setup-vertical-tab active" data-setup-tab="taxonomy">
+                  <button class="setup-vertical-tab active" data-setup-tab="dna">
+                    <span class="vtab-icon">🏢</span>
+                    <div class="vtab-text">
+                      <span class="vtab-title">1. Company DNA &amp; Industry</span>
+                      <span class="vtab-subtitle">Adaptive Layout &amp; Blueprint</span>
+                    </div>
+                    <span class="tab-count-badge font-mono" id="badge-current-industry">FinTech</span>
+                  </button>
+
+                  <button class="setup-vertical-tab" data-setup-tab="taxonomy">
                     <span class="vtab-icon">🏷️</span>
                     <div class="vtab-text">
-                      <span class="vtab-title">1. Taxonomy &amp; Categories</span>
+                      <span class="vtab-title">2. Taxonomy &amp; Categories</span>
                       <span class="vtab-subtitle">3-Tier Master Data</span>
                     </div>
                     <span class="tab-count-badge font-mono" id="badge-count-taxonomy">4</span>
@@ -1611,7 +1628,7 @@
                   <button class="setup-vertical-tab" data-setup-tab="matrix">
                     <span class="vtab-icon">⚡</span>
                     <div class="vtab-text">
-                      <span class="vtab-title">2. Priority Matrix</span>
+                      <span class="vtab-title">3. Priority Matrix</span>
                       <span class="vtab-subtitle">Impact × Urgency Grid</span>
                     </div>
                     <span class="tab-count-badge font-mono">12</span>
@@ -1620,7 +1637,7 @@
                   <button class="setup-vertical-tab" data-setup-tab="sla">
                     <span class="vtab-icon">⏱️</span>
                     <div class="vtab-text">
-                      <span class="vtab-title">3. SLA Policies &amp; Hours</span>
+                      <span class="vtab-title">4. SLA Policies &amp; Hours</span>
                       <span class="vtab-subtitle">Schedules &amp; Pause Rules</span>
                     </div>
                     <span class="tab-count-badge font-mono">4</span>
@@ -1629,7 +1646,7 @@
                   <button class="setup-vertical-tab" data-setup-tab="resolutions">
                     <span class="vtab-icon">✓</span>
                     <div class="vtab-text">
-                      <span class="vtab-title">4. Resolution Codes</span>
+                      <span class="vtab-title">5. Resolution Codes</span>
                       <span class="vtab-subtitle">Closure &amp; Root Causes</span>
                     </div>
                     <span class="tab-count-badge font-mono" id="badge-count-resolutions">6</span>
@@ -1638,7 +1655,7 @@
                   <button class="setup-vertical-tab" data-setup-tab="technicians">
                     <span class="vtab-icon">👥</span>
                     <div class="vtab-text">
-                      <span class="vtab-title">5. Technicians &amp; Rates</span>
+                      <span class="vtab-title">6. Technicians &amp; Rates</span>
                       <span class="vtab-subtitle">Roster &amp; Labor Billing</span>
                     </div>
                     <span class="tab-count-badge font-mono" id="badge-count-techs">5</span>
@@ -1647,7 +1664,7 @@
                   <button class="setup-vertical-tab" data-setup-tab="rules">
                     <span class="vtab-icon">⚙️</span>
                     <div class="vtab-text">
-                      <span class="vtab-title">6. Business Rules</span>
+                      <span class="vtab-title">7. Business Rules</span>
                       <span class="vtab-subtitle">Event-Driven Automation</span>
                     </div>
                     <span class="tab-count-badge font-mono" id="badge-count-rules">4</span>
@@ -1656,7 +1673,7 @@
                   <button class="setup-vertical-tab" data-setup-tab="email-channels">
                     <span class="vtab-icon">✉️</span>
                     <div class="vtab-text">
-                      <span class="vtab-title">7. Email Channels</span>
+                      <span class="vtab-title">8. Email Channels</span>
                       <span class="vtab-subtitle">Inbound Mailboxes</span>
                     </div>
                     <span class="tab-count-badge font-mono" id="badge-count-email">2</span>
@@ -1665,7 +1682,7 @@
                   <button class="setup-vertical-tab" data-setup-tab="phone-cti">
                     <span class="vtab-icon">📞</span>
                     <div class="vtab-text">
-                      <span class="vtab-title">8. Phone &amp; CTI</span>
+                      <span class="vtab-title">9. Phone &amp; CTI</span>
                       <span class="vtab-subtitle">Softphone Integration</span>
                     </div>
                     <span class="tab-count-badge font-mono">Live</span>

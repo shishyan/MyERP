@@ -67,6 +67,10 @@ app.include_router(itsm_router)
 from backend.omnichannel_engine import omnichannel_router
 app.include_router(omnichannel_router)
 
+# Company DNA & Adaptive Industry Blueprints Router
+from backend.industry_engine import industry_router
+app.include_router(industry_router)
+
 
 # --- Startup & Health ---
 

@@ -6063,3 +6063,436 @@ body.zen-focus-mode .zen-floating-pill {
   gap: 6px;
   margin-bottom: 6px;
 }
+
+/* ==========================================================================
+   Company DNA & Adaptive Industry Blueprints
+   ========================================================================== */
+
+.stat-pill-industry {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.stat-pill-industry:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.08);
+}
+
+.tag-compliance {
+  background: #ede9fe;
+  color: #6d28d9;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 1px solid #ddd6fe;
+  letter-spacing: 0.02em;
+}
+
+.dna-workspace-container {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* DNA Hero Banner Card */
+.dna-hero-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 22px 26px;
+  box-shadow: var(--shadow-zen-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.dna-hero-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: linear-gradient(180deg, #4f46e5 0%, #0d9488 100%);
+}
+
+.dna-hero-left {
+  flex: 1;
+}
+
+.dna-hero-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1d4ed8;
+  margin-bottom: 8px;
+}
+
+.dna-hero-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+.dna-hero-desc {
+  font-size: 13.5px;
+  color: #475569;
+  line-height: 1.5;
+  max-width: 820px;
+}
+
+.dna-hero-metrics {
+  display: flex;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.dna-metric-box {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 18px;
+  text-align: center;
+  min-width: 140px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.dna-metric-box.metric-alert {
+  border-color: #fecdd3;
+  background: #fff1f2;
+}
+
+.dna-metric-val {
+  font-size: 19px;
+  font-weight: 800;
+  color: #0f172a;
+  display: block;
+}
+
+.dna-metric-box.metric-alert .dna-metric-val {
+  color: #e11d48;
+}
+
+.dna-metric-sub {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* Blueprints Grid (6 Archetypes) */
+.dna-blueprints-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 18px;
+}
+
+.blueprint-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow-zen-sm);
+  transition: all var(--transition-smooth);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.blueprint-card:hover {
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-zen-md);
+}
+
+.blueprint-card.active {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2), var(--shadow-zen-md);
+}
+
+.blueprint-card.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #4f46e5, #0d9488);
+}
+
+.bp-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.bp-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.bp-theme-fintech .bp-icon-wrap { background: #eff6ff; border: 1px solid #bfdbfe; }
+.bp-theme-healthcare .bp-icon-wrap { background: #f0fdf4; border: 1px solid #bbf7d0; }
+.bp-theme-retail .bp-icon-wrap { background: #fff7ed; border: 1px solid #fed7aa; }
+.bp-theme-saas_ai .bp-icon-wrap { background: #f5f3ff; border: 1px solid #ddd6fe; }
+.bp-theme-manufacturing .bp-icon-wrap { background: #fefce8; border: 1px solid #fef08a; }
+.bp-theme-telecom .bp-icon-wrap { background: #ecfeff; border: 1px solid #a5f3fc; }
+
+.bp-title-wrap {
+  flex: 1;
+}
+
+.bp-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.bp-compliance-badge {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+  margin-top: 4px;
+}
+
+.bp-theme-fintech .bp-compliance-badge { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+.bp-theme-healthcare .bp-compliance-badge { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+.bp-theme-retail .bp-compliance-badge { background: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
+.bp-theme-saas_ai .bp-compliance-badge { background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe; }
+.bp-theme-manufacturing .bp-compliance-badge { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+.bp-theme-telecom .bp-compliance-badge { background: #cffafe; color: #155e75; border: 1px solid #a5f3fc; }
+
+.bp-active-indicator {
+  background: #10b981;
+  color: #ffffff;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  letter-spacing: 0.02em;
+}
+
+.bp-active-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+  animation: pulse 1.5s infinite;
+}
+
+.bp-desc {
+  font-size: 12.5px;
+  color: #475569;
+  line-height: 1.45;
+  margin-bottom: 14px;
+}
+
+.bp-specs-list {
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.bp-spec-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11.5px;
+}
+
+.bp-spec-key {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.bp-spec-val {
+  color: #0f172a;
+  font-weight: 700;
+  text-align: right;
+  max-width: 65%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bp-tags-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 16px;
+}
+
+.bp-tag {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+.bp-footer {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.btn-apply-blueprint {
+  width: 100%;
+  padding: 8px 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #0f172a;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-apply-blueprint:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #4f46e5;
+}
+
+.blueprint-card.active .btn-apply-blueprint {
+  background: #f0fdf4;
+  border-color: #86efac;
+  color: #166534;
+  cursor: default;
+}
+
+/* Company Tailoring & Recalibration Form */
+.dna-tailoring-panel {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 22px 26px;
+  box-shadow: var(--shadow-zen-sm);
+}
+
+.dna-panel-header {
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.dna-panel-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.dna-panel-sub {
+  font-size: 12.5px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.dna-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.dna-form-full {
+  grid-column: 1 / -1;
+}
+
+.dna-downtime-calculator-card {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #fef2f2 0%, #fff1f2 100%);
+  border: 1px solid #fecdd3;
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.calc-left h4 {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #9f1239;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.calc-left p {
+  font-size: 12px;
+  color: #be123c;
+  margin-top: 3px;
+}
+
+.calc-rates {
+  display: flex;
+  gap: 18px;
+}
+
+.calc-rate-box {
+  background: #ffffff;
+  border: 1px solid #fecdd3;
+  border-radius: 8px;
+  padding: 8px 14px;
+  text-align: center;
+  min-width: 110px;
+}
+
+.calc-rate-val {
+  font-size: 15px;
+  font-weight: 800;
+  color: #be123c;
+  display: block;
+}
+
+.calc-rate-label {
+  font-size: 10.5px;
+  color: #881337;
+  font-weight: 600;
+}
