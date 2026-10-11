@@ -2134,13 +2134,13 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
 
     tbody.innerHTML = targetItems.map(item => {
       const pClass = (item.priority || 'P3').toLowerCase();
-      let streamBadge = `<span class="badge-tag" style="background:#fee2e2; color:#b91c1c; font-weight:700;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1px; margin-right:4px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>INCIDENT</span>`;
+      let streamBadge = `<span class="badge-tag" style="background:#fee2e2; color:#b91c1c; font-weight:700;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" style="vertical-align:-1px; margin-right:4px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>INCIDENT</span>`;
       if (item.stream === 'PROBLEM') {
-        streamBadge = `<span class="badge-tag" style="background:#e0e7ff; color:#3730a3; font-weight:700;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1px; margin-right:4px;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>PROBLEM</span>`;
+        streamBadge = `<span class="badge-tag" style="background:#e0e7ff; color:#3730a3; font-weight:700;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2" style="vertical-align:-1px; margin-right:4px;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>PROBLEM</span>`;
       } else if (item.stream === 'CHANGE') {
-        streamBadge = `<span class="badge-tag" style="background:#fef3c7; color:#92400e; font-weight:700;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1px; margin-right:4px;"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/></svg>CHANGE</span>`;
+        streamBadge = `<span class="badge-tag" style="background:#fef3c7; color:#92400e; font-weight:700;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2" style="vertical-align:-1px; margin-right:4px;"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/></svg>CHANGE</span>`;
       } else if (item.stream === 'REQUEST') {
-        streamBadge = `<span class="badge-tag" style="background:#dcfce7; color:#166534; font-weight:700;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1px; margin-right:4px;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/></svg>REQUEST</span>`;
+        streamBadge = `<span class="badge-tag" style="background:#dcfce7; color:#166534; font-weight:700;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" style="vertical-align:-1px; margin-right:4px;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/></svg>REQUEST</span>`;
       }
 
       return `
@@ -2376,7 +2376,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
       allWorkItems.push({
         id: inc.id,
         stream: 'INCIDENT',
-        streamLabel: '<span class="modern-badge-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span> INCIDENT',
+        streamLabel: '<span class="modern-badge-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span> INCIDENT',
         title: inc.title,
         priority: inc.priority || 'P3',
         status: inc.status,
@@ -2396,7 +2396,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
       allWorkItems.push({
         id: p.id,
         stream: 'PROBLEM',
-        streamLabel: '<span class="modern-badge-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span> PROBLEM',
+        streamLabel: '<span class="modern-badge-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span> PROBLEM',
         title: p.title,
         priority: 'P2',
         status: p.status,
@@ -2418,7 +2418,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
       allWorkItems.push({
         id: chg.id,
         stream: 'CHANGE',
-        streamLabel: '<span class="modern-badge-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span> CHANGE',
+        streamLabel: '<span class="modern-badge-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span> CHANGE',
         title: chg.title,
         priority: chg.type === 'Emergency' ? 'P1' : 'P2',
         status: chg.cabStatus || 'Draft',
@@ -2439,7 +2439,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
       allWorkItems.push({
         id: req.id,
         stream: 'REQUEST',
-        streamLabel: '<span class="modern-badge-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span> SERVICE REQ',
+        streamLabel: '<span class="modern-badge-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span> SERVICE REQ',
         title: req.title,
         priority: req.priority || 'P3',
         status: req.status,
