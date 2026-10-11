@@ -5892,10 +5892,10 @@ body.zen-focus-mode .zen-floating-pill {
 
 /* Drawer Operations Vertical Side Menu Bar & Content */
 .drawer-vnav-sidebar {
-  width: 224px;
-  min-width: 200px;
-  max-width: 240px;
-  flex: 0 0 224px;
+  width: 240px;
+  min-width: 220px;
+  max-width: 260px;
+  flex: 0 0 240px;
   background: #f8fafc;
   border-right: 1px solid var(--border-zen-medium);
   display: flex;
@@ -5983,6 +5983,11 @@ body.zen-focus-mode .zen-floating-pill {
 .vnav-icon-pill.pill-blue {
   background: #eff6ff;
   border: 1px solid #bfdbfe;
+}
+
+.vnav-icon-pill.pill-indigo {
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
 }
 
 .vnav-icon-pill.pill-purple {
@@ -6092,6 +6097,20 @@ body.zen-focus-mode .zen-floating-pill {
   flex-direction: column;
   gap: 16px;
   background: #ffffff;
+}
+
+/* Governance Grid in Mini-Shell Content Canvas */
+.governance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .governance-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .drawer-ai-callout-strip {

@@ -520,7 +520,7 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
     isBlastSimulating: false,
     currentPlatform: 'servicenow',
     activeSchemaTab: 'tasks',
-    activeDrawerTab: 'overview',
+    activeDrawerTab: 'governance',
 
     // Company DNA & Industry Archetype
     industry: 'fintech',
@@ -3225,9 +3225,9 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
 
     state.selectedTicket = inc;
     const ciObj = state.cmdbNodes.find(n => n.id === inc.ci);
-    const validDrawerTabs = ['overview', 'ai-hub', 'subtasks', 'worklogs', 'timeline'];
+    const validDrawerTabs = ['governance', 'overview', 'ai-hub', 'subtasks', 'worklogs', 'timeline'];
     if (!validDrawerTabs.includes(state.activeDrawerTab)) {
-      state.activeDrawerTab = 'overview';
+      state.activeDrawerTab = 'governance';
     }
 
     // Worklogs calculation
@@ -3351,284 +3351,301 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
         </div>
       </div>
 
-      <!-- 3. Segmented Multi-Column Workspace inside 75% Drawer -->
-      <div class="drawer-erp-workspace">
+      <!-- 3. Mini-Shell Workspace inside 75% Drawer -->
+      <div class="drawer-erp-workspace drawer-mini-shell">
         
-        <!-- ======================================================== -->
-        <!-- SECTION 1 (NARROW FIRST SECTION): Governance, People, Classification & CI -->
-        <!-- ======================================================== -->
-        <div class="drawer-col-narrow drawer-col-governance">
+        <!-- MINI-SHELL VERTICAL SIDEBAR MENU (Single Unified Navigation Spine) -->
+        <aside class="drawer-vnav-sidebar">
+          <div class="drawer-vnav-header">
+            <span class="drawer-vnav-eyebrow">MINI-SHELL</span>
+            <span class="drawer-vnav-heading">Incident Console</span>
+          </div>
+
+          <nav class="drawer-vnav-menu">
+            <!-- 1. Governance & Control (Section 1 elevated into primary menu item) -->
+            <button class="drawer-vnav-item ${state.activeDrawerTab === 'governance' ? 'active' : ''}" data-drawer-tab="governance" title="Status, ownership, taxonomy & priority matrix">
+              <div class="vnav-item-left">
+                <span class="vnav-icon-pill pill-blue">🛡️</span>
+                <div class="vnav-text-col">
+                  <span class="vnav-title">Governance</span>
+                  <span class="vnav-sub">Status &amp; Taxonomy</span>
+                </div>
+              </div>
+              <span class="vnav-badge-pill font-mono">${formatStatusLabel(inc.status)}</span>
+            </button>
+
+            <!-- 2. Overview & Diagnostics -->
+            <button class="drawer-vnav-item ${state.activeDrawerTab === 'overview' ? 'active' : ''}" data-drawer-tab="overview" title="Diagnostics, stack trace & telemetry">
+              <div class="vnav-item-left">
+                <span class="vnav-icon-pill pill-blue">📋</span>
+                <div class="vnav-text-col">
+                  <span class="vnav-title">Diagnostics</span>
+                  <span class="vnav-sub">Telemetry &amp; Stack</span>
+                </div>
+              </div>
+              <span class="vnav-badge-pill">Trace</span>
+            </button>
+
+            <!-- 3. AI Sentinel & Runbooks -->
+            <button class="drawer-vnav-item ${state.activeDrawerTab === 'ai-hub' ? 'active' : ''}" data-drawer-tab="ai-hub" title="Autonomous AI triage, blast radius, runbooks & communications">
+              <div class="vnav-item-left">
+                <span class="vnav-icon-pill pill-purple">🤖</span>
+                <div class="vnav-text-col">
+                  <span class="vnav-title">AI Sentinel Hub</span>
+                  <span class="vnav-sub">Heuristics &amp; Blast</span>
+                </div>
+              </div>
+              <span class="vnav-badge-pill pill-purple-tag">✦ 4 Tools</span>
+            </button>
+
+            <!-- 4. Action Checklist & Subtasks -->
+            <button class="drawer-vnav-item ${state.activeDrawerTab === 'subtasks' ? 'active' : ''}" data-drawer-tab="subtasks" title="Remediation checklist and action tasks">
+              <div class="vnav-item-left">
+                <span class="vnav-icon-pill pill-emerald">☑️</span>
+                <div class="vnav-text-col">
+                  <span class="vnav-title">Action Items</span>
+                  <span class="vnav-sub">Remediation Checklist</span>
+                </div>
+              </div>
+              <span class="vnav-badge-pill">${completedSubtasks}/${subtasksList.length}</span>
+            </button>
+
+            <!-- 5. Worklogs & Costs -->
+            <button class="drawer-vnav-item ${state.activeDrawerTab === 'worklogs' ? 'active' : ''}" data-drawer-tab="worklogs" title="Technician labor hours and hourly billing rates">
+              <div class="vnav-item-left">
+                <span class="vnav-icon-pill pill-amber">⏱️</span>
+                <div class="vnav-text-col">
+                  <span class="vnav-title">Worklogs &amp; Costs</span>
+                  <span class="vnav-sub">Labor Hours &amp; Rates</span>
+                </div>
+              </div>
+              <span class="vnav-badge-pill font-mono">$${totalLaborCost.toFixed(0)}</span>
+            </button>
+
+            <!-- 6. Audit & Timeline -->
+            <button class="drawer-vnav-item ${state.activeDrawerTab === 'timeline' ? 'active' : ''}" data-drawer-tab="timeline" title="Incident audit stream and communication journal">
+              <div class="vnav-item-left">
+                <span class="vnav-icon-pill pill-slate">📜</span>
+                <div class="vnav-text-col">
+                  <span class="vnav-title">Audit Stream</span>
+                  <span class="vnav-sub">Activity &amp; Notes</span>
+                </div>
+              </div>
+              <span class="vnav-badge-pill">${inc.timeline.length}</span>
+            </button>
+          </nav>
+
+          <div class="drawer-vnav-footer">
+            <div class="vnav-footer-status">
+              <span class="dot-live-indicator"></span>
+              <span class="vnav-footer-text">Mini-Shell Active</span>
+            </div>
+          </div>
+        </aside>
+
+        <!-- MINI-SHELL MAIN CONTENT CANVAS (Expansive View for Selected Module) -->
+        <main class="drawer-vnav-content">
           
-          <!-- Lifecycle State Machine Flow Card -->
-          <div class="drawer-side-card side-card-status">
-            <div class="side-card-header">
-              <div class="side-card-title-wrap">
-                <span class="side-card-icon-pill icon-pill-blue">🔄</span>
-                <span class="side-card-title">STATUS &amp; LIFECYCLE</span>
-              </div>
-              <span class="badge-tag tag-blue font-mono font-bold">${formatStatusLabel(inc.status)}</span>
-            </div>
-            <div>
-              <label class="field-label-micro">
-                <span style="color:#2563eb;">●</span>
-                <span>Current ITIL State</span>
-              </label>
-              <select id="drawer-status-select" class="zen-select select-styled-shaded w-full" style="height:32px; font-weight:700;">
-                <option value="NEW" ${inc.status === 'NEW' ? 'selected' : ''}>New / Triaging</option>
-                <option value="IN_PROGRESS" ${inc.status === 'IN_PROGRESS' ? 'selected' : ''}>In Progress / Mitigating</option>
-                <option value="ON_HOLD" ${inc.status === 'ON_HOLD' ? 'selected' : ''}>On Hold / SLA Paused</option>
-                <option value="RESOLVED" ${inc.status === 'RESOLVED' ? 'selected' : ''}>Resolved / Mitigated</option>
-                <option value="CLOSED" ${inc.status === 'CLOSED' ? 'selected' : ''}>Closed / Archived</option>
-              </select>
-            </div>
-            <div class="mt-3">
-              <span class="field-label-micro mb-1" style="display:block;">Allowed Lifecycle Transitions:</span>
-              <div class="transition-actions-row">
-                ${transitionsHtml}
-              </div>
-            </div>
-          </div>
-
-          <!-- People & Ownership Card -->
-          <div class="drawer-side-card side-card-people">
-            <div class="side-card-header">
-              <div class="side-card-title-wrap">
-                <span class="side-card-icon-pill icon-pill-teal">👥</span>
-                <span class="side-card-title">PEOPLE &amp; ESCALATION</span>
-              </div>
-              <span class="badge-tag tag-emerald">Assigned</span>
-            </div>
-            <div class="caller-profile-row">
-              <div class="tech-avatar-mini" style="width:34px; height:34px; font-size:13px; background:linear-gradient(135deg, #0d9488, #2563eb); color:white; font-weight:800; box-shadow:0 2px 5px rgba(13,148,136,0.25);">
-                ${escapeHtml((inc.caller || 'AR').substring(0, 2).toUpperCase())}
-              </div>
-              <div class="caller-details">
-                <strong>${escapeHtml(inc.caller || 'alex.rivera@opennow.io')}</strong>
-                <span class="text-xs text-muted">Site Reliability Engineering</span>
-              </div>
-            </div>
-            <div class="assignment-meta-lines mt-3" style="display:flex; flex-direction:column; gap:6px;">
-              <div class="pair-badge-pill"><span class="text-muted font-bold text-xs">Assignment Group:</span><strong class="text-indigo font-mono">${escapeHtml(inc.team)}</strong></div>
-              <div class="pair-badge-pill"><span class="text-muted font-bold text-xs">Incident Lead:</span><span style="font-weight:700; color:#0f172a;">Alex Rivera (Lead)</span></div>
-              <div class="pair-badge-pill"><span class="text-muted font-bold text-xs">ITIL Status:</span><span class="font-bold font-mono ${inc.status === 'ON_HOLD' ? 'text-amber' : inc.status === 'RESOLVED' ? 'text-emerald' : 'text-indigo'}">${formatStatusLabel(inc.status)}</span></div>
-            </div>
-          </div>
-
-          <!-- Three-Tier ITIL Classification Card -->
-          <div class="drawer-side-card side-card-taxonomy">
-            <div class="side-card-header">
-              <div class="side-card-title-wrap">
-                <span class="side-card-icon-pill icon-pill-purple">🏷️</span>
-                <span class="side-card-title">3-TIER TAXONOMY</span>
-              </div>
-              <span class="badge-tag tag-purple">ITIL 4 Master</span>
-            </div>
-            <div class="classification-vertical-stack">
-              <div class="form-group mb-2">
-                <label class="field-label-micro">📁 Category</label>
-                <select id="drawer-cat-select" class="zen-select select-styled-shaded w-full" style="height:32px;"></select>
-              </div>
-              <div class="form-group mb-2">
-                <label class="field-label-micro">📂 Subcategory</label>
-                <select id="drawer-subcat-select" class="zen-select select-styled-shaded w-full" style="height:32px;"></select>
-              </div>
-              <div class="form-group">
-                <label class="field-label-micro">📌 Specific Item</label>
-                <select id="drawer-item-select" class="zen-select select-styled-shaded w-full" style="height:32px;"></select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Priority Matrix Card -->
-          <div class="drawer-side-card side-card-matrix">
-            <div class="side-card-header">
-              <div class="side-card-title-wrap">
-                <span class="side-card-icon-pill icon-pill-amber">⚡</span>
-                <span class="side-card-title">PRIORITY MATRIX</span>
-              </div>
-              <span class="priority-pill pill-${inc.priority.toLowerCase()}" id="drawer-matrix-badge">${inc.priority}</span>
-            </div>
-            <div class="matrix-inputs-stack">
-              <div class="form-group mb-2">
-                <label class="field-label-micro">💥 Impact Scope</label>
-                <select id="drawer-impact-select" class="zen-select select-styled-shaded w-full" style="height:32px;">
-                  <option value="Enterprise" ${inc.impact === 'Enterprise' ? 'selected' : ''}>Enterprise (High / Org-wide)</option>
-                  <option value="Department" ${inc.impact === 'Department' ? 'selected' : ''}>Department (Medium / Service)</option>
-                  <option value="Single User" ${inc.impact === 'Single User' ? 'selected' : ''}>Single User (Low / Localized)</option>
-                </select>
-              </div>
-              <div class="form-group mb-2">
-                <label class="field-label-micro">⏱️ Urgency Speed</label>
-                <select id="drawer-urgency-select" class="zen-select select-styled-shaded w-full" style="height:32px;">
-                  <option value="Critical" ${inc.urgency === 'Critical' ? 'selected' : ''}>Critical (Immediate Outage)</option>
-                  <option value="High" ${inc.urgency === 'High' ? 'selected' : ''}>High (Severe Disruption)</option>
-                  <option value="Medium" ${inc.urgency === 'Medium' ? 'selected' : ''}>Medium (Workaround Exists)</option>
-                  <option value="Low" ${inc.urgency === 'Low' ? 'selected' : ''}>Low (Minor / Inquiry)</option>
-                </select>
-              </div>
-              <div class="matrix-calc-result-box" style="background:#ffffff; border:1px solid #fde68a; border-radius:6px; padding:6px 10px; text-align:center;">
-                <span class="matrix-calc-label font-mono font-bold text-amber" id="drawer-matrix-label">${inc.impact || 'Enterprise'} × ${inc.urgency || 'High'} = ${inc.priority}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Affected CI & Topology Dependencies -->
-          <div class="drawer-side-card side-card-ci">
-            <div class="side-card-header">
-              <div class="side-card-title-wrap">
-                <span class="side-card-icon-pill icon-pill-cyan">🖥️</span>
-                <span class="side-card-title">AFFECTED SERVICE CI</span>
-              </div>
-              <span class="badge-tag tag-sky">${ciObj ? ciObj.tier : 'Tier 1'}</span>
-            </div>
-            <div class="ci-summary-box">
-              <div class="ci-title-link" id="drawer-jump-ci" title="Click to inspect node in CMDB Topology Graph" style="background:#ffffff;">
-                <span class="ci-name font-bold text-indigo">${escapeHtml(inc.ciName || inc.ci)}</span>
-                <span class="ci-jump-icon">➔</span>
-              </div>
-              <div class="ci-submeta font-mono text-xs text-muted mt-1">
-                ID: ${inc.ci} • Provider: ${ciObj ? ciObj.provider : 'Cloud AWS'}
-              </div>
+          <!-- PANEL 1: Governance, Control, People & Taxonomy (Elevated into Primary Menu Item) -->
+          <div class="drawer-tab-panel ${state.activeDrawerTab === 'governance' ? 'active' : ''}" id="drawer-tab-governance">
+            <div class="governance-grid">
               
-              <div class="ci-dep-links mt-3">
-                <div class="dep-link-label text-xs text-muted font-bold">Upstream Callers:</div>
-                <div class="dep-chips-list-sm mt-1">
-                  ${(ciObj && ciObj.upstream && ciObj.upstream.length > 0) ? ciObj.upstream.map(u => `<span class="ci-dep-chip">${u}</span>`).join('') : '<span class="text-xs text-muted">No upstream callers (Edge origin)</span>'}
+              <!-- Column A: Status & People -->
+              <div style="display: flex; flex-direction: column; gap: 16px;">
+                
+                <!-- Lifecycle State Machine Flow Card -->
+                <div class="drawer-side-card side-card-status">
+                  <div class="side-card-header">
+                    <div class="side-card-title-wrap">
+                      <span class="side-card-icon-pill icon-pill-blue">🔄</span>
+                      <span class="side-card-title">STATUS &amp; LIFECYCLE</span>
+                    </div>
+                    <span class="badge-tag tag-blue font-mono font-bold">${formatStatusLabel(inc.status)}</span>
+                  </div>
+                  <div>
+                    <label class="field-label-micro">
+                      <span style="color:#2563eb;">●</span>
+                      <span>Current ITIL State</span>
+                    </label>
+                    <select id="drawer-status-select" class="zen-select select-styled-shaded w-full" style="height:32px; font-weight:700;">
+                      <option value="NEW" ${inc.status === 'NEW' ? 'selected' : ''}>New / Triaging</option>
+                      <option value="IN_PROGRESS" ${inc.status === 'IN_PROGRESS' ? 'selected' : ''}>In Progress / Mitigating</option>
+                      <option value="ON_HOLD" ${inc.status === 'ON_HOLD' ? 'selected' : ''}>On Hold / SLA Paused</option>
+                      <option value="RESOLVED" ${inc.status === 'RESOLVED' ? 'selected' : ''}>Resolved / Mitigated</option>
+                      <option value="CLOSED" ${inc.status === 'CLOSED' ? 'selected' : ''}>Closed / Archived</option>
+                    </select>
+                  </div>
+                  <div class="mt-3">
+                    <span class="field-label-micro mb-1" style="display:block;">Allowed Lifecycle Transitions:</span>
+                    <div class="transition-actions-row">
+                      ${transitionsHtml}
+                    </div>
+                  </div>
                 </div>
 
-                <div class="dep-link-label text-xs text-muted font-bold mt-2">Downstream Dependencies:</div>
-                <div class="dep-chips-list-sm mt-1">
-                  ${(ciObj && ciObj.downstream && ciObj.downstream.length > 0) ? ciObj.downstream.map(d => `<span class="ci-dep-chip chip-downstream">${d}</span>`).join('') : '<span class="text-xs text-muted">Terminal dependency</span>'}
+                <!-- People & Ownership Card -->
+                <div class="drawer-side-card side-card-people">
+                  <div class="side-card-header">
+                    <div class="side-card-title-wrap">
+                      <span class="side-card-icon-pill icon-pill-teal">👥</span>
+                      <span class="side-card-title">PEOPLE &amp; ESCALATION</span>
+                    </div>
+                    <span class="badge-tag tag-emerald">Assigned</span>
+                  </div>
+                  <div class="caller-profile-row">
+                    <div class="tech-avatar-mini" style="width:34px; height:34px; font-size:13px; background:linear-gradient(135deg, #0d9488, #2563eb); color:white; font-weight:800; box-shadow:0 2px 5px rgba(13,148,136,0.25);">
+                      ${escapeHtml((inc.caller || 'AR').substring(0, 2).toUpperCase())}
+                    </div>
+                    <div class="caller-details">
+                      <strong>${escapeHtml(inc.caller || 'alex.rivera@opennow.io')}</strong>
+                      <span class="text-xs text-muted">Site Reliability Engineering</span>
+                    </div>
+                  </div>
+                  <div class="assignment-meta-lines mt-3" style="display:flex; flex-direction:column; gap:6px;">
+                    <div class="pair-badge-pill"><span class="text-muted font-bold text-xs">Assignment Group:</span><strong class="text-indigo font-mono">${escapeHtml(inc.team)}</strong></div>
+                    <div class="pair-badge-pill"><span class="text-muted font-bold text-xs">Incident Lead:</span><span style="font-weight:700; color:#0f172a;">Alex Rivera (Lead)</span></div>
+                    <div class="pair-badge-pill"><span class="text-muted font-bold text-xs">ITIL Status:</span><span class="font-bold font-mono ${inc.status === 'ON_HOLD' ? 'text-amber' : inc.status === 'RESOLVED' ? 'text-emerald' : 'text-indigo'}">${formatStatusLabel(inc.status)}</span></div>
+                  </div>
                 </div>
+
+                <!-- Resolution Verification Card (if resolved) -->
+                ${inc.status === 'RESOLVED' ? `
+                  <div class="drawer-side-card" style="background:#ecfdf5; border:1.5px solid #a7f3d0; border-left:4.5px solid #059669;">
+                    <div class="side-card-header" style="border-bottom-color:#a7f3d0;">
+                      <div class="side-card-title-wrap">
+                        <span class="side-card-icon-pill" style="background:#d1fae5; border:1px solid #a7f3d0;">✓</span>
+                        <span class="side-card-title text-emerald">RESOLUTION DETAILS</span>
+                      </div>
+                      <span class="badge-tag text-emerald">${escapeHtml(inc.resolutionCode || 'Resolved')}</span>
+                    </div>
+                    <div class="text-xs" style="color:#065f46; line-height:1.45;">
+                      <p><strong>Root Cause:</strong> ${escapeHtml(inc.rootCause || 'Root cause eliminated.')}</p>
+                      ${inc.preventiveAction ? `<p class="mt-2"><strong>Preventive Action:</strong> ${escapeHtml(inc.preventiveAction)}</p>` : ''}
+                      <p class="mt-2"><strong>FCR:</strong> ${inc.isFcr ? 'Yes (First Call Resolution)' : 'No (Escalated)'}</p>
+                      <p class="mt-1 text-muted">Resolved at: ${inc.resolvedAt || 'Recently'}</p>
+                    </div>
+                  </div>
+                ` : ''}
+
+                <!-- On Hold Justification Card (if on hold) -->
+                ${inc.status === 'ON_HOLD' ? `
+                  <div class="drawer-side-card" style="background:#fffbeb; border:1.5px solid #fde68a; border-left:4.5px solid #d97706;">
+                    <div class="side-card-header" style="border-bottom-color:#fde68a;">
+                      <div class="side-card-title-wrap">
+                        <span class="side-card-icon-pill" style="background:#fef3c7; border:1px solid #fde68a;">⏸️</span>
+                        <span class="side-card-title text-amber">HOLD JUSTIFICATION</span>
+                      </div>
+                      <span class="badge-tag text-amber">${escapeHtml(inc.holdReason || 'Pending Input')}</span>
+                    </div>
+                    <div class="text-xs" style="color:#92400e; line-height:1.45;">
+                      <p><strong>Justification:</strong> ${escapeHtml(inc.holdNotes || 'Work paused awaiting external dependency.')}</p>
+                      <p class="mt-2"><strong>Total SLA Time Frozen:</strong> ${formatDurationShort(inc.totalPausedSeconds || 0)}</p>
+                    </div>
+                  </div>
+                ` : ''}
+
               </div>
+
+              <!-- Column B: Taxonomy, Priority Matrix & CI -->
+              <div style="display: flex; flex-direction: column; gap: 16px;">
+                
+                <!-- Three-Tier ITIL Classification Card -->
+                <div class="drawer-side-card side-card-taxonomy">
+                  <div class="side-card-header">
+                    <div class="side-card-title-wrap">
+                      <span class="side-card-icon-pill icon-pill-purple">🏷️</span>
+                      <span class="side-card-title">3-TIER TAXONOMY</span>
+                    </div>
+                    <span class="badge-tag tag-purple">ITIL 4 Master</span>
+                  </div>
+                  <div class="classification-vertical-stack">
+                    <div class="form-group mb-2">
+                      <label class="field-label-micro">📁 Category</label>
+                      <select id="drawer-cat-select" class="zen-select select-styled-shaded w-full" style="height:32px;"></select>
+                    </div>
+                    <div class="form-group mb-2">
+                      <label class="field-label-micro">📂 Subcategory</label>
+                      <select id="drawer-subcat-select" class="zen-select select-styled-shaded w-full" style="height:32px;"></select>
+                    </div>
+                    <div class="form-group">
+                      <label class="field-label-micro">📌 Specific Item</label>
+                      <select id="drawer-item-select" class="zen-select select-styled-shaded w-full" style="height:32px;"></select>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Priority Matrix Card -->
+                <div class="drawer-side-card side-card-matrix">
+                  <div class="side-card-header">
+                    <div class="side-card-title-wrap">
+                      <span class="side-card-icon-pill icon-pill-amber">⚡</span>
+                      <span class="side-card-title">PRIORITY MATRIX</span>
+                    </div>
+                    <span class="priority-pill pill-${inc.priority.toLowerCase()}" id="drawer-matrix-badge">${inc.priority}</span>
+                  </div>
+                  <div class="matrix-inputs-stack">
+                    <div class="form-group mb-2">
+                      <label class="field-label-micro">💥 Impact Scope</label>
+                      <select id="drawer-impact-select" class="zen-select select-styled-shaded w-full" style="height:32px;">
+                        <option value="Enterprise" ${inc.impact === 'Enterprise' ? 'selected' : ''}>Enterprise (High / Org-wide)</option>
+                        <option value="Department" ${inc.impact === 'Department' ? 'selected' : ''}>Department (Medium / Service)</option>
+                        <option value="Single User" ${inc.impact === 'Single User' ? 'selected' : ''}>Single User (Low / Localized)</option>
+                      </select>
+                    </div>
+                    <div class="form-group mb-2">
+                      <label class="field-label-micro">⏱️ Urgency Speed</label>
+                      <select id="drawer-urgency-select" class="zen-select select-styled-shaded w-full" style="height:32px;">
+                        <option value="Critical" ${inc.urgency === 'Critical' ? 'selected' : ''}>Critical (Immediate Outage)</option>
+                        <option value="High" ${inc.urgency === 'High' ? 'selected' : ''}>High (Severe Disruption)</option>
+                        <option value="Medium" ${inc.urgency === 'Medium' ? 'selected' : ''}>Medium (Workaround Exists)</option>
+                        <option value="Low" ${inc.urgency === 'Low' ? 'selected' : ''}>Low (Minor / Inquiry)</option>
+                      </select>
+                    </div>
+                    <div class="matrix-calc-result-box" style="background:#ffffff; border:1px solid #fde68a; border-radius:6px; padding:6px 10px; text-align:center;">
+                      <span class="matrix-calc-label font-mono font-bold text-amber" id="drawer-matrix-label">${inc.impact || 'Enterprise'} × ${inc.urgency || 'High'} = ${inc.priority}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Affected CI & Topology Dependencies -->
+                <div class="drawer-side-card side-card-ci">
+                  <div class="side-card-header">
+                    <div class="side-card-title-wrap">
+                      <span class="side-card-icon-pill icon-pill-cyan">🖥️</span>
+                      <span class="side-card-title">AFFECTED SERVICE CI</span>
+                    </div>
+                    <span class="badge-tag tag-sky">${ciObj ? ciObj.tier : 'Tier 1'}</span>
+                  </div>
+                  <div class="ci-summary-box">
+                    <div class="ci-title-link" id="drawer-jump-ci" title="Click to inspect node in CMDB Topology Graph" style="background:#ffffff;">
+                      <span class="ci-name font-bold text-indigo">${escapeHtml(inc.ciName || inc.ci)}</span>
+                      <span class="ci-jump-icon">➔</span>
+                    </div>
+                    <div class="ci-submeta font-mono text-xs text-muted mt-1">
+                      ID: ${inc.ci} • Provider: ${ciObj ? ciObj.provider : 'Cloud AWS'}
+                    </div>
+                    
+                    <div class="ci-dep-links mt-3">
+                      <div class="dep-link-label text-xs text-muted font-bold">Upstream Callers:</div>
+                      <div class="dep-chips-list-sm mt-1">
+                        ${(ciObj && ciObj.upstream && ciObj.upstream.length > 0) ? ciObj.upstream.map(u => `<span class="ci-dep-chip">${u}</span>`).join('') : '<span class="text-xs text-muted">No upstream callers (Edge origin)</span>'}
+                      </div>
+
+                      <div class="dep-link-label text-xs text-muted font-bold mt-2">Downstream Dependencies:</div>
+                      <div class="dep-chips-list-sm mt-1">
+                        ${(ciObj && ciObj.downstream && ciObj.downstream.length > 0) ? ciObj.downstream.map(d => `<span class="ci-dep-chip chip-downstream">${d}</span>`).join('') : '<span class="text-xs text-muted">Terminal dependency</span>'}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
             </div>
           </div>
 
-          <!-- Resolution Verification Card (if resolved) -->
-          ${inc.status === 'RESOLVED' ? `
-            <div class="drawer-side-card" style="background:#ecfdf5; border:1.5px solid #a7f3d0; border-left:4.5px solid #059669;">
-              <div class="side-card-header" style="border-bottom-color:#a7f3d0;">
-                <div class="side-card-title-wrap">
-                  <span class="side-card-icon-pill" style="background:#d1fae5; border:1px solid #a7f3d0;">✓</span>
-                  <span class="side-card-title text-emerald">RESOLUTION DETAILS</span>
-                </div>
-                <span class="badge-tag text-emerald">${escapeHtml(inc.resolutionCode || 'Resolved')}</span>
-              </div>
-              <div class="text-xs" style="color:#065f46; line-height:1.45;">
-                <p><strong>Root Cause:</strong> ${escapeHtml(inc.rootCause || 'Root cause eliminated.')}</p>
-                ${inc.preventiveAction ? `<p class="mt-2"><strong>Preventive Action:</strong> ${escapeHtml(inc.preventiveAction)}</p>` : ''}
-                <p class="mt-2"><strong>FCR:</strong> ${inc.isFcr ? 'Yes (First Call Resolution)' : 'No (Escalated)'}</p>
-                <p class="mt-1 text-muted">Resolved at: ${inc.resolvedAt || 'Recently'}</p>
-              </div>
-            </div>
-          ` : ''}
-
-          <!-- On Hold Justification Card (if on hold) -->
-          ${inc.status === 'ON_HOLD' ? `
-            <div class="drawer-side-card" style="background:#fffbeb; border:1.5px solid #fde68a; border-left:4.5px solid #d97706;">
-              <div class="side-card-header" style="border-bottom-color:#fde68a;">
-                <div class="side-card-title-wrap">
-                  <span class="side-card-icon-pill" style="background:#fef3c7; border:1px solid #fde68a;">⏸️</span>
-                  <span class="side-card-title text-amber">HOLD JUSTIFICATION</span>
-                </div>
-                <span class="badge-tag text-amber">${escapeHtml(inc.holdReason || 'Pending Input')}</span>
-              </div>
-              <div class="text-xs" style="color:#92400e; line-height:1.45;">
-                <p><strong>Justification:</strong> ${escapeHtml(inc.holdNotes || 'Work paused awaiting external dependency.')}</p>
-                <p class="mt-2"><strong>Total SLA Time Frozen:</strong> ${formatDurationShort(inc.totalPausedSeconds || 0)}</p>
-              </div>
-            </div>
-          ` : ''}
-
-        </div>
-
-        <!-- ======================================================== -->
-        <!-- SECTION 2 (WIDER SECOND SECTION): Operations Workbench with Vertical Side Menu -->
-        <!-- ======================================================== -->
-        <div class="drawer-col-wide drawer-col-operations">
-          
-          <!-- Vertical Side Navigation Bar -->
-          <aside class="drawer-vnav-sidebar">
-            <div class="drawer-vnav-header">
-              <span class="drawer-vnav-eyebrow">WORKBENCH</span>
-              <span class="drawer-vnav-heading">Operations Hub</span>
-            </div>
-
-            <nav class="drawer-vnav-menu">
-              <!-- Item 1: Overview & Diagnostics -->
-              <button class="drawer-vnav-item ${state.activeDrawerTab === 'overview' ? 'active' : ''}" data-drawer-tab="overview" title="Diagnostics, stack trace & telemetry">
-                <div class="vnav-item-left">
-                  <span class="vnav-icon-pill pill-blue">📋</span>
-                  <div class="vnav-text-col">
-                    <span class="vnav-title">Diagnostics</span>
-                    <span class="vnav-sub">Telemetry &amp; Stack</span>
-                  </div>
-                </div>
-                <span class="vnav-badge-pill">Trace</span>
-              </button>
-
-              <!-- Item 2: AI Sentinel & Runbooks -->
-              <button class="drawer-vnav-item ${state.activeDrawerTab === 'ai-hub' ? 'active' : ''}" data-drawer-tab="ai-hub" title="Autonomous AI triage, blast radius, runbooks & communications">
-                <div class="vnav-item-left">
-                  <span class="vnav-icon-pill pill-purple">🤖</span>
-                  <div class="vnav-text-col">
-                    <span class="vnav-title">AI Sentinel Hub</span>
-                    <span class="vnav-sub">Heuristics &amp; Blast</span>
-                  </div>
-                </div>
-                <span class="vnav-badge-pill pill-purple-tag">✦ 4 Tools</span>
-              </button>
-
-              <!-- Item 3: Action Checklist & Subtasks -->
-              <button class="drawer-vnav-item ${state.activeDrawerTab === 'subtasks' ? 'active' : ''}" data-drawer-tab="subtasks" title="Remediation checklist and action tasks">
-                <div class="vnav-item-left">
-                  <span class="vnav-icon-pill pill-emerald">☑️</span>
-                  <div class="vnav-text-col">
-                    <span class="vnav-title">Action Items</span>
-                    <span class="vnav-sub">Remediation Checklist</span>
-                  </div>
-                </div>
-                <span class="vnav-badge-pill">${completedSubtasks}/${subtasksList.length}</span>
-              </button>
-
-              <!-- Item 4: Worklogs & Costs -->
-              <button class="drawer-vnav-item ${state.activeDrawerTab === 'worklogs' ? 'active' : ''}" data-drawer-tab="worklogs" title="Technician labor hours and hourly billing rates">
-                <div class="vnav-item-left">
-                  <span class="vnav-icon-pill pill-amber">⏱️</span>
-                  <div class="vnav-text-col">
-                    <span class="vnav-title">Worklogs &amp; Costs</span>
-                    <span class="vnav-sub">Labor Hours &amp; Rates</span>
-                  </div>
-                </div>
-                <span class="vnav-badge-pill font-mono">$${totalLaborCost.toFixed(0)}</span>
-              </button>
-
-              <!-- Item 5: Audit & Timeline -->
-              <button class="drawer-vnav-item ${state.activeDrawerTab === 'timeline' ? 'active' : ''}" data-drawer-tab="timeline" title="Incident audit stream and communication journal">
-                <div class="vnav-item-left">
-                  <span class="vnav-icon-pill pill-slate">📜</span>
-                  <div class="vnav-text-col">
-                    <span class="vnav-title">Audit Stream</span>
-                    <span class="vnav-sub">Activity &amp; Notes</span>
-                  </div>
-                </div>
-                <span class="vnav-badge-pill">${inc.timeline.length}</span>
-              </button>
-            </nav>
-
-            <div class="drawer-vnav-footer">
-              <div class="vnav-footer-status">
-                <span class="dot-live-indicator"></span>
-                <span class="vnav-footer-text">Live SRE Workspace</span>
-              </div>
-            </div>
-          </aside>
-
-          <!-- Operations Main Content Canvas -->
-          <main class="drawer-vnav-content">
-            
-            <!-- PANEL 1: Overview & Diagnostics -->
-            <div class="drawer-tab-panel ${state.activeDrawerTab === 'overview' ? 'active' : ''}" id="drawer-tab-overview">
+          <!-- PANEL 2: Overview & Diagnostics -->
+          <div class="drawer-tab-panel ${state.activeDrawerTab === 'overview' ? 'active' : ''}" id="drawer-tab-overview">
               
               <!-- Executive Summary Card -->
               <div class="drawer-summary-card">
@@ -3923,9 +3940,7 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
 
           </main>
         </div>
-
-      </div>
-    `;
+      `;
 
     // Bind Drawer Vertical Navigation Items
     document.querySelectorAll('.drawer-vnav-item, .drawer-tab-btn').forEach(btn => {
