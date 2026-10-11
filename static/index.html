@@ -7,7 +7,7 @@
   <meta name="description" content="ZenERP: Modern AI-native enterprise service platform. Tranquil #fafafa canvas, vibrant blue-green-purple sidebar, full ITSM suite, and autonomous AI copilot.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="light-zen-theme">
@@ -19,7 +19,7 @@
     <!-- VERTICAL GRADIENT SIDEBAR (BLUE-GREEN-PURPLE)            -->
     <!-- ======================================================== -->
     <aside class="aurora-sidebar" id="global-sidebar">
-      <!-- Top Brand Container: ZenERP + Client Icon & Name -->
+      <!-- Top Brand Container: ZenERP App Name & Icon Only (Height matches Top Bar 56px, Zero Clutter) -->
       <div class="sidebar-brand-row">
         <div class="brand-link" id="brand-home-btn" title="ZenERP — Enterprise Platform">
           <div class="brand-icon-gem" title="ZenERP">
@@ -37,24 +37,8 @@
               <circle cx="21" cy="10" r="1.8" fill="#34d399"/>
               <circle cx="11" cy="22" r="1.8" fill="#38bdf8"/>
             </svg>
-            <span class="brand-live-dot" title="ZenERP Online"></span>
           </div>
-          <div class="brand-text-block">
-            <div class="brand-title-wrap">
-              <span class="brand-title">ZenERP</span>
-              <span class="badge-zen-ver">v3.0</span>
-            </div>
-            <div class="brand-client-row" id="brand-client-badge" title="Active Client Tenant: Apex Global">
-              <span class="client-icon-badge">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                  <polyline points="2 17 12 22 22 17"></polyline>
-                  <polyline points="2 12 12 17 22 12"></polyline>
-                </svg>
-              </span>
-              <span class="client-name-label" id="brand-client-name">Apex Global</span>
-            </div>
-          </div>
+          <span class="brand-title">ZenERP</span>
         </div>
 
         <!-- Sidebar Collapse / Expand Toggle -->
@@ -63,7 +47,7 @@
         </button>
       </div>
 
-      <!-- Navigation Menu Items (Standard Hierarchy: Executive -> Service Requests -> Incidents -> Problems -> Changes -> Knowledge -> SLM AI Chat -> Settings) -->
+      <!-- Navigation Menu Items (Hierarchy: Executive -> Service Requests -> Incidents -> Problems -> Changes -> Knowledge Base -> Help & Support -> AI Chat -> Settings / CMDB / Migration) -->
       <nav class="sidebar-nav">
         <div class="nav-section-label">OVERVIEW &amp; REQUESTS</div>
 
@@ -76,12 +60,12 @@
           <span class="nav-pill pill-gold">HQ</span>
         </button>
 
-        <!-- 2. Service Requests & Catalog (Top Menu Group) -->
-        <button class="nav-item" data-view="service-catalog" id="nav-btn-catalog" title="Enterprise Service Requests &amp; Fulfillment Catalog">
+        <!-- 2. Service Requests (Top Menu Group) -->
+        <button class="nav-item" data-view="service-catalog" id="nav-btn-catalog" title="Enterprise Service Requests &amp; Fulfillment">
           <span class="nav-icon nav-icon-emerald">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
           </span>
-          <span class="nav-label">Service Requests &amp; Catalog</span>
+          <span class="nav-label">Service Requests</span>
           <span class="nav-pill pill-emerald" id="badge-requests-sidebar">4</span>
         </button>
 
@@ -123,35 +107,20 @@
           <span class="nav-pill pill-purple">KCS</span>
         </button>
 
-        <div class="nav-section-label mt-3">TECHNICAL INFRASTRUCTURE</div>
+        <div class="nav-section-label mt-3">HELP &amp; SUPPORT</div>
 
-        <button class="nav-item" data-view="cmdb-topology" id="nav-btn-cmdb" title="Interactive CMDB Topology Graph">
-          <span class="nav-icon nav-icon-teal">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><circle cx="6" cy="18" r="3"/><line x1="9" y1="6" x2="15" y2="6"/><line x1="6" y1="9" x2="6" y2="15"/><line x1="18" y1="9" x2="18" y2="15"/><line x1="9" y1="18" x2="15" y2="18"/><line x1="8.5" y1="8.5" x2="15.5" y2="15.5"/></svg>
-          </span>
-          <span class="nav-label">CMDB Topology</span>
-          <span class="nav-pill pill-live" id="sidebar-cmdb-live-badge">Live</span>
-        </button>
-
-        <button class="nav-item" data-view="migration-studio" id="nav-btn-migration" title="Top 10 Native Migration Studio">
-          <span class="nav-icon nav-icon-indigo">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          </span>
-          <span class="nav-label">Top 10 Migration Hub</span>
-          <span class="nav-pill pill-gold">Top 10</span>
-        </button>
-
-        <button class="nav-item" data-view="omnichannel-hub" id="nav-btn-omnichannel" title="Omnichannel Hub (Email &amp; CTI Screen Pop)">
+        <!-- 7. Help & Support (Omnichannel Hub) -->
+        <button class="nav-item" data-view="omnichannel-hub" id="nav-btn-omnichannel" title="Help &amp; Support (Email &amp; CTI Softphone)">
           <span class="nav-icon nav-icon-green">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
           </span>
-          <span class="nav-label">Omnichannel Hub</span>
+          <span class="nav-label">Help &amp; Support</span>
           <span class="nav-pill pill-emerald">CTI</span>
         </button>
 
-        <div class="nav-section-label mt-3">INTELLIGENCE &amp; CONFIG</div>
+        <div class="nav-section-label mt-3">INTELLIGENCE &amp; AI</div>
 
-        <!-- 7. AI Chat (Local SLM Engine) -->
+        <!-- 8. AI Chat (Local SLM Engine) -->
         <button class="nav-item" data-view="ai-chat" id="nav-btn-aichat" title="AI Chat Assistant (Local SLM Engine)">
           <span class="nav-icon nav-icon-pink">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8"/><path d="M8 13h6"/></svg>
@@ -160,13 +129,33 @@
           <span class="nav-pill pill-emerald">SLM</span>
         </button>
 
-        <!-- 8. Settings & Configurations (Bottom) -->
+        <div class="nav-section-label mt-3">SETTINGS &amp; PLATFORM</div>
+
+        <!-- 9. Settings & Configurations -->
         <button class="nav-item" data-view="setup" id="nav-btn-setup" title="Enterprise Setup &amp; Master Data Configuration">
           <span class="nav-icon nav-icon-blue">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
           </span>
           <span class="nav-label">Setup / Configurations</span>
           <span class="nav-pill pill-purple">ERP</span>
+        </button>
+
+        <!-- 10. CMDB Topology (Moved under Settings) -->
+        <button class="nav-item" data-view="cmdb-topology" id="nav-btn-cmdb" title="Interactive CMDB Topology Graph">
+          <span class="nav-icon nav-icon-teal">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><circle cx="6" cy="18" r="3"/><line x1="9" y1="6" x2="15" y2="6"/><line x1="6" y1="9" x2="6" y2="15"/><line x1="18" y1="9" x2="18" y2="15"/><line x1="9" y1="18" x2="15" y2="18"/><line x1="8.5" y1="8.5" x2="15.5" y2="15.5"/></svg>
+          </span>
+          <span class="nav-label">CMDB Topology</span>
+          <span class="nav-pill pill-live" id="sidebar-cmdb-live-badge">Live</span>
+        </button>
+
+        <!-- 11. Top 10 Migration Hub (Moved under Settings) -->
+        <button class="nav-item" data-view="migration-studio" id="nav-btn-migration" title="Top 10 Native Migration Studio">
+          <span class="nav-icon nav-icon-indigo">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </span>
+          <span class="nav-label">Top 10 Migration Hub</span>
+          <span class="nav-pill pill-gold">Top 10</span>
         </button>
       </nav>
 

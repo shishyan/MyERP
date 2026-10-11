@@ -8362,19 +8362,19 @@ ${notes}`,
 
     const breadcrumbHierarchy = {
       'executive-dashboard': { group: 'Overview', view: 'Executive ITSM Dashboard' },
-      'kanban-board': { group: 'Overview', view: 'Executive ITSM Dashboard' },
-      'service-requests': { group: 'Service Requests', view: 'Custom Service Requests' },
-      'service-catalog': { group: 'Service Requests', view: 'Enterprise Service Catalog' },
-      'incident-command': { group: 'ITSM Operations', view: 'Incident Command' },
-      'problem-management': { group: 'ITSM Operations', view: 'Problem Management & KEDB' },
-      'change-management': { group: 'ITSM Operations', view: 'Change Management & CAB' },
-      'knowledge-base': { group: 'Knowledge Management', view: 'Knowledge Base & Runbooks' },
-      'cmdb-topology': { group: 'Technical Infrastructure', view: 'CMDB Topology Graph' },
-      'ai-chat': { group: 'Intelligence', view: 'Local SLM AI Chat Copilot' },
-      'ai-ops': { group: 'Intelligence', view: 'AI Operations Center' },
-      'omnichannel-hub': { group: 'Omnichannel', view: 'Omnichannel Hub (Email & CTI)' },
-      'migration-studio': { group: 'Data Migration', view: 'Top 10 Migration Hub' },
-      'setup': { group: 'Platform Administration', view: 'Enterprise Setup & Configurations' }
+      'kanban-board': { group: 'Overview & Requests', view: 'Executive ITSM Dashboard' },
+      'service-requests': { group: 'Overview & Requests', view: 'Service Requests' },
+      'service-catalog': { group: 'Overview & Requests', view: 'Service Requests' },
+      'incident-command': { group: 'Operations & Governance', view: 'Incident Command' },
+      'problem-management': { group: 'Operations & Governance', view: 'Problem Management & KEDB' },
+      'change-management': { group: 'Operations & Governance', view: 'Change Management & CAB' },
+      'knowledge-base': { group: 'Operations & Governance', view: 'Knowledge Base & Runbooks' },
+      'omnichannel-hub': { group: 'Help & Support', view: 'Help & Support (Email & CTI)' },
+      'ai-chat': { group: 'Intelligence & AI', view: 'Local SLM AI Chat Copilot' },
+      'ai-ops': { group: 'Intelligence & AI', view: 'AI Operations Center' },
+      'cmdb-topology': { group: 'Settings & Platform', view: 'CMDB Topology Graph' },
+      'migration-studio': { group: 'Settings & Platform', view: 'Top 10 Migration Hub' },
+      'setup': { group: 'Settings & Platform', view: 'Enterprise Setup & Configurations' }
     };
     const crumb = breadcrumbHierarchy[viewName] || { group: 'Operations', view: viewName };
     if (DOM.breadcrumbGroup) {
@@ -8429,14 +8429,16 @@ ${notes}`,
       DOM.breadcrumbGroup.addEventListener('click', () => {
         const groupViews = {
           'Overview': 'executive-dashboard',
-          'Service Requests': 'service-requests',
+          'Overview & Requests': 'service-catalog',
+          'Service Requests': 'service-catalog',
+          'Operations & Governance': 'incident-command',
           'ITSM Operations': 'incident-command',
           'Knowledge Management': 'knowledge-base',
+          'Help & Support': 'omnichannel-hub',
+          'Intelligence & AI': 'ai-chat',
+          'Settings & Platform': 'setup',
           'Technical Infrastructure': 'cmdb-topology',
-          'Intelligence': 'ai-chat',
-          'Omnichannel': 'omnichannel-hub',
-          'Data Migration': 'migration-studio',
-          'Platform Administration': 'setup'
+          'Data Migration': 'migration-studio'
         };
         const targetView = groupViews[DOM.breadcrumbGroup.textContent.trim()] || 'executive-dashboard';
         switchView(targetView);
