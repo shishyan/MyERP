@@ -1135,6 +1135,8 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
         preventiveAction: 'Updated BGP Anycast route map weights to prefer direct IXP peering.',
         isFcr: true,
         resolvedAt: '4 hours ago',
+        aiTriageDone: true,
+        aiConfidence: '95.2%',
         worklogs: [
           {
             id: 'WL-1',
@@ -3142,7 +3144,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
           <span class="sla-timer-tag ${slaClass}" title="SLA Countdown: ${formatSlaTime(inc.slaSecondsRemaining)} • Paused for ${formatDurationShort(inc.totalPausedSeconds || 0)}">
             ${slaTagText}
           </span>
-          <span class="ai-tag" title="AI Confidence">${inc.aiConfidence} AI</span>
+          <span class="ai-tag" title="AI Confidence">${inc.aiConfidence || '95.0%'} AI</span>
         </div>
       </div>
     `;
@@ -3236,7 +3238,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
             if (inc) {
               if (inc.status === 'ON_HOLD' || inc.isPaused) {
                 el.className = 'sla-timer-tag sla-paused';
-                el.textContent = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-1px; margin-right:3px;"><circle cx="12" cy="12" r="10"/><line x1="10" y1="15" x2="10" y2="9"/><line x1="14" y1="15" x2="14" y2="9"/></svg>Paused (${inc.holdReason || 'On Hold'})`;
+                el.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-1px; margin-right:3px;"><circle cx="12" cy="12" r="10"/><line x1="10" y1="15" x2="10" y2="9"/><line x1="14" y1="15" x2="14" y2="9"/></svg>Paused (${escapeHtml(inc.holdReason || 'On Hold')})`;
                 el.title = `SLA Clock Paused (${formatSlaTime(inc.slaSecondsRemaining)} left) • Paused for ${formatDurationShort(inc.totalPausedSeconds || 0)}`;
               } else if (inc.status === 'RESOLVED') {
                 el.className = 'sla-timer-tag sla-safe';
@@ -3245,7 +3247,7 @@ You can ask me to inspect any ticket (\`INC-1001\`, \`CHG-2001\`, \`PRB-3001\`, 
                 const isCrit = inc.slaSecondsRemaining > 0 && inc.slaSecondsRemaining < 1800;
                 const isBr = inc.slaSecondsRemaining <= 0;
                 el.className = `sla-timer-tag ${isBr ? 'sla-breach' : isCrit ? 'sla-warn' : 'sla-safe'}`;
-                el.textContent = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:3px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${formatSlaTime(inc.slaSecondsRemaining)}`;
+                el.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:3px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${formatSlaTime(inc.slaSecondsRemaining)}`;
               }
             }
           }

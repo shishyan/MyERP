@@ -8649,15 +8649,15 @@ body.zen-focus-mode .zen-floating-pill {
   }
 }
 
-/* Base KPI Card Styling - Shrunk by 35% in height, wider and streamlined */
+/* Base KPI Card Styling - Shrunk by 35% previously, now increased by 10% for optimal balance */
 .page-kpi-card {
   border-radius: 10px !important;
-  padding: 7px 13px !important;
+  padding: 8px 14px !important;
   display: flex !important;
   flex-direction: column !important;
   justify-content: space-between !important;
-  min-height: 74px !important;
-  max-height: 78px !important;
+  min-height: 82px !important;
+  max-height: 86px !important;
   box-sizing: border-box !important;
   transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease, filter 0.2s ease !important;
   backdrop-filter: blur(8px) !important;
@@ -8780,8 +8780,8 @@ body.zen-focus-mode .zen-floating-pill {
 
 .kpi-mini-chart-wrap {
   width: 100%;
-  height: 24px !important;
-  margin: 1px 0 !important;
+  height: 27px !important;
+  margin: 2px 0 !important;
   display: flex;
   align-items: center;
 }
@@ -8806,8 +8806,8 @@ body.zen-focus-mode .zen-floating-pill {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 1px !important;
-  padding-top: 1px !important;
+  margin-top: 2px !important;
+  padding-top: 2px !important;
   border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
 }
 
@@ -8816,11 +8816,11 @@ body.zen-focus-mode .zen-floating-pill {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 2px !important;
+  margin-bottom: 3px !important;
 }
 
 .page-kpi-title {
-  font-size: 10px !important;
+  font-size: 10.5px !important;
   font-weight: 800 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.05em !important;
@@ -8829,23 +8829,23 @@ body.zen-focus-mode .zen-floating-pill {
 }
 
 .page-kpi-val {
-  font-size: 16px !important;
+  font-size: 17px !important;
   font-weight: 800 !important;
   color: #0f172a !important;
   line-height: 1.15 !important;
 }
 
 .page-kpi-sub {
-  font-size: 10px !important;
+  font-size: 10.5px !important;
   font-weight: 600 !important;
   color: #334155 !important;
-  margin-top: 1px !important;
+  margin-top: 2px !important;
   line-height: 1.15 !important;
 }
 
 .page-kpi-icon {
-  width: 22px !important;
-  height: 22px !important;
+  width: 24px !important;
+  height: 24px !important;
   border-radius: 6px !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -8853,8 +8853,8 @@ body.zen-focus-mode .zen-floating-pill {
 }
 
 .page-kpi-icon svg {
-  width: 13px !important;
-  height: 13px !important;
+  width: 14px !important;
+  height: 14px !important;
 }
 
 .kpi-chart-sub {
