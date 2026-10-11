@@ -5364,57 +5364,110 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
 
 
   // =========================================================================
-  // INTERACTIVE 4-STEP WIZARD ENGINE (ZERO COGNITIVE OVERLOAD)
+  // NEW INCIDENT DISPATCH ENGINE (75% DRAWER MINI-SHELL STANDARD)
   // =========================================================================
 
-  function switchWizardStep(stepNum) {
-    state.wizardStep = stepNum;
+  function switchCreateTab(tabName) {
+    state.activeCreateTab = tabName;
 
-    // 1. Update Stepper Tabs
-    for (let i = 1; i <= 4; i++) {
-      const tab = document.getElementById(`wizard-tab-${i}`);
-      const conn = document.getElementById(`wizard-conn-${i}`);
-
-      if (tab) {
-        tab.classList.remove('active', 'completed');
-        if (i < stepNum) {
-          tab.classList.add('completed');
-        } else if (i === stepNum) {
-          tab.classList.add('active');
-        }
+    // 1. Update Sidebar menu active state
+    document.querySelectorAll('[data-create-tab]').forEach(btn => {
+      if (btn.getAttribute('data-create-tab') === tabName) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
       }
-
-      if (conn) {
-        if (i < stepNum) {
-          conn.classList.add('active');
-        } else {
-          conn.classList.remove('active');
-        }
-      }
-    }
-
-    // 2. Update Counter Pill
-    const counter = document.getElementById('wizard-step-counter');
-    if (counter) counter.textContent = `Step ${stepNum} of 4`;
-
-    // 3. Toggle Wizard Panels
-    document.querySelectorAll('.wizard-panel').forEach(panel => {
-      panel.style.display = 'none';
-      panel.classList.remove('active');
     });
 
-    const activePanel = document.getElementById(`wizard-panel-${stepNum}`);
-    if (activePanel) {
-      activePanel.style.display = 'block';
-      activePanel.classList.add('active');
+    // 2. Toggle panels
+    document.querySelectorAll('.create-panel').forEach(panel => {
+      if (panel.getAttribute('data-panel') === tabName) {
+        panel.style.display = 'block';
+        panel.classList.add('active');
+      } else {
+        panel.style.display = 'none';
+        panel.classList.remove('active');
+      }
+    });
+
+    if (tabName === 'core' && DOM.inputTicketTitle) {
+      DOM.inputTicketTitle.focus();
+    }
+  }
+
+  function updateCreateModalHud() {
+    const titleVal = DOM.inputTicketTitle ? DOM.inputTicketTitle.value.trim() : '';
+    const titlePreview = document.getElementById('create-ribbon-title-preview');
+    if (titlePreview) {
+      titlePreview.textContent = titleVal || 'New Production Incident Specification';
     }
 
-    // Focus first input of panel
-    if (stepNum === 1 && DOM.inputTicketTitle) DOM.inputTicketTitle.focus();
+    const impact = DOM.selectTicketImpact ? DOM.selectTicketImpact.value : 'Enterprise';
+    const urgency = DOM.selectTicketUrgency ? DOM.selectTicketUrgency.value : 'High';
+    const priority = calculatePriority(impact, urgency);
+
+    // Update Ribbon Priority Pill
+    const ribbonPill = document.getElementById('create-ribbon-priority-pill');
+    if (ribbonPill) {
+      ribbonPill.className = `priority-pill pill-${priority.toLowerCase()}`;
+      ribbonPill.textContent = priority;
+    }
+
+    // Update Priority HUD Card
+    const hudPriorityVal = document.getElementById('create-hud-priority-val');
+    if (hudPriorityVal) {
+      hudPriorityVal.className = `kpi-hud-val ${priority === 'P1' ? 'text-rose' : priority === 'P2' ? 'text-amber' : priority === 'P3' ? 'text-blue' : 'text-emerald'}`;
+      hudPriorityVal.textContent = `${priority} ${priority === 'P1' ? 'Critical' : priority === 'P2' ? 'High' : priority === 'P3' ? 'Moderate' : 'Low'}`;
+    }
+
+    const hudFormula = document.getElementById('create-priority-calc-label');
+    if (hudFormula) {
+      hudFormula.textContent = `${impact} × ${urgency} = ${priority}`;
+    }
+
+    const inlinePill = document.getElementById('create-matrix-pill-inline');
+    if (inlinePill) {
+      inlinePill.className = `priority-pill pill-${priority.toLowerCase()}`;
+      inlinePill.textContent = `${priority} ${priority === 'P1' ? 'Critical' : priority === 'P2' ? 'High' : priority === 'P3' ? 'Moderate' : 'Low'}`;
+    }
+
+    const inlineFormula = document.getElementById('create-matrix-formula-text');
+    if (inlineFormula) {
+      inlineFormula.textContent = `${impact} × ${urgency} = ${priority}`;
+    }
+
+    // SLA targets
+    const policy = state.slaPolicies && state.slaPolicies[priority] ? state.slaPolicies[priority] : { resolveHours: priority === 'P1' ? 1 : priority === 'P2' ? 4 : 8, respMinutes: priority === 'P1' ? 15 : 30 };
+    const hudSlaTarget = document.getElementById('create-hud-sla-target');
+    const hudSlaSub = document.getElementById('create-hud-sla-sub');
+    const createSlaResp = document.getElementById('create-sla-resp-text');
+    const createSlaRes = document.getElementById('create-sla-res-text');
+
+    if (hudSlaTarget) hudSlaTarget.textContent = `${policy.resolveHours}.0 Hours`;
+    if (hudSlaSub) hudSlaSub.textContent = `${policy.respMinutes || 15}m Response • ${priority} Standard`;
+    if (createSlaResp) createSlaResp.textContent = `${policy.respMinutes || 15} Minutes`;
+    if (createSlaRes) createSlaRes.textContent = `${policy.resolveHours}.0 Hours`;
+
+    // CI HUD Card
+    const ciId = DOM.selectTicketCi ? DOM.selectTicketCi.value : 'CI-DB-001';
+    const ciObj = (state.cmdbNodes || []).find(n => n.id === ciId);
+    const hudCiVal = document.getElementById('create-hud-ci-val');
+    const hudCiSub = document.getElementById('create-hud-ci-sub');
+    if (hudCiVal) hudCiVal.textContent = ciObj ? ciObj.name : ciId;
+    if (hudCiSub) hudCiSub.textContent = `Tier ${ciObj ? ciObj.tier : '1'} • ${ciObj ? ciObj.type.toUpperCase() : 'CLOUD INFRA'}`;
+
+    // Team & Technician HUD Card
+    const team = DOM.selectTicketTeam ? DOM.selectTicketTeam.value : 'SRE-Core';
+    const techEl = document.getElementById('select-ticket-technician');
+    const tech = techEl ? techEl.value : 'Alex Rivera';
+    const hudTeamVal = document.getElementById('create-hud-team-val');
+    const hudTechSub = document.getElementById('create-hud-tech-sub');
+    if (hudTeamVal) hudTeamVal.textContent = team;
+    if (hudTechSub) hudTechSub.textContent = `${tech} (On-Call)`;
   }
 
   function openCreateModal(defaults = {}) {
-    switchWizardStep(1);
+    switchCreateTab('core');
 
     if (defaults.ci && DOM.selectTicketCi) DOM.selectTicketCi.value = defaults.ci;
 
@@ -5427,7 +5480,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
             <div class="ring-1"></div>
             <div class="ring-2"></div>
           </div>
-          <p>AI Copilot actively analyzes the symptoms entered in Step 1 to predict root cause, blast radius risk, and recommended runbook steps.</p>
+          <p>AI Copilot actively analyzes the symptoms entered in Core &amp; Symptoms to predict root cause, blast radius risk, and recommended runbook steps.</p>
         </div>
       `;
     }
@@ -5455,6 +5508,8 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
     if (defaults.category || defaults.ci) {
       applyBusinessRuleToCreateModal();
     }
+
+    updateCreateModalHud();
 
     if (DOM.createModalBackdrop) DOM.createModalBackdrop.classList.add('open');
     if (DOM.inputTicketTitle) DOM.inputTicketTitle.focus();
@@ -5559,6 +5614,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
             populateClassificationDropdowns(DOM.selectTicketCategory, DOM.selectTicketSubcategory, DOM.selectTicketItem, 'Cloud & Infrastructure', 'API Gateway (Kong)', 'TLS Certificate Auto-Renewal Failure');
           }
           setupPriorityMatrixCalculator(DOM.selectTicketImpact, DOM.selectTicketUrgency, DOM.createPriorityPreviewBadge, DOM.createPriorityCalcLabel, DOM.selectTicketPriority);
+          updateCreateModalHud();
           showToast('Applied AI suggested priority, CI & classification to form.', 'info');
         });
       }
@@ -5566,20 +5622,39 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
   }
 
   function handleCreateTicketSubmit(e) {
-    e.preventDefault();
+    if (e) e.preventDefault();
 
-    const title = DOM.inputTicketTitle.value.trim();
-    const desc = DOM.inputTicketDesc.value.trim();
-    const ci = DOM.selectTicketCi.value;
-    const team = DOM.selectTicketTeam.value;
-    const category = DOM.selectTicketCategory.value;
-    const subcategory = DOM.selectTicketSubcategory.value;
-    const item = DOM.selectTicketItem.value;
-    const impact = DOM.selectTicketImpact.value;
-    const urgency = DOM.selectTicketUrgency.value;
+    const title = DOM.inputTicketTitle ? DOM.inputTicketTitle.value.trim() : '';
+    const desc = DOM.inputTicketDesc ? DOM.inputTicketDesc.value.trim() : '';
+    const ci = DOM.selectTicketCi ? DOM.selectTicketCi.value : 'CI-DB-001';
+    const envEl = document.getElementById('select-ticket-env');
+    const env = envEl ? envEl.value : 'Production';
+    const team = DOM.selectTicketTeam ? DOM.selectTicketTeam.value : 'SRE-Core';
+    const techEl = document.getElementById('select-ticket-technician');
+    const technician = techEl ? techEl.value : 'Alex Rivera';
+    const callerEl = document.getElementById('input-ticket-caller');
+    const caller = callerEl ? callerEl.value.trim() : 'alex.rivera@opennow.io';
+    const deptEl = document.getElementById('select-caller-dept');
+    const dept = deptEl ? deptEl.value : 'Site Reliability Engineering';
+    const category = DOM.selectTicketCategory ? DOM.selectTicketCategory.value : 'Database & Storage';
+    const subcategory = DOM.selectTicketSubcategory ? DOM.selectTicketSubcategory.value : 'Query Performance';
+    const item = DOM.selectTicketItem ? DOM.selectTicketItem.value : 'Postgres Lock Contention';
+    const impact = DOM.selectTicketImpact ? DOM.selectTicketImpact.value : 'Enterprise';
+    const urgency = DOM.selectTicketUrgency ? DOM.selectTicketUrgency.value : 'High';
     const priority = calculatePriority(impact, urgency);
 
-    if (!title || !desc) return;
+    if (!title) {
+      switchCreateTab('core');
+      if (DOM.inputTicketTitle) DOM.inputTicketTitle.focus();
+      showToast('Please enter an incident title before dispatching.', 'warning');
+      return;
+    }
+    if (!desc) {
+      switchCreateTab('core');
+      if (DOM.inputTicketDesc) DOM.inputTicketDesc.focus();
+      showToast('Please provide telemetry symptoms or diagnostic details.', 'warning');
+      return;
+    }
 
     const newId = `INC-${Math.floor(1000 + Math.random() * 9000)}`;
     const ciObj = state.cmdbNodes.find(n => n.id === ci);
@@ -5590,6 +5665,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
       description: desc,
       ci: ci,
       ciName: ciObj ? ciObj.name : ci,
+      environment: env,
       category: category,
       subcategory: subcategory,
       item: item,
@@ -5598,34 +5674,58 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
       priority: priority,
       status: 'NEW',
       team: team,
-      caller: 'alex.rivera@opennow.io',
+      lead: technician,
+      technician: technician,
+      caller: caller,
+      department: dept,
       createdAt: 'Just now',
-      slaSecondsRemaining: priority === 'P1' ? 1800 : priority === 'P2' ? 7200 : 14400,
-      slaInitialSeconds: 14400,
+      slaDue: priority === 'P1' ? 'In 1 hour' : priority === 'P2' ? 'In 4 hours' : 'In 8 hours',
+      slaSecondsRemaining: priority === 'P1' ? 3600 : priority === 'P2' ? 14400 : 28800,
+      slaInitialSeconds: priority === 'P1' ? 3600 : priority === 'P2' ? 14400 : 28800,
       isPaused: false,
       holdReason: '',
       holdNotes: '',
       totalPausedSeconds: 0,
       aiTriageDone: true,
-      aiConfidence: '97.2%',
-      worklogs: [],
+      aiConfidence: '98.5%',
+      worklogs: [
+        {
+          id: `WL-${newId}-1`,
+          technician: technician,
+          hours: 0,
+          minutes: 30,
+          rate: 150,
+          cost: 75.00,
+          isBillable: true,
+          description: 'Initial incident declaration, scope triage, and escalation dispatch.',
+          loggedAt: 'Just now'
+        }
+      ],
       subtasks: [
         {
-          id: `SUB-${Date.now()}`,
+          id: `SUB-${Date.now()}-1`,
           title: `Initial SRE triage and telemetry verification for ${ci}`,
-          assignee: 'Alex Rivera (SRE)',
+          assignee: `${technician} (SRE)`,
+          completed: false,
+          completedAt: null
+        },
+        {
+          id: `SUB-${Date.now()}-2`,
+          title: `Assess downstream customer blast radius across CMDB graph`,
+          assignee: `${technician} (SRE)`,
           completed: false,
           completedAt: null
         }
       ],
       timeline: [
-        { time: 'Just now', user: 'Alex Rivera (SRE)', text: `Created incident. Classification: ${category} ➔ ${subcategory} ➔ ${item}. Impact: ${impact}, Urgency: ${urgency} (${priority}).` },
-        { time: 'Just now', user: 'Sentinel-AI', text: 'Auto-assigned incident and synchronized with CMDB topology.', isAi: true }
+        { time: 'Just now', user: caller, text: `Filed production incident ${newId}. Classification: ${category} ➔ ${subcategory} ➔ ${item}. Impact: ${impact}, Urgency: ${urgency} (${priority}).` },
+        { time: 'Just now', user: 'Sentinel AI', text: `Dispatched to ${team} (${technician}). Synchronized affected CI: ${ciObj ? ciObj.name : ci}.`, isAi: true }
       ]
     };
 
     if (priority === 'P1' && ciObj) {
       ciObj.health = 'critical';
+      if (!ciObj.activeIncidents) ciObj.activeIncidents = [];
       ciObj.activeIncidents.push(newId);
     }
 
@@ -5635,6 +5735,9 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
     setupCmdbGraph();
 
     showToast(`🚀 Incident ${newId} dispatched successfully!`, 'success');
+
+    // Immediately open in the Universal Drawer to review!
+    openTicketDrawer(newId);
   }
 
   // =========================================================================
@@ -8559,49 +8662,29 @@ ${notes}`,
       showToast(`Custom Service Request ${newReqId} created and routed for fulfillment!`, 'success');
     });
 
-    // Interactive 4-Step Wizard Navigation
-    document.querySelectorAll('.btn-wizard-next').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const nextStep = parseInt(btn.getAttribute('data-next-step'), 10);
-        
-        // Validate Step 1
-        if (state.wizardStep === 1) {
-          const t = DOM.inputTicketTitle ? DOM.inputTicketTitle.value.trim() : '';
-          const d = DOM.inputTicketDesc ? DOM.inputTicketDesc.value.trim() : '';
-          if (!t) {
-            showToast('Please enter an incident title before proceeding.', 'error');
-            DOM.inputTicketTitle.focus();
-            return;
-          }
-          if (!d) {
-            showToast('Please provide telemetry symptoms or diagnostic details.', 'error');
-            DOM.inputTicketDesc.focus();
-            return;
-          }
-        }
-        
-        switchWizardStep(nextStep);
+    // Drawer-Standard New Incident Form Navigation
+    document.querySelectorAll('[data-create-tab]').forEach(tabBtn => {
+      tabBtn.addEventListener('click', () => {
+        const tab = tabBtn.getAttribute('data-create-tab');
+        switchCreateTab(tab);
       });
     });
 
-    document.querySelectorAll('.btn-wizard-prev').forEach(btn => {
+    document.querySelectorAll('[data-goto-panel]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
-        const prevStep = parseInt(btn.getAttribute('data-prev-step'), 10);
-        switchWizardStep(prevStep);
+        const targetPanel = btn.getAttribute('data-goto-panel');
+        switchCreateTab(targetPanel);
       });
     });
 
-    document.querySelectorAll('.wizard-step-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        const stepNum = parseInt(tab.getAttribute('data-wizard-step'), 10);
-        // Only allow jumping back or to completed steps
-        if (stepNum <= state.wizardStep || tab.classList.contains('completed')) {
-          switchWizardStep(stepNum);
-        }
-      });
-    });
+    // Real-time HUD updates as user inputs fields
+    DOM.inputTicketTitle?.addEventListener('input', updateCreateModalHud);
+    DOM.selectTicketImpact?.addEventListener('change', updateCreateModalHud);
+    DOM.selectTicketUrgency?.addEventListener('change', updateCreateModalHud);
+    DOM.selectTicketCi?.addEventListener('change', updateCreateModalHud);
+    DOM.selectTicketTeam?.addEventListener('change', updateCreateModalHud);
+    document.getElementById('select-ticket-technician')?.addEventListener('change', updateCreateModalHud);
 
     if (DOM.formCreateTicket) {
       DOM.formCreateTicket.addEventListener('submit', handleCreateTicketSubmit);
