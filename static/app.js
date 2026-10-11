@@ -3225,7 +3225,10 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
 
     state.selectedTicket = inc;
     const ciObj = state.cmdbNodes.find(n => n.id === inc.ci);
-    state.activeDrawerTab = state.activeDrawerTab || 'overview';
+    const validDrawerTabs = ['overview', 'ai-hub', 'subtasks', 'worklogs', 'timeline'];
+    if (!validDrawerTabs.includes(state.activeDrawerTab)) {
+      state.activeDrawerTab = 'overview';
+    }
 
     // Worklogs calculation
     const totalLaborMinutes = (inc.worklogs || []).reduce((acc, w) => acc + ((Number(w.hours) || 0) * 60 + (Number(w.minutes) || 0)), 0);
@@ -3540,32 +3543,91 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
         </div>
 
         <!-- ======================================================== -->
-        <!-- SECTION 2 (WIDER SECOND SECTION): Tabbed Content Area & Operations -->
+        <!-- SECTION 2 (WIDER SECOND SECTION): Operations Workbench with Vertical Side Menu -->
         <!-- ======================================================== -->
-        <div class="drawer-col-wide drawer-col-operations" style="padding: 0; background: #fafafa;">
+        <div class="drawer-col-wide drawer-col-operations">
           
-          <!-- Tab Navigation Bar -->
-          <div class="drawer-workspace-tabs">
-            <button class="drawer-tab-btn ${state.activeDrawerTab === 'overview' ? 'active' : ''}" data-drawer-tab="overview">
-              <span>📋 Overview &amp; Diagnostics</span>
-            </button>
-            <button class="drawer-tab-btn ${state.activeDrawerTab === 'subtasks' ? 'active' : ''}" data-drawer-tab="subtasks">
-              <span>☑️ Action Checklist</span>
-              <span class="drawer-tab-badge">${completedSubtasks}/${subtasksList.length}</span>
-            </button>
-            <button class="drawer-tab-btn ${state.activeDrawerTab === 'worklogs' ? 'active' : ''}" data-drawer-tab="worklogs">
-              <span>⏱️ Worklogs &amp; Costs</span>
-              <span class="drawer-tab-badge font-mono">$${totalLaborCost.toFixed(0)}</span>
-            </button>
-            <button class="drawer-tab-btn ${state.activeDrawerTab === 'timeline' ? 'active' : ''}" data-drawer-tab="timeline">
-              <span>📜 Audit Stream</span>
-              <span class="drawer-tab-badge">${inc.timeline.length}</span>
-            </button>
-          </div>
+          <!-- Vertical Side Navigation Bar -->
+          <aside class="drawer-vnav-sidebar">
+            <div class="drawer-vnav-header">
+              <span class="drawer-vnav-eyebrow">WORKBENCH</span>
+              <span class="drawer-vnav-heading">Operations Hub</span>
+            </div>
 
-          <div style="padding: 20px 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px;">
+            <nav class="drawer-vnav-menu">
+              <!-- Item 1: Overview & Diagnostics -->
+              <button class="drawer-vnav-item ${state.activeDrawerTab === 'overview' ? 'active' : ''}" data-drawer-tab="overview" title="Diagnostics, stack trace & telemetry">
+                <div class="vnav-item-left">
+                  <span class="vnav-icon-pill pill-blue">📋</span>
+                  <div class="vnav-text-col">
+                    <span class="vnav-title">Diagnostics</span>
+                    <span class="vnav-sub">Telemetry &amp; Stack</span>
+                  </div>
+                </div>
+                <span class="vnav-badge-pill">Trace</span>
+              </button>
+
+              <!-- Item 2: AI Sentinel & Runbooks -->
+              <button class="drawer-vnav-item ${state.activeDrawerTab === 'ai-hub' ? 'active' : ''}" data-drawer-tab="ai-hub" title="Autonomous AI triage, blast radius, runbooks & communications">
+                <div class="vnav-item-left">
+                  <span class="vnav-icon-pill pill-purple">🤖</span>
+                  <div class="vnav-text-col">
+                    <span class="vnav-title">AI Sentinel Hub</span>
+                    <span class="vnav-sub">Heuristics &amp; Blast</span>
+                  </div>
+                </div>
+                <span class="vnav-badge-pill pill-purple-tag">✦ 4 Tools</span>
+              </button>
+
+              <!-- Item 3: Action Checklist & Subtasks -->
+              <button class="drawer-vnav-item ${state.activeDrawerTab === 'subtasks' ? 'active' : ''}" data-drawer-tab="subtasks" title="Remediation checklist and action tasks">
+                <div class="vnav-item-left">
+                  <span class="vnav-icon-pill pill-emerald">☑️</span>
+                  <div class="vnav-text-col">
+                    <span class="vnav-title">Action Items</span>
+                    <span class="vnav-sub">Remediation Checklist</span>
+                  </div>
+                </div>
+                <span class="vnav-badge-pill">${completedSubtasks}/${subtasksList.length}</span>
+              </button>
+
+              <!-- Item 4: Worklogs & Costs -->
+              <button class="drawer-vnav-item ${state.activeDrawerTab === 'worklogs' ? 'active' : ''}" data-drawer-tab="worklogs" title="Technician labor hours and hourly billing rates">
+                <div class="vnav-item-left">
+                  <span class="vnav-icon-pill pill-amber">⏱️</span>
+                  <div class="vnav-text-col">
+                    <span class="vnav-title">Worklogs &amp; Costs</span>
+                    <span class="vnav-sub">Labor Hours &amp; Rates</span>
+                  </div>
+                </div>
+                <span class="vnav-badge-pill font-mono">$${totalLaborCost.toFixed(0)}</span>
+              </button>
+
+              <!-- Item 5: Audit & Timeline -->
+              <button class="drawer-vnav-item ${state.activeDrawerTab === 'timeline' ? 'active' : ''}" data-drawer-tab="timeline" title="Incident audit stream and communication journal">
+                <div class="vnav-item-left">
+                  <span class="vnav-icon-pill pill-slate">📜</span>
+                  <div class="vnav-text-col">
+                    <span class="vnav-title">Audit Stream</span>
+                    <span class="vnav-sub">Activity &amp; Notes</span>
+                  </div>
+                </div>
+                <span class="vnav-badge-pill">${inc.timeline.length}</span>
+              </button>
+            </nav>
+
+            <div class="drawer-vnav-footer">
+              <div class="vnav-footer-status">
+                <span class="dot-live-indicator"></span>
+                <span class="vnav-footer-text">Live SRE Workspace</span>
+              </div>
+            </div>
+          </aside>
+
+          <!-- Operations Main Content Canvas -->
+          <main class="drawer-vnav-content">
             
-            <!-- TAB PANEL 1: Overview & Diagnostics -->
+            <!-- PANEL 1: Overview & Diagnostics -->
             <div class="drawer-tab-panel ${state.activeDrawerTab === 'overview' ? 'active' : ''}" id="drawer-tab-overview">
               
               <!-- Executive Summary Card -->
@@ -3574,10 +3636,24 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
                 <div class="drawer-title-meta-row">
                   <span>Created: <strong>${inc.createdAt}</strong></span>
                   <span>•</span>
-                  <span>AI Triage Confidence: <strong class="text-emerald font-mono">${inc.aiConfidence || '98.2%'}</strong></span>
+                  <span>AI Confidence: <strong class="text-emerald font-mono">${inc.aiConfidence || '98.2%'}</strong></span>
                   <span>•</span>
                   <span>Caller: <span class="font-mono text-secondary">${escapeHtml(inc.caller)}</span></span>
+                  <span>•</span>
+                  <span>Assignment: <strong class="text-indigo font-mono">${escapeHtml(inc.team)}</strong></span>
                 </div>
+              </div>
+
+              <!-- AI Sentinel Launch Banner -->
+              <div class="drawer-ai-callout-strip">
+                <div class="ai-callout-text-group">
+                  <span class="ai-callout-icon">🤖</span>
+                  <div>
+                    <strong class="ai-callout-heading">Autonomous Sentinel-AI Hub Primed</strong>
+                    <p class="ai-callout-body">Neural root-cause hypothesis, CMDB blast radius traversal, automated runbooks, and stakeholder communication drafts are primed.</p>
+                  </div>
+                </div>
+                <button class="btn btn-sm btn-zen-primary" id="btn-jump-ai-hub" style="white-space:nowrap; flex-shrink:0; background:linear-gradient(135deg, #7c3aed, #4f46e5); border:none; box-shadow:0 2px 6px rgba(124,58,237,0.3);">Launch AI Sentinel ➔</button>
               </div>
 
               <!-- High-Contrast Dark Telemetry & Log Payload Box (Zero Wall of White Text) -->
@@ -3594,7 +3670,37 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
                 <div class="telemetry-code-content" id="telemetry-code-view">${escapeHtml(inc.description)}</div>
               </div>
 
-              <!-- Autonomous AI Diagnostics Hub (Modern Interactive Tiles) -->
+              <!-- Affected Service Topology & Health Specs Snapshot -->
+              <div class="erp-section-card" style="background:#ffffff; border:1px solid #e2e8f0;">
+                <div class="drawer-section-title" style="margin-bottom:10px;">
+                  <span class="sec-icon">🖥️</span>
+                  <span>Affected Service Topology &amp; Health Specs</span>
+                </div>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:10px;">
+                  <div class="pair-badge-pill" style="flex-direction:column; align-items:flex-start; gap:2px; padding:8px 10px; background:#f8fafc; border-radius:6px; border:1px solid #e2e8f0;">
+                    <span class="text-muted font-bold text-xs">CI Identifier</span>
+                    <strong class="font-mono text-xs text-indigo">${escapeHtml(inc.ci)}</strong>
+                  </div>
+                  <div class="pair-badge-pill" style="flex-direction:column; align-items:flex-start; gap:2px; padding:8px 10px; background:#f8fafc; border-radius:6px; border:1px solid #e2e8f0;">
+                    <span class="text-muted font-bold text-xs">Infrastructure Tier</span>
+                    <strong class="text-xs text-slate-800">${ciObj ? ciObj.tier : 'Tier 1 Critical'}</strong>
+                  </div>
+                  <div class="pair-badge-pill" style="flex-direction:column; align-items:flex-start; gap:2px; padding:8px 10px; background:#f8fafc; border-radius:6px; border:1px solid #e2e8f0;">
+                    <span class="text-muted font-bold text-xs">Hosting Provider</span>
+                    <strong class="text-xs text-slate-800">${ciObj ? ciObj.provider : 'Cloud AWS Anycast'}</strong>
+                  </div>
+                  <div class="pair-badge-pill" style="flex-direction:column; align-items:flex-start; gap:2px; padding:8px 10px; background:#f8fafc; border-radius:6px; border:1px solid #e2e8f0;">
+                    <span class="text-muted font-bold text-xs">Current Health</span>
+                    <strong class="text-xs ${inc.status === 'RESOLVED' ? 'text-emerald' : 'text-rose'}">${inc.status === 'RESOLVED' ? '✓ Operational' : '● Disrupted / Triaging'}</strong>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- PANEL 2: AI Sentinel Hub (Dedicated Intelligent Operations Workbench) -->
+            <div class="drawer-tab-panel ${state.activeDrawerTab === 'ai-hub' ? 'active' : ''}" id="drawer-tab-ai-hub">
+              
               <div class="erp-section-card" style="border: 1.5px solid #d8b4fe; background: linear-gradient(180deg, #faf5ff 0%, #ffffff 100%);">
                 <div class="ai-copilot-top">
                   <div class="ai-copilot-title-group">
@@ -3815,24 +3921,40 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
               </div>
             </div>
 
-          </div>
+          </main>
         </div>
 
       </div>
     `;
 
-    // Bind Workspace Tabs Navigation
-    document.querySelectorAll('.drawer-tab-btn').forEach(btn => {
+    // Bind Drawer Vertical Navigation Items
+    document.querySelectorAll('.drawer-vnav-item, .drawer-tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const tabName = btn.getAttribute('data-drawer-tab');
         state.activeDrawerTab = tabName;
-        document.querySelectorAll('.drawer-tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.drawer-vnav-item, .drawer-tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.drawer-tab-panel').forEach(p => p.classList.remove('active'));
+        const activeNavBtn = document.querySelector(`.drawer-vnav-item[data-drawer-tab="${tabName}"]`);
+        if (activeNavBtn) activeNavBtn.classList.add('active');
         btn.classList.add('active');
         const targetPanel = document.getElementById(`drawer-tab-${tabName}`);
         if (targetPanel) targetPanel.classList.add('active');
       });
     });
+
+    // Bind Jump to AI Hub Button on Overview Panel
+    const btnJumpAiHub = document.getElementById('btn-jump-ai-hub');
+    if (btnJumpAiHub) {
+      btnJumpAiHub.addEventListener('click', () => {
+        state.activeDrawerTab = 'ai-hub';
+        document.querySelectorAll('.drawer-vnav-item, .drawer-tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.drawer-tab-panel').forEach(p => p.classList.remove('active'));
+        const aiNavBtn = document.querySelector('.drawer-vnav-item[data-drawer-tab="ai-hub"]');
+        if (aiNavBtn) aiNavBtn.classList.add('active');
+        const targetPanel = document.getElementById('drawer-tab-ai-hub');
+        if (targetPanel) targetPanel.classList.add('active');
+      });
+    }
 
     // Bind Copy Telemetry Button
     const btnCopy = document.getElementById('btn-copy-telemetry-text');
