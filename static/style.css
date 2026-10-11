@@ -7139,3 +7139,138 @@ body.zen-focus-mode .zen-floating-pill {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   border-color: #cbd5e1;
 }
+
+/* ========================================================================= */
+/* BALANCED DRAWER FORM ENTRY HIERARCHY (MANDATORY -> RECOMMENDED -> OPTIONAL) */
+/* ========================================================================= */
+.drawer-tier-group {
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  transition: all var(--transition-fast);
+}
+
+.drawer-tier-group:hover {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+}
+
+.drawer-tier-group.tier-mandatory {
+  background: linear-gradient(180deg, #fff1f2 0%, #ffffff 85%);
+  border: 1.5px solid #fecdd3;
+  border-left: 4.5px solid #e11d48;
+}
+
+.drawer-tier-group.tier-recommended {
+  background: linear-gradient(180deg, #fffbeb 0%, #ffffff 85%);
+  border: 1.5px solid #fed7aa;
+  border-left: 4.5px solid #f97316;
+}
+
+.drawer-tier-group.tier-optional {
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 85%);
+  border: 1.5px solid #e2e8f0;
+  border-left: 4.5px solid #64748b;
+}
+
+.drawer-tier-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.08);
+}
+
+.tier-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tier-header-icon {
+  font-size: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tier-header-title {
+  font-size: 11.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.tier-mandatory .tier-header-title { color: #9f1239; }
+.tier-recommended .tier-header-title { color: #9a3412; }
+.tier-optional .tier-header-title { color: #475569; }
+
+.tier-badge {
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tier-badge.badge-mandatory {
+  background: #ffe4e6;
+  color: #be123c;
+  border: 1px solid #f43f5e;
+}
+
+.tier-badge.badge-recommended {
+  background: #ffedd5;
+  color: #c2410c;
+  border: 1px solid #fb923c;
+}
+
+.tier-badge.badge-optional {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.drawer-form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.drawer-form-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .drawer-form-grid-2,
+  .drawer-form-grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field-label-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 5px;
+}
+
+.field-label-pill .required-star {
+  color: #e11d48;
+  font-weight: 800;
+}
+
+.drawer-card-highlight {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+

@@ -2166,19 +2166,8 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
     // Bind card click triggers across all work item types
     document.querySelectorAll('#kanban-container .ticket-card').forEach(card => {
       card.addEventListener('click', () => {
-        const itemType = card.getAttribute('data-item-type');
         const itemId = card.getAttribute('data-item-id');
-
-        if (itemType === 'INCIDENT') {
-          openTicketDrawer(itemId);
-        } else if (itemType === 'PROBLEM') {
-          open5WhysModal(itemId);
-        } else if (itemType === 'CHANGE') {
-          switchView('change-management');
-          showToast(`Inspecting change request ${itemId}.`, 'info');
-        } else if (itemType === 'REQUEST') {
-          openServiceRequestDrawer(itemId);
-        }
+        if (itemId) openTicketDrawer(itemId);
       });
     });
   }
@@ -2320,6 +2309,10 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
   }
 
   function openServiceRequestDrawer(reqId) {
+    if (typeof openTicketDrawer === 'function') {
+      openTicketDrawer(reqId);
+      return;
+    }
     const req = (state.serviceRequests || []).find(r => r.id === reqId);
     if (!req) return;
 
@@ -3262,14 +3255,62 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
   // =========================================================================
 
   function openTicketDrawer(ticketId) {
-    const inc = state.incidents.find(i => i.id === ticketId);
-    if (!inc) return;
+    let item = null;
+    let itemType = 'INCIDENT';
 
+    if (typeof ticketId === 'string') {
+      if (ticketId.startsWith('PRB-') || ticketId.startsWith('PRB')) {
+        itemType = 'PROBLEM';
+        item = (state.problems || []).find(p => p.id === ticketId);
+      } else if (ticketId.startsWith('CHG-') || ticketId.startsWith('CHG')) {
+        itemType = 'CHANGE';
+        item = (state.changes || []).find(c => c.id === ticketId);
+      } else if (ticketId.startsWith('REQ-') || ticketId.startsWith('REQ')) {
+        itemType = 'REQUEST';
+        item = (state.serviceRequests || []).find(r => r.id === ticketId);
+      } else {
+        itemType = 'INCIDENT';
+        item = (state.incidents || []).find(i => i.id === ticketId);
+      }
+    }
+
+    if (!item) {
+      item = (state.incidents || []).find(i => i.id === ticketId) ||
+             (state.problems || []).find(p => p.id === ticketId) ||
+             (state.changes || []).find(c => c.id === ticketId) ||
+             (state.serviceRequests || []).find(r => r.id === ticketId);
+      if (item) {
+        itemType = item.id.startsWith('PRB') ? 'PROBLEM' : item.id.startsWith('CHG') ? 'CHANGE' : item.id.startsWith('REQ') ? 'REQUEST' : 'INCIDENT';
+      }
+    }
+
+    if (!item) return;
+    const inc = item; // Alias to support existing helpers smoothly
     state.selectedTicket = inc;
-    const ciObj = state.cmdbNodes.find(n => n.id === inc.ci);
-    const validDrawerTabs = ['governance', 'overview', 'ai-hub', 'subtasks', 'worklogs', 'timeline'];
+    const ciObj = state.cmdbNodes.find(n => n.id === (inc.ci || 'CI-DB-001'));
+
+    const validDrawerTabs = ['core', 'people', 'diagnostics', 'workflows', 'ai-hub', 'timeline'];
     if (!validDrawerTabs.includes(state.activeDrawerTab)) {
-      state.activeDrawerTab = 'governance';
+      state.activeDrawerTab = 'core';
+    }
+
+    // Ensure non-incident collections have worklogs, subtasks, and timeline
+    if (!inc.worklogs || inc.worklogs.length === 0) {
+      inc.worklogs = [
+        { id: `WL-${inc.id}-1`, technician: inc.lead || inc.caller || 'Alex Rivera', hours: 1, minutes: 15, rate: 150, cost: 187.50, isBillable: true, description: 'Initial diagnostic assessment and telemetry triage.', loggedAt: 'Today' }
+      ];
+    }
+    if (!inc.subtasks || inc.subtasks.length === 0) {
+      inc.subtasks = [
+        { id: `SUB-${inc.id}-1`, title: 'Inspect telemetry metrics & system logs', assignee: inc.lead || inc.caller || 'Alex Rivera', completed: true },
+        { id: `SUB-${inc.id}-2`, title: 'Verify change blast radius / workaround resolution', assignee: inc.lead || inc.caller || 'Alex Rivera', completed: false }
+      ];
+    }
+    if (!inc.timeline || inc.timeline.length === 0) {
+      inc.timeline = [
+        { time: '10 mins ago', user: 'Sentinel AI', text: `${itemType} ${inc.id} registered and evaluated by OpenNow.`, isAi: true },
+        { time: 'Just now', user: inc.caller || inc.lead || 'Alex Rivera', text: 'Opened record in Universal Drawer.', isAi: false }
+      ];
     }
 
     // Worklogs calculation
@@ -3286,55 +3327,72 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
     // SLA Target Hours from policy
     const policyTargetHours = state.slaPolicies && state.slaPolicies[inc.priority] ? state.slaPolicies[inc.priority].resolveHours : (inc.priority === 'P1' ? 1 : 4);
 
-    // Dynamic Lifecycle Transitions Buttons for Header Ribbon & Sidebar
+    // Dynamic Type Badge and Titles
+    let typeBadge = '<span class="badge-tag" style="background:#fee2e2; color:#b91c1c; border-color:#fca5a5; font-weight:800;">🚨 INCIDENT</span>';
+    let consoleTitle = 'Incident Console';
+    if (itemType === 'PROBLEM') {
+      typeBadge = '<span class="badge-tag" style="background:#e0e7ff; color:#3730a3; border-color:#a5b4fc; font-weight:800;">🔍 PROBLEM</span>';
+      consoleTitle = 'Problem Console';
+    } else if (itemType === 'CHANGE') {
+      typeBadge = '<span class="badge-tag" style="background:#fef3c7; color:#92400e; border-color:#fcd34d; font-weight:800;">🔄 CHANGE RFC</span>';
+      consoleTitle = 'Change Advisory Console';
+    } else if (itemType === 'REQUEST') {
+      typeBadge = '<span class="badge-tag" style="background:#dcfce7; color:#166534; border-color:#86efac; font-weight:800;">📦 SERVICE REQUEST</span>';
+      consoleTitle = 'Fulfillment Console';
+    }
+
+    // Dynamic Lifecycle Transitions Buttons
     let ribbonActionBtn = '';
     let transitionsHtml = '';
-    if (inc.status === 'NEW') {
+    const currentStatus = inc.status || inc.cabStatus || inc.stage || 'NEW';
+
+    if (currentStatus === 'NEW' || currentStatus === 'Draft' || currentStatus === 'Pending CAB Approval' || currentStatus === 'Under Investigation') {
       ribbonActionBtn = `<button class="btn-ribbon-action btn-ribbon-start" id="ribbon-btn-start">▶ Start Work</button>`;
       transitionsHtml = `
-        <button class="btn-transition btn-transition-start" id="trans-btn-start" title="Acknowledge, assign and begin active incident triage">▶ Assign &amp; Start Work</button>
+        <button class="btn-transition btn-transition-start" id="trans-btn-start" title="Acknowledge and begin work">▶ Start Work</button>
         <button class="btn-transition btn-transition-hold" id="trans-btn-hold" title="Pause SLA clock and place on hold">⏸ Put on Hold</button>
-        <button class="btn-transition btn-transition-resolve" id="trans-btn-resolve" title="Record resolution code and close out issue">✓ Resolve Ticket</button>
-        <button class="btn-transition btn-transition-close" id="trans-btn-close" title="Cancel or close ticket">✕ Close</button>
+        <button class="btn-transition btn-transition-resolve" id="trans-btn-resolve" title="Record resolution or approval">✓ Resolve / Approve</button>
+        <button class="btn-transition btn-transition-close" id="trans-btn-close" title="Close ticket">✕ Close</button>
       `;
-    } else if (inc.status === 'IN_PROGRESS') {
-      ribbonActionBtn = `<button class="btn-ribbon-action btn-ribbon-resolve" id="ribbon-btn-resolve">✓ Resolve Incident</button>`;
+    } else if (currentStatus === 'IN_PROGRESS' || currentStatus === 'Approved by CAB' || currentStatus === 'In Fulfillment') {
+      ribbonActionBtn = `<button class="btn-ribbon-action btn-ribbon-resolve" id="ribbon-btn-resolve">✓ Complete &amp; Resolve</button>`;
       transitionsHtml = `
         <button class="btn-transition btn-transition-hold" id="trans-btn-hold" title="Pause SLA clock and place on hold">⏸ Put on Hold</button>
-        <button class="btn-transition btn-transition-resolve" id="trans-btn-resolve" title="Record resolution code and close out issue">✓ Resolve Ticket</button>
+        <button class="btn-transition btn-transition-resolve" id="trans-btn-resolve" title="Record resolution">✓ Resolve / Fulfill</button>
         ${inc.priority !== 'P1' ? `<button class="btn-transition btn-transition-escalate" id="trans-btn-escalate" title="Escalate severity to P1 Critical">⚡ Escalate to P1</button>` : ''}
-        <button class="btn-transition btn-transition-close" id="trans-btn-close" title="Close incident">✕ Close</button>
+        <button class="btn-transition btn-transition-close" id="trans-btn-close" title="Close ticket">✕ Close</button>
       `;
-    } else if (inc.status === 'ON_HOLD') {
+    } else if (currentStatus === 'ON_HOLD') {
       ribbonActionBtn = `<button class="btn-ribbon-action btn-ribbon-start" id="ribbon-btn-resume">▶ Resume SLA</button>`;
       transitionsHtml = `
-        <button class="btn-transition btn-transition-resume" id="trans-btn-resume" title="Resume active mitigation and unpause SLA timer">▶ Resume Work (Unpause SLA)</button>
-        <button class="btn-transition btn-transition-resolve" id="trans-btn-resolve" title="Record resolution code and close out issue">✓ Resolve Ticket</button>
-        <button class="btn-transition btn-transition-close" id="trans-btn-close" title="Close incident">✕ Close</button>
+        <button class="btn-transition btn-transition-resume" id="trans-btn-resume" title="Resume active work">▶ Resume Work</button>
+        <button class="btn-transition btn-transition-resolve" id="trans-btn-resolve" title="Record resolution">✓ Resolve</button>
+        <button class="btn-transition btn-transition-close" id="trans-btn-close" title="Close ticket">✕ Close</button>
       `;
-    } else if (inc.status === 'RESOLVED') {
+    } else { // RESOLVED / CLOSED / Fulfilled
       ribbonActionBtn = `<button class="btn-ribbon-action btn-ribbon-reopen" id="ribbon-btn-reopen">⟲ Reopen</button>`;
       transitionsHtml = `
-        <button class="btn-transition btn-transition-reopen" id="trans-btn-reopen" title="Reopen incident and restart mitigation">⟲ Reopen Incident</button>
+        <button class="btn-transition btn-transition-reopen" id="trans-btn-reopen" title="Reopen record">⟲ Reopen Record</button>
         <button class="btn-transition btn-transition-close" id="trans-btn-close" title="Archive and close permanently">✕ Archive &amp; Close</button>
-      `;
-    } else { // CLOSED
-      ribbonActionBtn = `<button class="btn-ribbon-action btn-ribbon-reopen" id="ribbon-btn-reopen">⟲ Reopen</button>`;
-      transitionsHtml = `
-        <button class="btn-transition btn-transition-reopen" id="trans-btn-reopen" title="Reopen incident">⟲ Reopen Incident</button>
       `;
     }
 
     // Status Ribbon CSS Class & Label
     let statusBadgeClass = 'status-badge-new';
-    let statusLabel = 'New / Triaging';
-    if (inc.status === 'IN_PROGRESS') { statusBadgeClass = 'status-badge-progress'; statusLabel = '⚡ In Progress'; }
-    else if (inc.status === 'ON_HOLD') { statusBadgeClass = 'status-badge-hold'; statusLabel = `⏸ Paused (${escapeHtml(inc.holdReason || 'Hold')})`; }
-    else if (inc.status === 'RESOLVED') { statusBadgeClass = 'status-badge-resolved'; statusLabel = '✓ Resolved'; }
-    else if (inc.status === 'CLOSED') { statusBadgeClass = 'status-badge-closed'; statusLabel = 'Closed'; }
+    let statusLabel = currentStatus;
+    if (currentStatus === 'IN_PROGRESS' || currentStatus.includes('Approved') || currentStatus.includes('Fulfillment')) {
+      statusBadgeClass = 'status-badge-progress';
+      statusLabel = `⚡ ${currentStatus}`;
+    } else if (currentStatus === 'ON_HOLD') {
+      statusBadgeClass = 'status-badge-hold';
+      statusLabel = `⏸ Paused (${escapeHtml(inc.holdReason || 'Hold')})`;
+    } else if (currentStatus === 'RESOLVED' || currentStatus === 'Fulfilled' || currentStatus.includes('Delivered')) {
+      statusBadgeClass = 'status-badge-resolved';
+      statusLabel = `✓ ${currentStatus}`;
+    }
 
     // SLA Countdown text
-    const slaText = (inc.status === 'RESOLVED') ? 'MET TARGET' : (inc.status === 'ON_HOLD' ? `PAUSED (${formatSlaTime(inc.slaSecondsRemaining)})` : formatSlaTime(inc.slaSecondsRemaining));
+    const slaText = (currentStatus === 'RESOLVED' || currentStatus === 'Fulfilled') ? 'MET TARGET' : (currentStatus === 'ON_HOLD' ? `PAUSED (${formatSlaTime(inc.slaSecondsRemaining || 3600)})` : formatSlaTime(inc.slaSecondsRemaining || 7200));
 
     const techniciansList = state.technicians || DEFAULT_TECHNICIANS;
     const defaultTechRate = techniciansList[0] ? techniciansList[0].rate : 150;
@@ -3344,7 +3402,8 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
       <div class="drawer-command-ribbon">
         <div class="drawer-ribbon-left">
           <span class="drawer-ribbon-key-badge">${inc.id}</span>
-          <span class="priority-pill pill-${inc.priority.toLowerCase()}" id="drawer-header-priority-pill">${inc.priority}</span>
+          ${typeBadge}
+          <span class="priority-pill pill-${(inc.priority || 'P2').toLowerCase()}" id="drawer-header-priority-pill">${inc.priority || 'P2'}</span>
           <span class="drawer-ribbon-status ${statusBadgeClass}">${statusLabel}</span>
           <span class="drawer-header-title-summary" title="${escapeHtml(inc.title)}">${escapeHtml(inc.title)}</span>
         </div>
@@ -3354,23 +3413,23 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
         </div>
       </div>
 
-      <!-- 2. Interactive KPI Glass HUD Strip (Zero Wall of White Text) -->
+      <!-- 2. Interactive KPI Glass HUD Strip -->
       <div class="drawer-kpi-hud-strip">
-        <div class="kpi-hud-card" style="border-left: 3.5px solid ${inc.status === 'ON_HOLD' ? '#f59e0b' : inc.status === 'RESOLVED' ? '#10b981' : '#6366f1'};">
+        <div class="kpi-hud-card" style="border-left: 3.5px solid ${currentStatus === 'ON_HOLD' ? '#f59e0b' : currentStatus === 'RESOLVED' ? '#10b981' : '#6366f1'};">
           <div class="kpi-hud-top">
             <span class="kpi-hud-title">SLA Resolution Target</span>
-            <span class="kpi-hud-icon">${inc.status === 'ON_HOLD' ? '⏸️' : '⏱️'}</span>
+            <span class="kpi-hud-icon">${currentStatus === 'ON_HOLD' ? '⏸️' : '⏱️'}</span>
           </div>
-          <span class="kpi-hud-val font-mono ${inc.status === 'ON_HOLD' ? 'text-amber' : inc.status === 'RESOLVED' ? 'text-emerald' : 'text-indigo'}">${slaText}</span>
-          <span class="kpi-hud-sub">Target: ${policyTargetHours}h • Paused: ${formatDurationShort(inc.totalPausedSeconds || 0)}</span>
+          <span class="kpi-hud-val font-mono ${currentStatus === 'ON_HOLD' ? 'text-amber' : currentStatus === 'RESOLVED' ? 'text-emerald' : 'text-indigo'}">${slaText}</span>
+          <span class="kpi-hud-sub">Target: ${policyTargetHours}h • Due: ${inc.slaDue || 'Today'}</span>
         </div>
 
         <div class="kpi-hud-card" style="border-left: 3.5px solid #f59e0b;">
           <div class="kpi-hud-top">
-            <span class="kpi-hud-title">Priority Matrix</span>
+            <span class="kpi-hud-title">Severity / Impact</span>
             <span class="kpi-hud-icon">⚡</span>
           </div>
-          <span class="kpi-hud-val">${inc.priority} Severity</span>
+          <span class="kpi-hud-val">${inc.priority || 'P2'} Level</span>
           <span class="kpi-hud-sub">${escapeHtml(inc.impact || 'Enterprise')} × ${escapeHtml(inc.urgency || 'High')}</span>
         </div>
 
@@ -3379,8 +3438,8 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
             <span class="kpi-hud-title">Affected Service CI</span>
             <span class="kpi-hud-icon">🌐</span>
           </div>
-          <span class="kpi-hud-val" style="font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(inc.ciName || inc.ci)}</span>
-          <span class="kpi-hud-sub font-mono">Tier: ${ciObj ? ciObj.tier : '1'} • Provider: ${ciObj ? ciObj.provider : 'Cloud'}</span>
+          <span class="kpi-hud-val" style="font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(inc.ciName || inc.ci || 'Core Service')}</span>
+          <span class="kpi-hud-sub font-mono">Tier: ${ciObj ? ciObj.tier : '1'} • Cloud Infra</span>
         </div>
 
         <div class="kpi-hud-card" style="border-left: 3.5px solid #0284c7;">
@@ -3396,632 +3455,788 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
       <!-- 3. Mini-Shell Workspace inside 75% Drawer -->
       <div class="drawer-erp-workspace drawer-mini-shell">
         
-        <!-- MINI-SHELL VERTICAL SIDEBAR MENU (Single Unified Navigation Spine) -->
+        <!-- MINI-SHELL VERTICAL SIDEBAR MENU (Balanced 6 Logical Modules) -->
         <aside class="drawer-vnav-sidebar">
           <div class="drawer-vnav-header">
-            <span class="drawer-vnav-eyebrow">MINI-SHELL</span>
-            <span class="drawer-vnav-heading">Incident Console</span>
+            <span class="drawer-vnav-eyebrow">${itemType}</span>
+            <span class="drawer-vnav-heading">${consoleTitle}</span>
           </div>
 
           <nav class="drawer-vnav-menu">
-            <!-- 1. Governance & Control (Section 1 elevated into primary menu item) -->
-            <button class="drawer-vnav-item ${state.activeDrawerTab === 'governance' ? 'active' : ''}" data-drawer-tab="governance" title="Status, ownership, taxonomy & priority matrix">
+            <!-- 1. Core Details & Classification -->
+            <button class="drawer-vnav-item ${state.activeDrawerTab === 'core' ? 'active' : ''}" data-drawer-tab="core" title="Title, status, taxonomy & priority matrix">
               <div class="vnav-item-left">
-                <span class="vnav-icon-pill pill-blue">🛡️</span>
+                <span class="vnav-icon-pill pill-blue">🏷️</span>
                 <div class="vnav-text-col">
-                  <span class="vnav-title">Governance</span>
-                  <span class="vnav-sub">Status &amp; Taxonomy</span>
+                  <span class="vnav-title">Core &amp; Taxonomy</span>
+                  <span class="vnav-sub">Status &amp; Category</span>
                 </div>
               </div>
-              <span class="vnav-badge-pill font-mono">${formatStatusLabel(inc.status)}</span>
+              <span class="vnav-badge-pill font-mono">${inc.priority || 'P2'}</span>
             </button>
 
-            <!-- 2. Overview & Diagnostics -->
-            <button class="drawer-vnav-item ${state.activeDrawerTab === 'overview' ? 'active' : ''}" data-drawer-tab="overview" title="Diagnostics, stack trace & telemetry">
+            <!-- 2. People & SLA Governance -->
+            <button class="drawer-vnav-item ${state.activeDrawerTab === 'people' ? 'active' : ''}" data-drawer-tab="people" title="Ownership, caller, technician, SLA policy & cost center">
               <div class="vnav-item-left">
-                <span class="vnav-icon-pill pill-blue">📋</span>
+                <span class="vnav-icon-pill pill-emerald">👥</span>
                 <div class="vnav-text-col">
-                  <span class="vnav-title">Diagnostics</span>
-                  <span class="vnav-sub">Telemetry &amp; Stack</span>
+                  <span class="vnav-title">People &amp; SLA</span>
+                  <span class="vnav-sub">Ownership &amp; Group</span>
                 </div>
               </div>
-              <span class="vnav-badge-pill">Trace</span>
+              <span class="vnav-badge-pill">SLA</span>
             </button>
 
-            <!-- 3. AI Sentinel & Runbooks -->
-            <button class="drawer-vnav-item ${state.activeDrawerTab === 'ai-hub' ? 'active' : ''}" data-drawer-tab="ai-hub" title="Autonomous AI triage, blast radius, runbooks & communications">
+            <!-- 3. Scope, Specs & Diagnostics -->
+            <button class="drawer-vnav-item ${state.activeDrawerTab === 'diagnostics' ? 'active' : ''}" data-drawer-tab="diagnostics" title="Diagnostic telemetry, stack trace & CMDB topology">
               <div class="vnav-item-left">
-                <span class="vnav-icon-pill pill-purple">🤖</span>
+                <span class="vnav-icon-pill pill-slate">💻</span>
                 <div class="vnav-text-col">
-                  <span class="vnav-title">AI Sentinel Hub</span>
-                  <span class="vnav-sub">Heuristics &amp; Blast</span>
+                  <span class="vnav-title">Specs &amp; Topology</span>
+                  <span class="vnav-sub">Telemetry &amp; Blast</span>
                 </div>
               </div>
-              <span class="vnav-badge-pill pill-purple-tag">✦ 4 Tools</span>
+              <span class="vnav-badge-pill">CMDB</span>
             </button>
 
-            <!-- 4. Action Checklist & Subtasks -->
-            <button class="drawer-vnav-item ${state.activeDrawerTab === 'subtasks' ? 'active' : ''}" data-drawer-tab="subtasks" title="Remediation checklist and action tasks">
+            <!-- 4. Workflows, Actions & Governance -->
+            <button class="drawer-vnav-item ${state.activeDrawerTab === 'workflows' ? 'active' : ''}" data-drawer-tab="workflows" title="Lifecycle actions, subtasks checklist, 5-whys & approvals">
               <div class="vnav-item-left">
-                <span class="vnav-icon-pill pill-emerald">☑️</span>
+                <span class="vnav-icon-pill pill-amber">⚙️</span>
                 <div class="vnav-text-col">
-                  <span class="vnav-title">Action Items</span>
-                  <span class="vnav-sub">Remediation Checklist</span>
+                  <span class="vnav-title">Workflows &amp; Actions</span>
+                  <span class="vnav-sub">Subtasks &amp; Governance</span>
                 </div>
               </div>
               <span class="vnav-badge-pill">${completedSubtasks}/${subtasksList.length}</span>
             </button>
 
-            <!-- 5. Worklogs & Costs -->
-            <button class="drawer-vnav-item ${state.activeDrawerTab === 'worklogs' ? 'active' : ''}" data-drawer-tab="worklogs" title="Technician labor hours and hourly billing rates">
+            <!-- 5. AI Ops Center & Copilot -->
+            <button class="drawer-vnav-item ${state.activeDrawerTab === 'ai-hub' ? 'active' : ''}" data-drawer-tab="ai-hub" title="Autonomous AI triage, blast radius, runbooks & communications">
               <div class="vnav-item-left">
-                <span class="vnav-icon-pill pill-amber">⏱️</span>
+                <span class="vnav-icon-pill pill-purple">🤖</span>
                 <div class="vnav-text-col">
-                  <span class="vnav-title">Worklogs &amp; Costs</span>
-                  <span class="vnav-sub">Labor Hours &amp; Rates</span>
+                  <span class="vnav-title">AI Ops Copilot</span>
+                  <span class="vnav-sub">Runbooks &amp; Triage</span>
+                </div>
+              </div>
+              <span class="vnav-badge-pill pill-purple-tag">✦ 4 Tools</span>
+            </button>
+
+            <!-- 6. Labor Costs & Audit Stream -->
+            <button class="drawer-vnav-item ${state.activeDrawerTab === 'timeline' ? 'active' : ''}" data-drawer-tab="timeline" title="Technician labor hours, costing & chronological audit stream">
+              <div class="vnav-item-left">
+                <span class="vnav-icon-pill pill-teal">📜</span>
+                <div class="vnav-text-col">
+                  <span class="vnav-title">Labor &amp; Audit</span>
+                  <span class="vnav-sub">Worklogs &amp; Stream</span>
                 </div>
               </div>
               <span class="vnav-badge-pill font-mono">$${totalLaborCost.toFixed(0)}</span>
-            </button>
-
-            <!-- 6. Audit & Timeline -->
-            <button class="drawer-vnav-item ${state.activeDrawerTab === 'timeline' ? 'active' : ''}" data-drawer-tab="timeline" title="Incident audit stream and communication journal">
-              <div class="vnav-item-left">
-                <span class="vnav-icon-pill pill-slate">📜</span>
-                <div class="vnav-text-col">
-                  <span class="vnav-title">Audit Stream</span>
-                  <span class="vnav-sub">Activity &amp; Notes</span>
-                </div>
-              </div>
-              <span class="vnav-badge-pill">${inc.timeline.length}</span>
             </button>
           </nav>
 
           <div class="drawer-vnav-footer">
             <div class="vnav-footer-status">
               <span class="dot-live-indicator"></span>
-              <span class="vnav-footer-text">Mini-Shell Active</span>
+              <span class="vnav-footer-text">Balanced Mini-Shell Active</span>
             </div>
           </div>
         </aside>
 
-        <!-- MINI-SHELL MAIN CONTENT CANVAS (Expansive View for Selected Module) -->
+        <!-- MINI-SHELL MAIN CONTENT CANVAS (Strict 3-Tier Hierarchy: Mandatory -> Recommended -> Optional) -->
         <main class="drawer-vnav-content">
           
-          <!-- PANEL 1: Governance, Control, People & Taxonomy (Elevated into Primary Menu Item) -->
-          <div class="drawer-tab-panel ${state.activeDrawerTab === 'governance' ? 'active' : ''}" id="drawer-tab-governance">
-            <div class="governance-grid">
+          <!-- ======================================================== -->
+          <!-- PANEL 1: CORE DETAILS & TAXONOMY                        -->
+          <!-- ======================================================== -->
+          <div class="drawer-tab-panel ${state.activeDrawerTab === 'core' ? 'active' : ''}" id="drawer-tab-core">
+            
+            <!-- Tier 1: MANDATORY (Top of page) -->
+            <div class="drawer-tier-group tier-mandatory">
+              <div class="drawer-tier-header">
+                <div class="tier-header-left">
+                  <span class="tier-header-icon">🔴</span>
+                  <span class="tier-header-title">Mandatory Information</span>
+                </div>
+                <span class="tier-badge badge-mandatory">Required Fields</span>
+              </div>
               
-              <!-- Column A: Status & People -->
-              <div style="display: flex; flex-direction: column; gap: 16px;">
-                
-                <!-- Lifecycle State Machine Flow Card -->
-                <div class="drawer-side-card side-card-status">
-                  <div class="side-card-header">
-                    <div class="side-card-title-wrap">
-                      <span class="side-card-icon-pill icon-pill-blue">🔄</span>
-                      <span class="side-card-title">STATUS &amp; LIFECYCLE</span>
-                    </div>
-                    <span class="badge-tag tag-blue font-mono font-bold">${formatStatusLabel(inc.status)}</span>
-                  </div>
-                  <div>
-                    <label class="field-label-micro">
-                      <span style="color:#2563eb;">●</span>
-                      <span>Current ITIL State</span>
-                    </label>
-                    <select id="drawer-status-select" class="zen-select select-styled-shaded w-full" style="height:32px; font-weight:700;">
-                      <option value="NEW" ${inc.status === 'NEW' ? 'selected' : ''}>New / Triaging</option>
-                      <option value="IN_PROGRESS" ${inc.status === 'IN_PROGRESS' ? 'selected' : ''}>In Progress / Mitigating</option>
-                      <option value="ON_HOLD" ${inc.status === 'ON_HOLD' ? 'selected' : ''}>On Hold / SLA Paused</option>
-                      <option value="RESOLVED" ${inc.status === 'RESOLVED' ? 'selected' : ''}>Resolved / Mitigated</option>
-                      <option value="CLOSED" ${inc.status === 'CLOSED' ? 'selected' : ''}>Closed / Archived</option>
-                    </select>
-                  </div>
-                  <div class="mt-3">
-                    <span class="field-label-micro mb-1" style="display:block;">Allowed Lifecycle Transitions:</span>
-                    <div class="transition-actions-row">
-                      ${transitionsHtml}
-                    </div>
-                  </div>
-                </div>
-
-                <!-- People & Ownership Card -->
-                <div class="drawer-side-card side-card-people">
-                  <div class="side-card-header">
-                    <div class="side-card-title-wrap">
-                      <span class="side-card-icon-pill icon-pill-teal">👥</span>
-                      <span class="side-card-title">PEOPLE &amp; ESCALATION</span>
-                    </div>
-                    <span class="badge-tag tag-emerald">Assigned</span>
-                  </div>
-                  <div class="caller-profile-row">
-                    <div class="tech-avatar-mini" style="width:34px; height:34px; font-size:13px; background:linear-gradient(135deg, #0d9488, #2563eb); color:white; font-weight:800; box-shadow:0 2px 5px rgba(13,148,136,0.25);">
-                      ${escapeHtml((inc.caller || 'AR').substring(0, 2).toUpperCase())}
-                    </div>
-                    <div class="caller-details">
-                      <strong>${escapeHtml(inc.caller || 'alex.rivera@opennow.io')}</strong>
-                      <span class="text-xs text-muted">Site Reliability Engineering</span>
-                    </div>
-                  </div>
-                  <div class="assignment-meta-lines mt-3" style="display:flex; flex-direction:column; gap:6px;">
-                    <div class="pair-badge-pill"><span class="text-muted font-bold text-xs">Assignment Group:</span><strong class="text-indigo font-mono">${escapeHtml(inc.team)}</strong></div>
-                    <div class="pair-badge-pill"><span class="text-muted font-bold text-xs">Incident Lead:</span><span style="font-weight:700; color:#0f172a;">Alex Rivera (Lead)</span></div>
-                    <div class="pair-badge-pill"><span class="text-muted font-bold text-xs">ITIL Status:</span><span class="font-bold font-mono ${inc.status === 'ON_HOLD' ? 'text-amber' : inc.status === 'RESOLVED' ? 'text-emerald' : 'text-indigo'}">${formatStatusLabel(inc.status)}</span></div>
-                  </div>
-                </div>
-
-                <!-- Resolution Verification Card (if resolved) -->
-                ${inc.status === 'RESOLVED' ? `
-                  <div class="drawer-side-card" style="background:#ecfdf5; border:1.5px solid #a7f3d0; border-left:4.5px solid #059669;">
-                    <div class="side-card-header" style="border-bottom-color:#a7f3d0;">
-                      <div class="side-card-title-wrap">
-                        <span class="side-card-icon-pill" style="background:#d1fae5; border:1px solid #a7f3d0;">✓</span>
-                        <span class="side-card-title text-emerald">RESOLUTION DETAILS</span>
-                      </div>
-                      <span class="badge-tag text-emerald">${escapeHtml(inc.resolutionCode || 'Resolved')}</span>
-                    </div>
-                    <div class="text-xs" style="color:#065f46; line-height:1.45;">
-                      <p><strong>Root Cause:</strong> ${escapeHtml(inc.rootCause || 'Root cause eliminated.')}</p>
-                      ${inc.preventiveAction ? `<p class="mt-2"><strong>Preventive Action:</strong> ${escapeHtml(inc.preventiveAction)}</p>` : ''}
-                      <p class="mt-2"><strong>FCR:</strong> ${inc.isFcr ? 'Yes (First Call Resolution)' : 'No (Escalated)'}</p>
-                      <p class="mt-1 text-muted">Resolved at: ${inc.resolvedAt || 'Recently'}</p>
-                    </div>
-                  </div>
-                ` : ''}
-
-                <!-- On Hold Justification Card (if on hold) -->
-                ${inc.status === 'ON_HOLD' ? `
-                  <div class="drawer-side-card" style="background:#fffbeb; border:1.5px solid #fde68a; border-left:4.5px solid #d97706;">
-                    <div class="side-card-header" style="border-bottom-color:#fde68a;">
-                      <div class="side-card-title-wrap">
-                        <span class="side-card-icon-pill" style="background:#fef3c7; border:1px solid #fde68a;">⏸️</span>
-                        <span class="side-card-title text-amber">HOLD JUSTIFICATION</span>
-                      </div>
-                      <span class="badge-tag text-amber">${escapeHtml(inc.holdReason || 'Pending Input')}</span>
-                    </div>
-                    <div class="text-xs" style="color:#92400e; line-height:1.45;">
-                      <p><strong>Justification:</strong> ${escapeHtml(inc.holdNotes || 'Work paused awaiting external dependency.')}</p>
-                      <p class="mt-2"><strong>Total SLA Time Frozen:</strong> ${formatDurationShort(inc.totalPausedSeconds || 0)}</p>
-                    </div>
-                  </div>
-                ` : ''}
-
+              <div class="form-group mb-3">
+                <label class="field-label-pill"><span class="required-star">*</span> Title / Short Summary</label>
+                <input type="text" id="drawer-item-title" class="zen-form-control" value="${escapeHtml(inc.title)}" style="font-weight:700; font-size:14px;" required>
               </div>
 
-              <!-- Column B: Taxonomy, Priority Matrix & CI -->
-              <div style="display: flex; flex-direction: column; gap: 16px;">
+              <div class="drawer-form-grid-2">
+                <div class="form-group">
+                  <label class="field-label-pill"><span class="required-star">*</span> Current Lifecycle State</label>
+                  <select id="drawer-status-select" class="zen-select select-styled-shaded w-full" style="height:34px; font-weight:700;">
+                    <option value="NEW" ${currentStatus === 'NEW' || currentStatus === 'Draft' || currentStatus === 'Under Investigation' ? 'selected' : ''}>New / Triaging / Draft</option>
+                    <option value="IN_PROGRESS" ${currentStatus === 'IN_PROGRESS' || currentStatus.includes('Approved') || currentStatus.includes('Fulfillment') ? 'selected' : ''}>In Progress / Active Mitigation</option>
+                    <option value="ON_HOLD" ${currentStatus === 'ON_HOLD' ? 'selected' : ''}>On Hold / SLA Paused</option>
+                    <option value="RESOLVED" ${currentStatus === 'RESOLVED' || currentStatus === 'Fulfilled' || currentStatus === 'Known Error' ? 'selected' : ''}>Resolved / Mitigated</option>
+                    <option value="CLOSED" ${currentStatus === 'CLOSED' ? 'selected' : ''}>Closed / Archived</option>
+                  </select>
+                </div>
                 
-                <!-- Three-Tier ITIL Classification Card -->
-                <div class="drawer-side-card side-card-taxonomy">
-                  <div class="side-card-header">
-                    <div class="side-card-title-wrap">
-                      <span class="side-card-icon-pill icon-pill-purple">🏷️</span>
-                      <span class="side-card-title">3-TIER TAXONOMY</span>
-                    </div>
-                    <span class="badge-tag tag-purple">ITIL 4 Master</span>
-                  </div>
-                  <div class="classification-vertical-stack">
-                    <div class="form-group mb-2">
-                      <label class="field-label-micro">📁 Category</label>
-                      <select id="drawer-cat-select" class="zen-select select-styled-shaded w-full" style="height:32px;"></select>
-                    </div>
-                    <div class="form-group mb-2">
-                      <label class="field-label-micro">📂 Subcategory</label>
-                      <select id="drawer-subcat-select" class="zen-select select-styled-shaded w-full" style="height:32px;"></select>
-                    </div>
-                    <div class="form-group">
-                      <label class="field-label-micro">📌 Specific Item</label>
-                      <select id="drawer-item-select" class="zen-select select-styled-shaded w-full" style="height:32px;"></select>
-                    </div>
-                  </div>
+                <div class="form-group">
+                  <label class="field-label-pill"><span class="required-star">*</span> Primary Category</label>
+                  <select id="drawer-cat-select" class="zen-select select-styled-shaded w-full" style="height:34px;">
+                    <option value="Database & Storage" ${inc.category === 'Database & Storage' ? 'selected' : ''}>Database &amp; Storage</option>
+                    <option value="Cloud & Infrastructure" ${inc.category === 'Cloud & Infrastructure' ? 'selected' : ''}>Cloud &amp; Infrastructure</option>
+                    <option value="Payment & Fintech" ${inc.category === 'Payment & Fintech' ? 'selected' : ''}>Payment &amp; Fintech</option>
+                    <option value="Security & Compliance" ${inc.category === 'Security & Compliance' ? 'selected' : ''}>Security &amp; Compliance</option>
+                    <option value="Software & Workstations" ${inc.category === 'Software & Workstations' ? 'selected' : ''}>Software &amp; Workstations</option>
+                  </select>
                 </div>
-
-                <!-- Priority Matrix Card -->
-                <div class="drawer-side-card side-card-matrix">
-                  <div class="side-card-header">
-                    <div class="side-card-title-wrap">
-                      <span class="side-card-icon-pill icon-pill-amber">⚡</span>
-                      <span class="side-card-title">PRIORITY MATRIX</span>
-                    </div>
-                    <span class="priority-pill pill-${inc.priority.toLowerCase()}" id="drawer-matrix-badge">${inc.priority}</span>
-                  </div>
-                  <div class="matrix-inputs-stack">
-                    <div class="form-group mb-2">
-                      <label class="field-label-micro">💥 Impact Scope</label>
-                      <select id="drawer-impact-select" class="zen-select select-styled-shaded w-full" style="height:32px;">
-                        <option value="Enterprise" ${inc.impact === 'Enterprise' ? 'selected' : ''}>Enterprise (High / Org-wide)</option>
-                        <option value="Department" ${inc.impact === 'Department' ? 'selected' : ''}>Department (Medium / Service)</option>
-                        <option value="Single User" ${inc.impact === 'Single User' ? 'selected' : ''}>Single User (Low / Localized)</option>
-                      </select>
-                    </div>
-                    <div class="form-group mb-2">
-                      <label class="field-label-micro">⏱️ Urgency Speed</label>
-                      <select id="drawer-urgency-select" class="zen-select select-styled-shaded w-full" style="height:32px;">
-                        <option value="Critical" ${inc.urgency === 'Critical' ? 'selected' : ''}>Critical (Immediate Outage)</option>
-                        <option value="High" ${inc.urgency === 'High' ? 'selected' : ''}>High (Severe Disruption)</option>
-                        <option value="Medium" ${inc.urgency === 'Medium' ? 'selected' : ''}>Medium (Workaround Exists)</option>
-                        <option value="Low" ${inc.urgency === 'Low' ? 'selected' : ''}>Low (Minor / Inquiry)</option>
-                      </select>
-                    </div>
-                    <div class="matrix-calc-result-box" style="background:#ffffff; border:1px solid #fde68a; border-radius:6px; padding:6px 10px; text-align:center;">
-                      <span class="matrix-calc-label font-mono font-bold text-amber" id="drawer-matrix-label">${inc.impact || 'Enterprise'} × ${inc.urgency || 'High'} = ${inc.priority}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Affected CI & Topology Dependencies -->
-                <div class="drawer-side-card side-card-ci">
-                  <div class="side-card-header">
-                    <div class="side-card-title-wrap">
-                      <span class="side-card-icon-pill icon-pill-cyan">🖥️</span>
-                      <span class="side-card-title">AFFECTED SERVICE CI</span>
-                    </div>
-                    <span class="badge-tag tag-sky">${ciObj ? ciObj.tier : 'Tier 1'}</span>
-                  </div>
-                  <div class="ci-summary-box">
-                    <div class="ci-title-link" id="drawer-jump-ci" title="Click to inspect node in CMDB Topology Graph" style="background:#ffffff;">
-                      <span class="ci-name font-bold text-indigo">${escapeHtml(inc.ciName || inc.ci)}</span>
-                      <span class="ci-jump-icon">➔</span>
-                    </div>
-                    <div class="ci-submeta font-mono text-xs text-muted mt-1">
-                      ID: ${inc.ci} • Provider: ${ciObj ? ciObj.provider : 'Cloud AWS'}
-                    </div>
-                    
-                    <div class="ci-dep-links mt-3">
-                      <div class="dep-link-label text-xs text-muted font-bold">Upstream Callers:</div>
-                      <div class="dep-chips-list-sm mt-1">
-                        ${(ciObj && ciObj.upstream && ciObj.upstream.length > 0) ? ciObj.upstream.map(u => `<span class="ci-dep-chip">${u}</span>`).join('') : '<span class="text-xs text-muted">No upstream callers (Edge origin)</span>'}
-                      </div>
-
-                      <div class="dep-link-label text-xs text-muted font-bold mt-2">Downstream Dependencies:</div>
-                      <div class="dep-chips-list-sm mt-1">
-                        ${(ciObj && ciObj.downstream && ciObj.downstream.length > 0) ? ciObj.downstream.map(d => `<span class="ci-dep-chip chip-downstream">${d}</span>`).join('') : '<span class="text-xs text-muted">Terminal dependency</span>'}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
               </div>
 
+              <div class="drawer-form-grid-2 mt-2">
+                <div class="form-group">
+                  <label class="field-label-pill"><span class="required-star">*</span> Subcategory</label>
+                  <select id="drawer-subcat-select" class="zen-select select-styled-shaded w-full" style="height:32px;">
+                    <option value="${escapeHtml(inc.subcategory || 'Aurora Primary')}" selected>${escapeHtml(inc.subcategory || 'Aurora Primary')}</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="field-label-pill"><span class="required-star">*</span> Specific Item / Offering</label>
+                  <select id="drawer-item-select" class="zen-select select-styled-shaded w-full" style="height:32px;">
+                    <option value="${escapeHtml(inc.item || inc.catalogItem || 'PostgreSQL DB')}" selected>${escapeHtml(inc.item || inc.catalogItem || 'PostgreSQL DB')}</option>
+                  </select>
+                </div>
+              </div>
             </div>
+
+            <!-- Tier 2: RECOMMENDED (Middle of page) -->
+            <div class="drawer-tier-group tier-recommended">
+              <div class="drawer-tier-header">
+                <div class="tier-header-left">
+                  <span class="tier-header-icon">🟡</span>
+                  <span class="tier-header-title">Recommended Context</span>
+                </div>
+                <span class="tier-badge badge-recommended">Operational Importance</span>
+              </div>
+
+              <div class="drawer-form-grid-2">
+                <!-- Priority Matrix Calculator Card -->
+                <div class="drawer-card-highlight">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-weight:700; font-size:12px; color:#9a3412;">⚡ Dynamic Priority Matrix</span>
+                    <span class="priority-pill pill-${(inc.priority || 'P2').toLowerCase()}" id="drawer-matrix-badge">${inc.priority || 'P2'}</span>
+                  </div>
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                    <div>
+                      <label class="field-label-micro">Impact Scope</label>
+                      <select id="drawer-impact-select" class="zen-select w-full" style="height:30px; font-size:11.5px;">
+                        <option value="Enterprise" ${inc.impact === 'Enterprise' ? 'selected' : ''}>Enterprise (High)</option>
+                        <option value="Department" ${inc.impact === 'Department' ? 'selected' : ''}>Department (Med)</option>
+                        <option value="Single User" ${inc.impact === 'Single User' ? 'selected' : ''}>Single User (Low)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="field-label-micro">Urgency Speed</label>
+                      <select id="drawer-urgency-select" class="zen-select w-full" style="height:30px; font-size:11.5px;">
+                        <option value="Critical" ${inc.urgency === 'Critical' ? 'selected' : ''}>Critical (Outage)</option>
+                        <option value="High" ${inc.urgency === 'High' ? 'selected' : ''}>High (Disruptive)</option>
+                        <option value="Medium" ${inc.urgency === 'Medium' ? 'selected' : ''}>Medium (Standard)</option>
+                        <option value="Low" ${inc.urgency === 'Low' ? 'selected' : ''}>Low (Inquiry)</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="mt-2 text-center" style="background:#fff7ed; padding:4px; border-radius:4px; font-size:11px; font-family:var(--font-mono); color:#c2410c;" id="drawer-matrix-label">
+                    ${inc.impact || 'Enterprise'} × ${inc.urgency || 'High'} = ${inc.priority || 'P2'}
+                  </div>
+                </div>
+
+                <!-- Primary CI Card -->
+                <div class="drawer-card-highlight">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-weight:700; font-size:12px; color:#0284c7;">🖥️ Target Service CI</span>
+                    <span class="badge-tag tag-sky font-mono">${ciObj ? ciObj.tier : 'Tier 1'}</span>
+                  </div>
+                  <div class="ci-title-link" id="drawer-jump-ci" title="Click to inspect in CMDB Topology Graph" style="cursor:pointer; padding:6px 8px; border:1px solid #bae6fd; border-radius:6px; background:#f0f9ff; display:flex; justify-content:space-between; align-items:center;">
+                    <strong class="text-indigo" style="font-size:12px;">${escapeHtml(inc.ciName || inc.ci || 'Core Infrastructure')}</strong>
+                    <span class="text-xs text-indigo">➔ Inspect</span>
+                  </div>
+                  <div class="text-xs text-muted mt-2">
+                    Identifier: <span class="font-mono">${inc.ci || 'CI-CORE-001'}</span> • Provider: ${ciObj ? ciObj.provider : 'Cloud AWS'}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tier 3: OPTIONAL (Bottom of page) -->
+            <div class="drawer-tier-group tier-optional">
+              <div class="drawer-tier-header">
+                <div class="tier-header-left">
+                  <span class="tier-header-icon">⚪</span>
+                  <span class="tier-header-title">Optional &amp; Advanced Labels</span>
+                </div>
+                <span class="tier-badge badge-optional">Optional Fields</span>
+              </div>
+
+              <div class="drawer-form-grid-2">
+                <div class="form-group">
+                  <label class="field-label-pill">External Tracking Reference ID</label>
+                  <input type="text" id="drawer-ext-ref" class="zen-form-control font-mono" placeholder="e.g. JIRA-4921, AWS-CASE-8831, SN-INC0928">
+                </div>
+                <div class="form-group">
+                  <label class="field-label-pill">Business Labels &amp; Compliance Tags</label>
+                  <input type="text" id="drawer-tags" class="zen-form-control" value="#fintech #tier1 #pci-dss" placeholder="Add #tags separated by space">
+                </div>
+              </div>
+            </div>
+
           </div>
 
-          <!-- PANEL 2: Overview & Diagnostics -->
-          <div class="drawer-tab-panel ${state.activeDrawerTab === 'overview' ? 'active' : ''}" id="drawer-tab-overview">
-              
-              <!-- Executive Summary Card -->
-              <div class="drawer-summary-card">
-                <h3 class="drawer-summary-title">${escapeHtml(inc.title)}</h3>
-                <div class="drawer-title-meta-row">
-                  <span>Created: <strong>${inc.createdAt}</strong></span>
-                  <span>•</span>
-                  <span>AI Confidence: <strong class="text-emerald font-mono">${inc.aiConfidence || '98.2%'}</strong></span>
-                  <span>•</span>
-                  <span>Caller: <span class="font-mono text-secondary">${escapeHtml(inc.caller)}</span></span>
-                  <span>•</span>
-                  <span>Assignment: <strong class="text-indigo font-mono">${escapeHtml(inc.team)}</strong></span>
+          <!-- ======================================================== -->
+          <!-- PANEL 2: PEOPLE, OWNERSHIP & SLA                        -->
+          <!-- ======================================================== -->
+          <div class="drawer-tab-panel ${state.activeDrawerTab === 'people' ? 'active' : ''}" id="drawer-tab-people">
+            
+            <!-- Tier 1: MANDATORY (Top of page) -->
+            <div class="drawer-tier-group tier-mandatory">
+              <div class="drawer-tier-header">
+                <div class="tier-header-left">
+                  <span class="tier-header-icon">🔴</span>
+                  <span class="tier-header-title">Mandatory Ownership</span>
                 </div>
+                <span class="tier-badge badge-mandatory">Required Fields</span>
               </div>
 
-              <!-- AI Sentinel Launch Banner -->
-              <div class="drawer-ai-callout-strip">
-                <div class="ai-callout-text-group">
-                  <span class="ai-callout-icon">🤖</span>
-                  <div>
-                    <strong class="ai-callout-heading">Autonomous Sentinel-AI Hub Primed</strong>
-                    <p class="ai-callout-body">Neural root-cause hypothesis, CMDB blast radius traversal, automated runbooks, and stakeholder communication drafts are primed.</p>
+              <!-- Caller / Requester Profile -->
+              <div class="caller-profile-row" style="background:#ffffff; border:1px solid #fecdd3; border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:12px;">
+                <div class="tech-avatar-mini" style="width:38px; height:38px; font-size:14px; background:linear-gradient(135deg, #0d9488, #2563eb); color:white; font-weight:800; border-radius:50%; display:flex; align-items:center; justify-content:center;">
+                  ${escapeHtml((inc.caller || inc.requesterName || inc.lead || 'AR').substring(0, 2).toUpperCase())}
+                </div>
+                <div style="flex:1;">
+                  <strong style="font-size:13px; color:#0f172a;">${escapeHtml(inc.caller || inc.requesterName || inc.lead || 'alex.rivera@opennow.io')}</strong>
+                  <div class="text-xs text-muted">${escapeHtml(inc.department || inc.team || 'Site Reliability Engineering')} • Active Requester</div>
+                </div>
+                <span class="badge-tag tag-emerald">Verified VIP</span>
+              </div>
+
+              <div class="drawer-form-grid-2 mt-3">
+                <div class="form-group">
+                  <label class="field-label-pill"><span class="required-star">*</span> Assignment Group</label>
+                  <select id="drawer-team-select" class="zen-select select-styled-shaded w-full" style="height:34px; font-weight:700;">
+                    <option value="SRE-Core" ${inc.team === 'SRE-Core' ? 'selected' : ''}>SRE-Core (Platform &amp; Reliability)</option>
+                    <option value="Database-Ops" ${inc.team === 'Database-Ops' ? 'selected' : ''}>Database-Ops (DBA Fleet)</option>
+                    <option value="Security-SecOps" ${inc.team === 'Security-SecOps' ? 'selected' : ''}>Security-SecOps (SOC &amp; IAM)</option>
+                    <option value="Cloud-Infra" ${inc.team === 'Cloud-Infra' ? 'selected' : ''}>Cloud-Infra (K8s &amp; Edge)</option>
+                    <option value="Payment-Platform" ${inc.team === 'Payment-Platform' ? 'selected' : ''}>Payment-Platform (Fintech Engine)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="field-label-pill"><span class="required-star">*</span> Assigned Lead Engineer</label>
+                  <select id="drawer-tech-select" class="zen-select select-styled-shaded w-full" style="height:34px; font-weight:700;">
+                    ${techniciansList.map(t => `<option value="${escapeHtml(t.name)}" ${inc.caller && inc.caller.includes(t.name) ? 'selected' : ''}>${escapeHtml(t.name)} (${t.role})</option>`).join('')}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tier 2: RECOMMENDED (Middle of page) -->
+            <div class="drawer-tier-group tier-recommended">
+              <div class="drawer-tier-header">
+                <div class="tier-header-left">
+                  <span class="tier-header-icon">🟡</span>
+                  <span class="tier-header-title">Recommended SLA Targets &amp; Escalation</span>
+                </div>
+                <span class="tier-badge badge-recommended">Operational Importance</span>
+              </div>
+
+              <div class="drawer-form-grid-2">
+                <div class="drawer-card-highlight">
+                  <span class="field-label-micro text-amber">⏱️ Active SLA Clock &amp; Policy</span>
+                  <div style="font-size:16px; font-weight:800; font-family:var(--font-mono); color:#d97706; margin-top:2px;">
+                    ${slaText}
+                  </div>
+                  <div class="text-xs text-muted mt-1">
+                    Target: ${policyTargetHours}h turnaround • Paused: ${formatDurationShort(inc.totalPausedSeconds || 0)}
                   </div>
                 </div>
-                <button class="btn btn-sm btn-zen-primary" id="btn-jump-ai-hub" style="white-space:nowrap; flex-shrink:0; background:linear-gradient(135deg, #7c3aed, #4f46e5); border:none; box-shadow:0 2px 6px rgba(124,58,237,0.3);">Launch AI Sentinel ➔</button>
+
+                <div class="drawer-card-highlight">
+                  <span class="field-label-micro text-indigo">🛡️ Escalation / Approving Manager</span>
+                  <div style="font-weight:700; font-size:13px; color:#1e3a8a; margin-top:2px;">
+                    ${escapeHtml(inc.manager || 'Marcus Vance (Director of SRE)')}
+                  </div>
+                  <div class="text-xs text-muted mt-1">
+                    Escalation SLA: 30 minutes • Tier 2 On-Call
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tier 3: OPTIONAL (Bottom of page) -->
+            <div class="drawer-tier-group tier-optional">
+              <div class="drawer-tier-header">
+                <div class="tier-header-left">
+                  <span class="tier-header-icon">⚪</span>
+                  <span class="tier-header-title">Optional Cost Allocation &amp; Stakeholders</span>
+                </div>
+                <span class="tier-badge badge-optional">Optional Fields</span>
               </div>
 
-              <!-- High-Contrast Dark Telemetry & Log Payload Box (Zero Wall of White Text) -->
-              <div class="telemetry-code-block">
+              <div class="drawer-form-grid-2">
+                <div class="form-group">
+                  <label class="field-label-pill">Cost Center Code</label>
+                  <input type="text" class="zen-form-control font-mono" value="CC-ENG-4029 (Platform & Cloud Infra)" readonly style="background:#f8fafc;">
+                </div>
+                <div class="form-group">
+                  <label class="field-label-pill">Watchers &amp; Stakeholder CC</label>
+                  <input type="text" class="zen-form-control" placeholder="stakeholders@opennow.io, leads@opennow.io">
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ======================================================== -->
+          <!-- PANEL 3: SCOPE, SPECS & DIAGNOSTICS                     -->
+          <!-- ======================================================== -->
+          <div class="drawer-tab-panel ${state.activeDrawerTab === 'diagnostics' ? 'active' : ''}" id="drawer-tab-diagnostics">
+            
+            <!-- Tier 1: MANDATORY (Top of page) -->
+            <div class="drawer-tier-group tier-mandatory">
+              <div class="drawer-tier-header">
+                <div class="tier-header-left">
+                  <span class="tier-header-icon">🔴</span>
+                  <span class="tier-header-title">Diagnostic Telemetry / Scope Payload</span>
+                </div>
+                <span class="tier-badge badge-mandatory">Mandatory Specs</span>
+              </div>
+
+              <div class="telemetry-code-block" style="border-radius:8px;">
                 <div class="telemetry-code-header">
                   <div class="telemetry-header-title">
                     <span class="telemetry-dot-red"></span>
                     <span class="telemetry-dot-yellow"></span>
                     <span class="telemetry-dot-green"></span>
-                    <span>SYSTEM DIAGNOSTIC TELEMETRY &amp; STACK TRACE</span>
+                    <span>DIAGNOSTIC TELEMETRY &amp; STACK TRACE</span>
                   </div>
                   <button class="btn-copy-telemetry" id="btn-copy-telemetry-text">Copy Payload</button>
                 </div>
-                <div class="telemetry-code-content" id="telemetry-code-view">${escapeHtml(inc.description)}</div>
+                <div class="telemetry-code-content" id="telemetry-code-view" style="max-height:220px; overflow-y:auto; padding:12px; font-size:12px;">${escapeHtml(inc.description || inc.specs || inc.rootCause || 'No stack trace provided.')}</div>
               </div>
-
-              <!-- Affected Service Topology & Health Specs Snapshot -->
-              <div class="erp-section-card" style="background:#ffffff; border:1px solid #e2e8f0;">
-                <div class="drawer-section-title" style="margin-bottom:10px;">
-                  <span class="sec-icon">🖥️</span>
-                  <span>Affected Service Topology &amp; Health Specs</span>
-                </div>
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:10px;">
-                  <div class="pair-badge-pill" style="flex-direction:column; align-items:flex-start; gap:2px; padding:8px 10px; background:#f8fafc; border-radius:6px; border:1px solid #e2e8f0;">
-                    <span class="text-muted font-bold text-xs">CI Identifier</span>
-                    <strong class="font-mono text-xs text-indigo">${escapeHtml(inc.ci)}</strong>
-                  </div>
-                  <div class="pair-badge-pill" style="flex-direction:column; align-items:flex-start; gap:2px; padding:8px 10px; background:#f8fafc; border-radius:6px; border:1px solid #e2e8f0;">
-                    <span class="text-muted font-bold text-xs">Infrastructure Tier</span>
-                    <strong class="text-xs text-slate-800">${ciObj ? ciObj.tier : 'Tier 1 Critical'}</strong>
-                  </div>
-                  <div class="pair-badge-pill" style="flex-direction:column; align-items:flex-start; gap:2px; padding:8px 10px; background:#f8fafc; border-radius:6px; border:1px solid #e2e8f0;">
-                    <span class="text-muted font-bold text-xs">Hosting Provider</span>
-                    <strong class="text-xs text-slate-800">${ciObj ? ciObj.provider : 'Cloud AWS Anycast'}</strong>
-                  </div>
-                  <div class="pair-badge-pill" style="flex-direction:column; align-items:flex-start; gap:2px; padding:8px 10px; background:#f8fafc; border-radius:6px; border:1px solid #e2e8f0;">
-                    <span class="text-muted font-bold text-xs">Current Health</span>
-                    <strong class="text-xs ${inc.status === 'RESOLVED' ? 'text-emerald' : 'text-rose'}">${inc.status === 'RESOLVED' ? '✓ Operational' : '● Disrupted / Triaging'}</strong>
-                  </div>
-                </div>
-              </div>
-
             </div>
 
-            <!-- PANEL 2: AI Sentinel Hub (Dedicated Intelligent Operations Workbench) -->
-            <div class="drawer-tab-panel ${state.activeDrawerTab === 'ai-hub' ? 'active' : ''}" id="drawer-tab-ai-hub">
-              
-              <div class="erp-section-card" style="border: 1.5px solid #d8b4fe; background: linear-gradient(180deg, #faf5ff 0%, #ffffff 100%);">
-                <div class="ai-copilot-top">
-                  <div class="ai-copilot-title-group">
-                    <span class="ai-star-sparkle">✦</span>
-                    <h4 style="color:#581c87; font-weight:800;">Autonomous Sentinel-AI Action Hub</h4>
-                  </div>
-                  <span class="ai-copilot-badge">Real-time Heuristics</span>
+            <!-- Tier 2: RECOMMENDED (Middle of page) -->
+            <div class="drawer-tier-group tier-recommended">
+              <div class="drawer-tier-header">
+                <div class="tier-header-left">
+                  <span class="tier-header-icon">🟡</span>
+                  <span class="tier-header-title">CMDB Service Topology &amp; Blast Radius</span>
                 </div>
-                <p class="ai-copilot-subtext">Click any intelligence action below to execute automated graph traversal, diagnostic synthesis, or executive communication drafting.</p>
-
-                <div class="ai-tiles-grid">
-                  <button class="btn-ai-tile" id="ai-btn-triage">
-                    <span class="tile-icon">⚡</span>
-                    <div class="tile-info">
-                      <h5>Auto-Triage Analysis</h5>
-                      <p>Neural root-cause hypothesis</p>
-                    </div>
-                  </button>
-                  <button class="btn-ai-tile" id="ai-btn-blast">
-                    <span class="tile-icon">🌐</span>
-                    <div class="tile-info">
-                      <h5>CMDB Blast Radius</h5>
-                      <p>Traverse graph dependencies</p>
-                    </div>
-                  </button>
-                  <button class="btn-ai-tile" id="ai-btn-runbook">
-                    <span class="tile-icon">🛠️</span>
-                    <div class="tile-info">
-                      <h5>Synthesize Runbook</h5>
-                      <p>Diagnostic commands &amp; steps</p>
-                    </div>
-                  </button>
-                  <button class="btn-ai-tile" id="ai-btn-stakeholder">
-                    <span class="tile-icon">📢</span>
-                    <div class="tile-info">
-                      <h5>Draft Stakeholder Update</h5>
-                      <p>Customer &amp; leadership memo</p>
-                    </div>
-                  </button>
-                </div>
-
-                <div class="ai-output-box mt-3" id="drawer-ai-output" style="display: none;"></div>
+                <span class="tier-badge badge-recommended">Topology Context</span>
               </div>
 
-            </div>
-
-            <!-- TAB PANEL 2: Remediation Checklist & Subtasks -->
-            <div class="drawer-tab-panel ${state.activeDrawerTab === 'subtasks' ? 'active' : ''}" id="drawer-tab-subtasks">
-              <div class="erp-section-card">
-                <div class="subtasks-progress-box">
-                  <div class="progress-header-row">
-                    <div class="drawer-section-title mb-0">
-                      <span class="sec-icon">☑️</span>
-                      <span>Remediation Action Items</span>
-                    </div>
-                    <span class="font-mono text-indigo font-bold text-xs" id="subtasks-header-count">${completedSubtasks} of ${subtasksList.length} Completed (${subtasksPct}%)</span>
-                  </div>
-                  <div class="subtasks-track mt-2">
-                    <div class="subtasks-bar-fill" style="width: ${subtasksPct}%;"></div>
+              <div class="drawer-form-grid-2">
+                <div class="drawer-card-highlight">
+                  <span class="field-label-micro text-indigo">Upstream Calling Services:</span>
+                  <div class="dep-chips-list-sm mt-1">
+                    ${(ciObj && ciObj.upstream && ciObj.upstream.length > 0) ? ciObj.upstream.map(u => `<span class="ci-dep-chip" style="font-size:11px; padding:2px 8px; border-radius:4px; background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe;">${u}</span>`).join(' ') : '<span class="text-xs text-muted">Edge origin (No upstream callers)</span>'}
                   </div>
                 </div>
 
-                <!-- Add Subtask Form -->
-                <form id="form-add-subtask" class="add-subtask-bar mt-3">
-                  <input type="text" id="input-subtask-title" placeholder="Add checklist action (e.g. Verify DB read replicas, Flush cache)..." required>
-                  <select id="input-subtask-assignee" class="zen-select" style="height:32px; font-size:11.5px;">
-                    ${techniciansList.map(t => `<option value="${escapeHtml(t.name)}">${escapeHtml(t.name)}</option>`).join('')}
-                    <option value="Unassigned">Unassigned</option>
-                  </select>
-                  <button type="submit" class="btn btn-sm btn-zen-primary">+ Add</button>
-                </form>
+                <div class="drawer-card-highlight">
+                  <span class="field-label-micro text-rose">Downstream Blast Radius:</span>
+                  <div class="dep-chips-list-sm mt-1">
+                    ${(ciObj && ciObj.downstream && ciObj.downstream.length > 0) ? ciObj.downstream.map(d => `<span class="ci-dep-chip chip-downstream" style="font-size:11px; padding:2px 8px; border-radius:4px; background:#fef2f2; color:#b91c1c; border:1px solid #fecdd3;">${d}</span>`).join(' ') : '<span class="text-xs text-muted">Terminal dependency</span>'}
+                  </div>
+                </div>
+              </div>
 
-                <!-- Subtasks List -->
-                <div class="subtasks-items-list mt-3" id="subtasks-list-container">
-                  ${subtasksList.length > 0 ? subtasksList.map(st => `
-                    <div class="subtask-item ${st.completed ? 'completed' : ''}" data-subtask-id="${st.id}">
-                      <div class="subtask-left">
-                        <input type="checkbox" class="subtask-checkbox subtask-toggle" data-subtask-id="${st.id}" ${st.completed ? 'checked' : ''}>
-                        <span class="subtask-title-text">${escapeHtml(st.title)}</span>
-                      </div>
-                      <div style="display:flex; align-items:center; gap:8px;">
-                        <span class="subtask-assignee-pill">${escapeHtml(st.assignee)}</span>
-                        <button class="btn-del-item btn-del-subtask" data-subtask-id="${st.id}" title="Remove subtask">&times;</button>
-                      </div>
-                    </div>
-                  `).join('') : `
-                    <div class="empty-subtasks-hint">
-                      No subtasks yet. Add specific remediation steps above.
-                    </div>
-                  `}
+              <div class="mt-3 text-right">
+                <button class="btn btn-sm btn-zen-outline" id="drawer-jump-ci-diag">
+                  <span>➔ Inspect Full Graph in CMDB Topology</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Tier 3: OPTIONAL (Bottom of page) -->
+            <div class="drawer-tier-group tier-optional">
+              <div class="drawer-tier-header">
+                <div class="tier-header-left">
+                  <span class="tier-header-icon">⚪</span>
+                  <span class="tier-header-title">Optional Cloud Hosting Specs</span>
+                </div>
+                <span class="tier-badge badge-optional">Infrastructure Metadata</span>
+              </div>
+
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px;">
+                <div class="drawer-card-highlight" style="padding:8px 10px;">
+                  <span class="text-xs text-muted font-bold">Hosting Region</span>
+                  <div class="font-mono text-xs font-bold text-slate-800 mt-1">AWS us-east-1</div>
+                </div>
+                <div class="drawer-card-highlight" style="padding:8px 10px;">
+                  <span class="text-xs text-muted font-bold">VPC Subnet</span>
+                  <div class="font-mono text-xs font-bold text-slate-800 mt-1">vpc-0a88ef</div>
+                </div>
+                <div class="drawer-card-highlight" style="padding:8px 10px;">
+                  <span class="text-xs text-muted font-bold">Kubernetes NS</span>
+                  <div class="font-mono text-xs font-bold text-slate-800 mt-1">payments-prod</div>
+                </div>
+                <div class="drawer-card-highlight" style="padding:8px 10px;">
+                  <span class="text-xs text-muted font-bold">APM Monitor</span>
+                  <div class="font-mono text-xs font-bold text-emerald mt-1">Datadog Monitored</div>
                 </div>
               </div>
             </div>
 
-            <!-- TAB PANEL 3: Worklogs & Labor Costing -->
-            <div class="drawer-tab-panel ${state.activeDrawerTab === 'worklogs' ? 'active' : ''}" id="drawer-tab-worklogs">
-              <div class="erp-section-card">
-                <div class="worklogs-summary-strip">
-                  <div class="worklog-summary-card">
-                    <span class="wl-metric-label">Duration Logged</span>
-                    <span class="wl-metric-val font-mono">${formatMinutesToHours(totalLaborMinutes)}</span>
+          </div>
+
+          <!-- ======================================================== -->
+          <!-- PANEL 4: WORKFLOWS, ACTIONS & GOVERNANCE                -->
+          <!-- ======================================================== -->
+          <div class="drawer-tab-panel ${state.activeDrawerTab === 'workflows' ? 'active' : ''}" id="drawer-tab-workflows">
+            
+            <!-- Tier 1: MANDATORY (Top of page) -->
+            <div class="drawer-tier-group tier-mandatory">
+              <div class="drawer-tier-header">
+                <div class="tier-header-left">
+                  <span class="tier-header-icon">🔴</span>
+                  <span class="tier-header-title">Primary Workflow Action / Resolution</span>
+                </div>
+                <span class="tier-badge badge-mandatory">State Decision</span>
+              </div>
+
+              <div>
+                <label class="field-label-pill">Allowed State Transitions for ${inc.id}:</label>
+                <div class="transition-actions-row mt-1" style="display:flex; flex-wrap:wrap; gap:8px;">
+                  ${transitionsHtml}
+                </div>
+              </div>
+
+              ${itemType === 'PROBLEM' ? `
+                <div class="mt-3 p-3" style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px;">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <strong class="text-indigo" style="font-size:12px;">🔍 5-Whys Root Cause Analysis:</strong>
+                    <button class="btn btn-xs btn-zen-primary btn-open-whys" data-problem-id="${inc.id}">Open 5-Whys Analyzer</button>
                   </div>
-                  <div class="worklog-summary-card">
-                    <span class="wl-metric-label">Total Labor Cost</span>
-                    <span class="wl-metric-val font-mono text-emerald">$${totalLaborCost.toFixed(2)}</span>
+                  <p class="text-xs text-secondary mt-1">${escapeHtml(inc.rootCause || 'Root cause investigation under active trace.')}</p>
+                </div>
+              ` : itemType === 'CHANGE' ? `
+                <div class="mt-3 p-3" style="background:#fef3c7; border:1px solid #fde68a; border-radius:8px;">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <strong style="font-size:12px; color:#92400e;">🗳️ CAB Governance Review:</strong>
+                    <span class="badge-tag">${escapeHtml(inc.cabStatus || 'Pending')}</span>
                   </div>
-                  <div class="worklog-summary-card">
-                    <span class="wl-metric-label">Billing Ratio</span>
-                    <span class="wl-metric-val font-mono text-indigo">${billablePct}% Billable</span>
+                  <p class="text-xs text-secondary mt-1">Scheduled Window: <strong>${escapeHtml(inc.scheduled || 'Weekend Window')}</strong></p>
+                </div>
+              ` : currentStatus === 'RESOLVED' ? `
+                <div class="mt-3 p-3" style="background:#ecfdf5; border:1.5px solid #a7f3d0; border-radius:8px;">
+                  <strong class="text-emerald" style="font-size:12px;">✓ Verified Service Restoration</strong>
+                  <p class="text-xs text-secondary mt-1">Root Cause: <strong>${escapeHtml(inc.rootCause || 'Eliminated defect')}</strong></p>
+                </div>
+              ` : ''}
+            </div>
+
+            <!-- Tier 2: RECOMMENDED (Middle of page) -->
+            <div class="drawer-tier-group tier-recommended">
+              <div class="drawer-tier-header">
+                <div class="tier-header-left">
+                  <span class="tier-header-icon">🟡</span>
+                  <span class="tier-header-title">Remediation Action Items Checklist</span>
+                </div>
+                <span class="tier-badge badge-recommended">${completedSubtasks} of ${subtasksList.length} Completed (${subtasksPct}%)</span>
+              </div>
+
+              <div class="subtasks-track mt-1 mb-3" style="height:6px; background:#e2e8f0; border-radius:999px; overflow:hidden;">
+                <div class="subtasks-bar-fill" style="width: ${subtasksPct}%; height:100%; background:linear-gradient(90deg, #4f46e5, #10b981); transition:width 0.3s ease;"></div>
+              </div>
+
+              <!-- Add Subtask Form -->
+              <form id="form-add-subtask" class="add-subtask-bar" style="display:flex; gap:8px;">
+                <input type="text" id="input-subtask-title" class="zen-form-control" placeholder="Add actionable checklist step..." style="height:32px; flex:1;" required>
+                <select id="input-subtask-assignee" class="zen-select" style="height:32px; font-size:11.5px; width:160px;">
+                  ${techniciansList.map(t => `<option value="${escapeHtml(t.name)}">${escapeHtml(t.name)}</option>`).join('')}
+                </select>
+                <button type="submit" class="btn btn-sm btn-zen-primary" style="white-space:nowrap;">+ Add Item</button>
+              </form>
+
+              <!-- Subtasks List -->
+              <div class="subtasks-items-list mt-3" id="subtasks-list-container">
+                ${subtasksList.map(st => `
+                  <div class="subtask-item ${st.completed ? 'completed' : ''}" data-subtask-id="${st.id}" style="display:flex; justify-content:space-between; align-items:center; padding:8px 10px; background:#ffffff; border:1px solid #e2e8f0; border-radius:6px; margin-bottom:6px;">
+                    <div class="subtask-left" style="display:flex; align-items:center; gap:8px;">
+                      <input type="checkbox" class="subtask-checkbox subtask-toggle" data-subtask-id="${st.id}" ${st.completed ? 'checked' : ''}>
+                      <span class="subtask-title-text" style="${st.completed ? 'text-decoration:line-through; color:#94a3b8;' : 'color:#1e293b; font-weight:600; font-size:12px;'}">${escapeHtml(st.title)}</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                      <span class="subtask-assignee-pill" style="font-size:11px; padding:2px 6px; border-radius:4px; background:#f1f5f9; color:#475569;">${escapeHtml(st.assignee)}</span>
+                      <button class="btn-del-item btn-del-subtask" data-subtask-id="${st.id}" title="Remove subtask" style="border:none; background:none; color:#ef4444; cursor:pointer;">&times;</button>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Tier 3: OPTIONAL (Bottom of page) -->
+            <div class="drawer-tier-group tier-optional">
+              <div class="drawer-tier-header">
+                <div class="tier-header-left">
+                  <span class="tier-header-icon">⚪</span>
+                  <span class="tier-header-title">Optional Hardening &amp; Rollback Notes</span>
+                </div>
+                <span class="tier-badge badge-optional">Contingency</span>
+              </div>
+
+              <div class="form-group">
+                <label class="field-label-pill">Preventive Action / Future Hardening</label>
+                <textarea class="zen-form-control form-textarea" rows="2" placeholder="Record architectural improvements, alarms to schedule, or rollback contingency steps...">${escapeHtml(inc.preventiveAction || inc.rollbackPlan || '')}</textarea>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ======================================================== -->
+          <!-- PANEL 5: AI OPS CENTER & COPILOT                        -->
+          <!-- ======================================================== -->
+          <div class="drawer-tab-panel ${state.activeDrawerTab === 'ai-hub' ? 'active' : ''}" id="drawer-tab-ai-hub">
+            
+            <!-- Tier 1: MANDATORY / PRIMARY AI ACTIONS (Top of page) -->
+            <div class="drawer-tier-group tier-mandatory" style="border-left-color:#8b5cf6; background:linear-gradient(180deg, #faf5ff 0%, #ffffff 85%); border-color:#e9d5ff;">
+              <div class="drawer-tier-header">
+                <div class="tier-header-left">
+                  <span class="tier-header-icon">✦</span>
+                  <span class="tier-header-title" style="color:#6b21a8;">Autonomous Sentinel-AI Action Hub</span>
+                </div>
+                <span class="tier-badge" style="background:#f3e8ff; color:#7e22ce; border:1px solid #d8b4fe;">Heuristic Ops</span>
+              </div>
+
+              <div class="ai-tiles-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:10px;">
+                <button class="btn-ai-tile" id="ai-btn-triage" style="text-align:left; padding:10px; border-radius:8px; border:1px solid #e9d5ff; background:#ffffff; cursor:pointer;">
+                  <span class="tile-icon" style="font-size:18px;">⚡</span>
+                  <div class="tile-info" style="margin-top:4px;">
+                    <h5 style="font-size:12px; font-weight:700; color:#581c87; margin:0;">Auto-Triage Analysis</h5>
+                    <p style="font-size:10.5px; color:#6b21a8; margin:2px 0 0 0;">Neural root-cause hypothesis</p>
+                  </div>
+                </button>
+                <button class="btn-ai-tile" id="ai-btn-blast" style="text-align:left; padding:10px; border-radius:8px; border:1px solid #e9d5ff; background:#ffffff; cursor:pointer;">
+                  <span class="tile-icon" style="font-size:18px;">🌐</span>
+                  <div class="tile-info" style="margin-top:4px;">
+                    <h5 style="font-size:12px; font-weight:700; color:#581c87; margin:0;">CMDB Blast Radius</h5>
+                    <p style="font-size:10.5px; color:#6b21a8; margin:2px 0 0 0;">Traverse graph dependencies</p>
+                  </div>
+                </button>
+                <button class="btn-ai-tile" id="ai-btn-runbook" style="text-align:left; padding:10px; border-radius:8px; border:1px solid #e9d5ff; background:#ffffff; cursor:pointer;">
+                  <span class="tile-icon" style="font-size:18px;">🛠️</span>
+                  <div class="tile-info" style="margin-top:4px;">
+                    <h5 style="font-size:12px; font-weight:700; color:#581c87; margin:0;">Synthesize Runbook</h5>
+                    <p style="font-size:10.5px; color:#6b21a8; margin:2px 0 0 0;">Diagnostic commands &amp; steps</p>
+                  </div>
+                </button>
+                <button class="btn-ai-tile" id="ai-btn-stakeholder" style="text-align:left; padding:10px; border-radius:8px; border:1px solid #e9d5ff; background:#ffffff; cursor:pointer;">
+                  <span class="tile-icon" style="font-size:18px;">📢</span>
+                  <div class="tile-info" style="margin-top:4px;">
+                    <h5 style="font-size:12px; font-weight:700; color:#581c87; margin:0;">Draft Broadcast</h5>
+                    <p style="font-size:10.5px; color:#6b21a8; margin:2px 0 0 0;">Customer &amp; leadership memo</p>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Tier 2: RECOMMENDED INTERACTIVE CONSOLE (Middle of page) -->
+            <div class="drawer-tier-group tier-recommended" style="border-left-color:#6366f1;">
+              <div class="drawer-tier-header">
+                <div class="tier-header-left">
+                  <span class="tier-header-icon">💻</span>
+                  <span class="tier-header-title" style="color:#3730a3;">Live Autonomous Intelligence Console</span>
+                </div>
+                <span class="tier-badge badge-recommended">Interactive Output</span>
+              </div>
+
+              <div class="ai-output-box" id="drawer-ai-output" style="display:flex; flex-direction:column; gap:8px; background:#ffffff; border:1px solid #c7d2fe; border-radius:8px; padding:12px;">
+                <div class="text-xs text-muted" style="text-align:center; padding:14px 0;">
+                  Click any action tile above to generate automated root-cause predictions, runbook scripts, or communications.
+                </div>
+              </div>
+            </div>
+
+            <!-- Tier 3: OPTIONAL SRE PARAMETERS (Bottom of page) -->
+            <div class="drawer-tier-group tier-optional">
+              <div class="drawer-tier-header">
+                <div class="tier-header-left">
+                  <span class="tier-header-icon">⚪</span>
+                  <span class="tier-header-title">Optional Autonomous SRE Parameters</span>
+                </div>
+                <span class="tier-badge badge-optional">Telemetry Weights</span>
+              </div>
+
+              <div class="drawer-form-grid-2">
+                <div>
+                  <label class="field-label-pill">Model Confidence Threshold</label>
+                  <input type="text" class="zen-form-control font-mono" value="98.2% (High Confidence Filter)" readonly style="background:#f8fafc;">
+                </div>
+                <div>
+                  <label class="field-label-pill">Active SRE Engine</label>
+                  <input type="text" class="zen-form-control font-mono" value="Sentinel-v4.2 Heuristic Cluster" readonly style="background:#f8fafc;">
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ======================================================== -->
+          <!-- PANEL 6: LABOR COSTS & AUDIT STREAM                     -->
+          <!-- ======================================================== -->
+          <div class="drawer-tab-panel ${state.activeDrawerTab === 'timeline' ? 'active' : ''}" id="drawer-tab-timeline">
+            
+            <!-- Tier 1: MANDATORY / PRIMARY AUDIT STREAM (Top of page) -->
+            <div class="drawer-tier-group tier-mandatory">
+              <div class="drawer-tier-header">
+                <div class="tier-header-left">
+                  <span class="tier-header-icon">🔴</span>
+                  <span class="tier-header-title">Real-time Chronological Audit Stream</span>
+                </div>
+                <span class="tier-badge badge-mandatory">${inc.timeline.length} Entries</span>
+              </div>
+
+              <!-- Quick Work Note Entry Bar -->
+              <div class="add-comment-row mb-3" style="display:flex; gap:8px;">
+                <input type="text" id="input-drawer-comment" class="zen-form-control add-comment-input" placeholder="Log technician work note or stakeholder update..." style="flex:1;">
+                <button class="btn btn-sm btn-zen-primary" id="btn-add-drawer-comment">Log Note</button>
+              </div>
+
+              <!-- Timeline Events List -->
+              <div class="timeline-list" id="drawer-timeline-list" style="max-height:260px; overflow-y:auto; padding-right:6px;">
+                ${inc.timeline.map(t => `
+                  <div class="timeline-item">
+                    <span class="timeline-bullet ${t.isAi ? 'bullet-ai' : ''}"></span>
+                    <div class="timeline-item-meta">
+                      <strong>${escapeHtml(t.user)}</strong> • ${t.time}
+                    </div>
+                    <div class="timeline-item-body">${escapeHtml(t.text)}</div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Tier 2: RECOMMENDED LABOR COSTING (Middle of page) -->
+            <div class="drawer-tier-group tier-recommended">
+              <div class="drawer-tier-header">
+                <div class="tier-header-left">
+                  <span class="tier-header-icon">🟡</span>
+                  <span class="tier-header-title">Technician Labor Hours &amp; Costing</span>
+                </div>
+                <span class="tier-badge badge-recommended">$${totalLaborCost.toFixed(2)} Total</span>
+              </div>
+
+              <!-- Labor Summary Strip -->
+              <div class="worklogs-summary-strip mb-3" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+                <div class="drawer-card-highlight text-center" style="padding:6px;">
+                  <span class="text-xs text-muted font-bold">Total Time</span>
+                  <div class="font-mono font-bold text-slate-800">${formatMinutesToHours(totalLaborMinutes)}</div>
+                </div>
+                <div class="drawer-card-highlight text-center" style="padding:6px;">
+                  <span class="text-xs text-muted font-bold">Labor Spend</span>
+                  <div class="font-mono font-bold text-emerald">$${totalLaborCost.toFixed(2)}</div>
+                </div>
+                <div class="drawer-card-highlight text-center" style="padding:6px;">
+                  <span class="text-xs text-muted font-bold">Billable %</span>
+                  <div class="font-mono font-bold text-indigo">${billablePct}% Billable</div>
+                </div>
+              </div>
+
+              <!-- Add Worklog Form -->
+              <form id="form-add-worklog" style="display:flex; flex-direction:column; gap:8px; background:#ffffff; border:1px solid #fed7aa; border-radius:8px; padding:10px;">
+                <div style="display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:8px;">
+                  <div>
+                    <label class="field-label-micro">Technician</label>
+                    <select id="input-wl-tech" class="zen-select w-full" style="height:30px; font-size:11px;">
+                      ${techniciansList.map(t => `<option value="${escapeHtml(t.name)}" data-rate="${t.rate}">${escapeHtml(t.name)} ($${t.rate}/hr)</option>`).join('')}
+                    </select>
+                  </div>
+                  <div>
+                    <label class="field-label-micro">Hours</label>
+                    <input type="number" id="input-wl-hours" class="zen-form-control" style="height:30px; font-size:11px;" value="1" min="0" max="24">
+                  </div>
+                  <div>
+                    <label class="field-label-micro">Minutes</label>
+                    <select id="input-wl-mins" class="zen-select w-full" style="height:30px; font-size:11px;">
+                      <option value="0">0m</option>
+                      <option value="15">15m</option>
+                      <option value="30" selected>30m</option>
+                      <option value="45">45m</option>
+                    </select>
                   </div>
                 </div>
 
-                <!-- Add Worklog Form -->
-                <div class="add-worklog-card mt-3">
-                  <div class="text-xs font-bold text-secondary mb-2">Log Technician Labor Hours</div>
-                  <form id="form-add-worklog" style="display:flex; flex-direction:column; gap:8px;">
-                    <div class="worklog-inputs-grid">
-                      <div>
-                        <label class="text-xs text-muted">Technician</label>
-                        <select id="input-wl-tech" class="zen-select w-full" style="height:32px;">
-                          ${techniciansList.map(t => `<option value="${escapeHtml(t.name)}" data-rate="${t.rate}">${escapeHtml(t.name)} ($${t.rate}/hr)</option>`).join('')}
-                        </select>
-                      </div>
-                      <div style="display:flex; gap:6px;">
-                        <div style="flex:1;">
-                          <label class="text-xs text-muted">Hours</label>
-                          <input type="number" id="input-wl-hours" class="zen-form-control" style="height:32px;" value="1" min="0" max="24">
-                        </div>
-                        <div style="flex:1;">
-                          <label class="text-xs text-muted">Mins</label>
-                          <select id="input-wl-mins" class="zen-select w-full" style="height:32px;">
-                            <option value="0">0m</option>
-                            <option value="15">15m</option>
-                            <option value="30" selected>30m</option>
-                            <option value="45">45m</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div>
-                        <label class="text-xs text-muted">Hourly Rate ($/hr)</label>
-                        <input type="number" id="input-wl-rate" class="zen-form-control font-mono" style="height:32px;" value="${defaultTechRate}" min="0" step="5">
-                      </div>
-                    </div>
+                <div style="display:grid; grid-template-columns:1fr 2fr; gap:8px;">
+                  <div>
+                    <label class="field-label-micro">Rate ($/hr)</label>
+                    <input type="number" id="input-wl-rate" class="zen-form-control font-mono" style="height:30px; font-size:11px;" value="${defaultTechRate}">
+                  </div>
+                  <div>
+                    <label class="field-label-micro">Action Description</label>
+                    <input type="text" id="input-wl-desc" class="zen-form-control" placeholder="Describe actions performed..." style="height:30px; font-size:11px;" required>
+                  </div>
+                </div>
 
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
+                  <label style="display:inline-flex; align-items:center; gap:5px; font-size:11px; cursor:pointer;">
+                    <input type="checkbox" id="check-wl-billable" checked class="zen-checkbox">
+                    <span>Billable to cost center</span>
+                  </label>
+                  <button type="submit" class="btn btn-xs btn-zen-primary">+ Log Labor Time</button>
+                </div>
+              </form>
+
+              <!-- Logged Worklogs List -->
+              <div class="worklog-entries-list mt-2" id="worklogs-list-container">
+                ${(inc.worklogs || []).map(w => `
+                  <div class="worklog-row-item" style="display:flex; justify-content:space-between; align-items:center; padding:6px 10px; background:#ffffff; border:1px solid #e2e8f0; border-radius:6px; margin-bottom:4px;">
                     <div>
-                      <label class="text-xs text-muted">Work Description / Remediation Notes</label>
-                      <input type="text" id="input-wl-desc" class="zen-form-control" placeholder="Describe actions performed during this labor window..." required>
+                      <strong style="font-size:11.5px; color:#0f172a;">${escapeHtml(w.technician)}</strong>
+                      <span class="text-xs text-muted"> • ${w.hours}h ${w.minutes}m (@ $${w.rate}/hr) • ${escapeHtml(w.description)}</span>
                     </div>
-
-                    <div style="display:flex; align-items:center; justify-content:space-between; margin-top:4px;">
-                      <label style="display:inline-flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
-                        <input type="checkbox" id="check-wl-billable" checked class="zen-checkbox">
-                        <span>Billable to department cost center</span>
-                      </label>
-                      <button type="submit" class="btn btn-sm btn-zen-primary">
-                        <span>+ Log Labor Entry</span>
-                      </button>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                      <span class="worklog-cost-pill font-mono" style="font-weight:700; font-size:11px; color:#059669;">$${Number(w.cost).toFixed(2)}</span>
+                      <button class="btn-del-item btn-del-worklog" data-wl-id="${w.id}" title="Remove entry" style="border:none; background:none; color:#ef4444; cursor:pointer;">&times;</button>
                     </div>
-                  </form>
-                </div>
-
-                <!-- Worklogs List -->
-                <div class="worklog-entries-list mt-3" id="worklogs-list-container">
-                  ${(inc.worklogs && inc.worklogs.length > 0) ? inc.worklogs.map(w => `
-                    <div class="worklog-row-item">
-                      <div class="worklog-row-header">
-                        <div class="worklog-tech-badge">
-                          <span class="tech-avatar-mini">${escapeHtml(w.technician.substring(0, 2).toUpperCase())}</span>
-                          <span>${escapeHtml(w.technician)}</span>
-                        </div>
-                        <div style="display:flex; align-items:center; gap:8px;">
-                          <span class="worklog-cost-pill">$${Number(w.cost).toFixed(2)}</span>
-                          <button class="btn-del-item btn-del-worklog" data-wl-id="${w.id}" title="Remove entry">&times;</button>
-                        </div>
-                      </div>
-                      <div class="worklog-meta-line">
-                        <span class="font-mono"><strong>${w.hours}h ${w.minutes}m</strong> (@ $${w.rate}/hr)</span>
-                        <span>•</span>
-                        <span class="${w.isBillable ? 'badge-billable' : 'badge-nonbillable'}">${w.isBillable ? 'Billable' : 'Non-Billable'}</span>
-                        <span>•</span>
-                        <span>${w.loggedAt}</span>
-                      </div>
-                      <div class="worklog-desc-text">${escapeHtml(w.description)}</div>
-                    </div>
-                  `).join('') : `
-                    <div class="empty-worklogs-hint">
-                      No labor hours recorded yet. Use the form above to track technician time and costs.
-                    </div>
-                  `}
-                </div>
+                  </div>
+                `).join('')}
               </div>
             </div>
 
-            <!-- TAB PANEL 4: Activity & Audit Timeline Stream -->
-            <div class="drawer-tab-panel ${state.activeDrawerTab === 'timeline' ? 'active' : ''}" id="drawer-tab-timeline">
-              <div class="erp-section-card">
-                <div class="drawer-section-title">
-                  <span class="sec-icon">📜</span>
-                  <span>Incident Audit Stream (${inc.timeline.length} Entries)</span>
+            <!-- Tier 3: OPTIONAL AUDIT FILTERS (Bottom of page) -->
+            <div class="drawer-tier-group tier-optional">
+              <div class="drawer-tier-header">
+                <div class="tier-header-left">
+                  <span class="tier-header-icon">⚪</span>
+                  <span class="tier-header-title">Optional Audit Log Filter</span>
                 </div>
+                <span class="tier-badge badge-optional">Audit View</span>
+              </div>
 
-                <div class="timeline-list" id="drawer-timeline-list">
-                  ${inc.timeline.map(t => `
-                    <div class="timeline-item">
-                      <span class="timeline-bullet ${t.isAi ? 'bullet-ai' : ''}"></span>
-                      <div class="timeline-item-meta">
-                        <strong>${escapeHtml(t.user)}</strong> • ${t.time}
-                      </div>
-                      <div class="timeline-item-body">${escapeHtml(t.text)}</div>
-                    </div>
-                  `).join('')}
-                </div>
-
-                <div class="add-comment-row mt-3">
-                  <input type="text" id="input-drawer-comment" class="add-comment-input" placeholder="Add work note or stakeholder update...">
-                  <button class="btn btn-sm btn-zen-primary" id="btn-add-drawer-comment">Log Note</button>
-                </div>
+              <div class="filter-chips-row">
+                <button class="filter-chip active">All Audit Events</button>
+                <button class="filter-chip">Human Work Notes Only</button>
+                <button class="filter-chip">Lifecycle State Changes</button>
               </div>
             </div>
 
-          </main>
-        </div>
-      `;
+          </div>
+
+        </main>
+      </div>
+    `;
 
     // Bind Drawer Vertical Navigation Items
-    document.querySelectorAll('.drawer-vnav-item, .drawer-tab-btn').forEach(btn => {
+    document.querySelectorAll('.drawer-vnav-item').forEach(btn => {
       btn.addEventListener('click', () => {
         const tabName = btn.getAttribute('data-drawer-tab');
         state.activeDrawerTab = tabName;
-        document.querySelectorAll('.drawer-vnav-item, .drawer-tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.drawer-vnav-item').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.drawer-tab-panel').forEach(p => p.classList.remove('active'));
-        const activeNavBtn = document.querySelector(`.drawer-vnav-item[data-drawer-tab="${tabName}"]`);
-        if (activeNavBtn) activeNavBtn.classList.add('active');
         btn.classList.add('active');
         const targetPanel = document.getElementById(`drawer-tab-${tabName}`);
         if (targetPanel) targetPanel.classList.add('active');
       });
     });
-
-    // Bind Jump to AI Hub Button on Overview Panel
-    const btnJumpAiHub = document.getElementById('btn-jump-ai-hub');
-    if (btnJumpAiHub) {
-      btnJumpAiHub.addEventListener('click', () => {
-        state.activeDrawerTab = 'ai-hub';
-        document.querySelectorAll('.drawer-vnav-item, .drawer-tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.drawer-tab-panel').forEach(p => p.classList.remove('active'));
-        const aiNavBtn = document.querySelector('.drawer-vnav-item[data-drawer-tab="ai-hub"]');
-        if (aiNavBtn) aiNavBtn.classList.add('active');
-        const targetPanel = document.getElementById('drawer-tab-ai-hub');
-        if (targetPanel) targetPanel.classList.add('active');
-      });
-    }
-
-    // Bind Copy Telemetry Button
-    const btnCopy = document.getElementById('btn-copy-telemetry-text');
-    if (btnCopy) {
-      btnCopy.addEventListener('click', () => {
-        navigator.clipboard.writeText(inc.description);
-        btnCopy.textContent = 'Copied!';
-        setTimeout(() => { btnCopy.textContent = 'Copy Payload'; }, 1800);
-      });
-    }
 
     // Bind Close Button & Backdrop
     const btnCloseDrawer = document.getElementById('btn-close-drawer');
@@ -4029,45 +4244,7 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
     DOM.drawerBackdrop.classList.add('active');
     DOM.ticketSlideover.classList.add('open');
 
-    // Bind Quick Action Ribbon Buttons
-    const ribbonStart = document.getElementById('ribbon-btn-start');
-    if (ribbonStart) {
-      ribbonStart.addEventListener('click', () => {
-        inc.status = 'IN_PROGRESS';
-        inc.isPaused = false;
-        inc.timeline.unshift({ time: 'Just now', user: 'Alex Rivera (SRE)', text: 'Began mitigation via quick ribbon action.' });
-        renderTickets();
-        openTicketDrawer(inc.id);
-        showToast(`Work started on ${inc.id}. Status: In Progress.`, 'success');
-      });
-    }
-    const ribbonResolve = document.getElementById('ribbon-btn-resolve');
-    if (ribbonResolve) ribbonResolve.addEventListener('click', () => openResolutionModal(inc.id));
-    const ribbonResume = document.getElementById('ribbon-btn-resume');
-    if (ribbonResume) {
-      ribbonResume.addEventListener('click', () => {
-        inc.status = 'IN_PROGRESS';
-        inc.isPaused = false;
-        inc.timeline.unshift({ time: 'Just now', user: 'Alex Rivera (SRE)', text: 'Resumed mitigation from hold via ribbon.' });
-        renderTickets();
-        openTicketDrawer(inc.id);
-        showToast(`Mitigation resumed on ${inc.id}. SLA unpaused.`, 'success');
-      });
-    }
-    const ribbonReopen = document.getElementById('ribbon-btn-reopen');
-    if (ribbonReopen) {
-      ribbonReopen.addEventListener('click', () => {
-        inc.status = 'IN_PROGRESS';
-        inc.isPaused = false;
-        if (inc.slaSecondsRemaining <= 0) inc.slaSecondsRemaining = 3600;
-        inc.timeline.unshift({ time: 'Just now', user: 'Alex Rivera (SRE)', text: 'Reopened incident via ribbon action.' });
-        renderTickets();
-        openTicketDrawer(inc.id);
-        showToast(`Incident ${inc.id} reopened!`, 'warning');
-      });
-    }
-
-    // Bind Jump to CI
+    // Bind Jump to CI buttons
     const jumpCi = document.getElementById('drawer-jump-ci');
     if (jumpCi) {
       jumpCi.addEventListener('click', () => {
@@ -4076,30 +4253,39 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
         openCmdbInspector(inc.ci);
       });
     }
-
-    // Populate Cascading Classification in Drawer
-    const drawerCat = document.getElementById('drawer-cat-select');
-    const drawerSubcat = document.getElementById('drawer-subcat-select');
-    const drawerItem = document.getElementById('drawer-item-select');
-    if (drawerCat && drawerSubcat && drawerItem) {
-      populateClassificationDropdowns(drawerCat, drawerSubcat, drawerItem, inc.category, inc.subcategory, inc.item);
-      const onClassChange = () => {
-        inc.category = drawerCat.value;
-        inc.subcategory = drawerSubcat.value;
-        inc.item = drawerItem.value;
-        inc.timeline.unshift({
-          time: 'Just now',
-          user: 'Alex Rivera (SRE)',
-          text: `Updated classification to: ${inc.category} ➔ ${inc.subcategory} ➔ ${inc.item}.`
-        });
-        showToast('Classification updated successfully.', 'info');
-      };
-      drawerCat.addEventListener('change', onClassChange);
-      drawerSubcat.addEventListener('change', onClassChange);
-      drawerItem.addEventListener('change', onClassChange);
+    const jumpCiDiag = document.getElementById('drawer-jump-ci-diag');
+    if (jumpCiDiag) {
+      jumpCiDiag.addEventListener('click', () => {
+        closeTicketDrawer();
+        switchView('cmdb-topology');
+        openCmdbInspector(inc.ci);
+      });
     }
 
-    // Setup Priority Matrix Calculator in Drawer
+    // Bind Copy Telemetry Button
+    const btnCopy = document.getElementById('btn-copy-telemetry-text');
+    if (btnCopy) {
+      btnCopy.addEventListener('click', () => {
+        navigator.clipboard.writeText(inc.description || inc.specs || inc.rootCause || '');
+        btnCopy.textContent = 'Copied!';
+        setTimeout(() => { btnCopy.textContent = 'Copy Payload'; }, 1800);
+      });
+    }
+
+    // Title input auto-save on change
+    const titleInput = document.getElementById('drawer-item-title');
+    if (titleInput) {
+      titleInput.addEventListener('change', (e) => {
+        inc.title = e.target.value.trim();
+        renderTickets();
+        if (typeof renderProblemManagement === 'function') renderProblemManagement();
+        if (typeof renderChangeManagement === 'function') renderChangeManagement();
+        if (typeof renderServiceRequests === 'function') renderServiceRequests();
+        showToast('Record title updated.', 'info');
+      });
+    }
+
+    // Priority Matrix Calculator in Drawer
     const drawerImpact = document.getElementById('drawer-impact-select');
     const drawerUrgency = document.getElementById('drawer-urgency-select');
     const drawerMatrixBadge = document.getElementById('drawer-matrix-badge');
@@ -4120,7 +4306,7 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
             inc.timeline.unshift({
               time: 'Just now',
               user: 'Alex Rivera (SRE)',
-              text: `Recalculated priority: ${oldP} ➔ ${calcP} based on Impact: ${imp}, Urgency: ${urg}.`
+              text: `Recalculated priority: ${oldP} ➔ ${calcP} (Impact: ${imp}, Urgency: ${urg}).`
             });
             renderTickets();
             showToast(`Priority recalculated to ${calcP}`, 'info');
@@ -4129,102 +4315,82 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
       });
     }
 
-    // Lifecycle Action Bar Button Listeners
+    // Lifecycle Action Buttons
     const btnStart = document.getElementById('trans-btn-start');
-    if (btnStart) {
-      btnStart.addEventListener('click', () => {
-        inc.status = 'IN_PROGRESS';
-        inc.isPaused = false;
-        inc.timeline.unshift({
-          time: 'Just now',
-          user: 'Alex Rivera (SRE)',
-          text: 'Assigned incident and began active mitigation. SLA countdown started.'
-        });
-        renderTickets();
-        openTicketDrawer(inc.id);
-        showToast(`Work started on ${inc.id}. Status: In Progress.`, 'success');
-      });
-    }
+    const ribbonStart = document.getElementById('ribbon-btn-start');
+    const startHandler = () => {
+      inc.status = 'IN_PROGRESS';
+      inc.isPaused = false;
+      inc.timeline.unshift({ time: 'Just now', user: 'Alex Rivera (SRE)', text: 'Began active mitigation / fulfillment.' });
+      renderTickets();
+      if (typeof renderProblemManagement === 'function') renderProblemManagement();
+      if (typeof renderChangeManagement === 'function') renderChangeManagement();
+      if (typeof renderServiceRequests === 'function') renderServiceRequests();
+      openTicketDrawer(inc.id);
+      showToast(`Work started on ${inc.id}. Status: In Progress.`, 'success');
+    };
+    if (btnStart) btnStart.addEventListener('click', startHandler);
+    if (ribbonStart) ribbonStart.addEventListener('click', startHandler);
 
     const btnHold = document.getElementById('trans-btn-hold');
-    if (btnHold) {
-      btnHold.addEventListener('click', () => {
-        openHoldModal(inc.id);
-      });
-    }
+    if (btnHold) btnHold.addEventListener('click', () => openHoldModal(inc.id));
 
     const btnResume = document.getElementById('trans-btn-resume');
-    if (btnResume) {
-      btnResume.addEventListener('click', () => {
-        inc.status = 'IN_PROGRESS';
-        inc.isPaused = false;
-        inc.timeline.unshift({
-          time: 'Just now',
-          user: 'Alex Rivera (SRE)',
-          text: 'Resumed mitigation from hold. Active SLA clock resumed.'
-        });
-        renderTickets();
-        openTicketDrawer(inc.id);
-        showToast(`Mitigation resumed on ${inc.id}. SLA unpaused.`, 'success');
-      });
-    }
+    const ribbonResume = document.getElementById('ribbon-btn-resume');
+    const resumeHandler = () => {
+      inc.status = 'IN_PROGRESS';
+      inc.isPaused = false;
+      inc.timeline.unshift({ time: 'Just now', user: 'Alex Rivera (SRE)', text: 'Resumed mitigation from hold. SLA unpaused.' });
+      renderTickets();
+      openTicketDrawer(inc.id);
+      showToast(`Mitigation resumed on ${inc.id}. SLA unpaused.`, 'success');
+    };
+    if (btnResume) btnResume.addEventListener('click', resumeHandler);
+    if (ribbonResume) ribbonResume.addEventListener('click', resumeHandler);
 
     const btnResolve = document.getElementById('trans-btn-resolve');
-    if (btnResolve) {
-      btnResolve.addEventListener('click', () => {
+    const ribbonResolve = document.getElementById('ribbon-btn-resolve');
+    const resolveHandler = () => {
+      if (itemType === 'INCIDENT') {
         openResolutionModal(inc.id);
-      });
-    }
+      } else {
+        inc.status = itemType === 'CHANGE' ? 'Approved by CAB' : 'RESOLVED';
+        inc.timeline.unshift({ time: 'Just now', user: 'Alex Rivera', text: `${itemType} ${inc.id} marked as resolved/approved.` });
+        renderTickets();
+        if (typeof renderProblemManagement === 'function') renderProblemManagement();
+        if (typeof renderChangeManagement === 'function') renderChangeManagement();
+        if (typeof renderServiceRequests === 'function') renderServiceRequests();
+        openTicketDrawer(inc.id);
+        showToast(`${inc.id} successfully resolved/approved!`, 'success');
+      }
+    };
+    if (btnResolve) btnResolve.addEventListener('click', resolveHandler);
+    if (ribbonResolve) ribbonResolve.addEventListener('click', resolveHandler);
 
     const btnClose = document.getElementById('trans-btn-close');
     if (btnClose) {
       btnClose.addEventListener('click', () => {
         inc.status = 'CLOSED';
         inc.isPaused = false;
-        inc.timeline.unshift({
-          time: 'Just now',
-          user: 'Alex Rivera (SRE)',
-          text: 'Incident closed and permanently archived.'
-        });
+        inc.timeline.unshift({ time: 'Just now', user: 'Alex Rivera', text: `${itemType} closed and archived.` });
         renderTickets();
         openTicketDrawer(inc.id);
-        showToast(`Incident ${inc.id} closed.`, 'info');
+        showToast(`${inc.id} closed.`, 'info');
       });
     }
 
     const btnReopen = document.getElementById('trans-btn-reopen');
-    if (btnReopen) {
-      btnReopen.addEventListener('click', () => {
-        inc.status = 'IN_PROGRESS';
-        inc.isPaused = false;
-        if (inc.slaSecondsRemaining <= 0) inc.slaSecondsRemaining = 3600;
-        inc.timeline.unshift({
-          time: 'Just now',
-          user: 'Alex Rivera (SRE)',
-          text: 'Reopened incident. SLA timer restarted.'
-        });
-        renderTickets();
-        openTicketDrawer(inc.id);
-        showToast(`Incident ${inc.id} reopened!`, 'warning');
-      });
-    }
-
-    const btnEscalate = document.getElementById('trans-btn-escalate');
-    if (btnEscalate) {
-      btnEscalate.addEventListener('click', () => {
-        inc.priority = 'P1';
-        inc.impact = 'Enterprise';
-        inc.urgency = 'Critical';
-        inc.timeline.unshift({
-          time: 'Just now',
-          user: 'Alex Rivera (SRE)',
-          text: 'Manually escalated incident to P1 Critical severity.'
-        });
-        renderTickets();
-        openTicketDrawer(inc.id);
-        showToast(`🚨 ${inc.id} escalated to P1 Critical!`, 'error');
-      });
-    }
+    const ribbonReopen = document.getElementById('ribbon-btn-reopen');
+    const reopenHandler = () => {
+      inc.status = 'IN_PROGRESS';
+      inc.isPaused = false;
+      inc.timeline.unshift({ time: 'Just now', user: 'Alex Rivera', text: `Reopened ${itemType}.` });
+      renderTickets();
+      openTicketDrawer(inc.id);
+      showToast(`${inc.id} reopened!`, 'warning');
+    };
+    if (btnReopen) btnReopen.addEventListener('click', reopenHandler);
+    if (ribbonReopen) ribbonReopen.addEventListener('click', reopenHandler);
 
     // Status select change
     const statusSelect = document.getElementById('drawer-status-select');
@@ -4238,11 +4404,7 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
         } else {
           inc.status = newStatus;
           inc.isPaused = false;
-          inc.timeline.unshift({
-            time: 'Just now',
-            user: 'Alex Rivera (SRE)',
-            text: `Changed status to ${formatStatusLabel(newStatus)}.`
-          });
+          inc.timeline.unshift({ time: 'Just now', user: 'Alex Rivera (SRE)', text: `Changed status to ${formatStatusLabel(newStatus)}.` });
           renderTickets();
           openTicketDrawer(inc.id);
           showToast(`${inc.id} status updated to ${formatStatusLabel(newStatus)}`, 'success');
@@ -4250,7 +4412,7 @@ cmctl renew wildcard-opennow-tls -n kong-ingress
       });
     }
 
-    // Worklog Technician select auto-rate binding
+    // Worklogs Technician select auto-rate binding
     const wlTechSelect = document.getElementById('input-wl-tech');
     const wlRateInput = document.getElementById('input-wl-rate');
     if (wlTechSelect && wlRateInput) {
@@ -6803,7 +6965,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
 
     function renderProblemKanbanCard(p) {
       return `
-        <div class="m-kanban-card">
+        <div class="m-kanban-card" data-problem-id="${p.id}" style="cursor:pointer;">
           <div class="m-kanban-card-top">
             <span class="m-kanban-id">${p.id}</span>
             ${p.isKedb ? '<span class="badge-tag text-emerald" style="font-size:10px;">★ KEDB</span>' : '<span class="badge-tag" style="font-size:10px;">P2 High</span>'}
@@ -6852,6 +7014,29 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
         open5WhysModal(pId);
       });
     });
+
+    // Attach drawer triggers to problem table rows and kanban cards
+    if (tbody) {
+      tbody.querySelectorAll('tr[data-problem-id]').forEach(row => {
+        row.style.cursor = 'pointer';
+        row.addEventListener('click', (e) => {
+          if (e.target.closest('button')) return;
+          const pId = row.getAttribute('data-problem-id');
+          if (pId) openTicketDrawer(pId);
+        });
+      });
+    }
+
+    const prbKanbanWrapEl = document.getElementById('problems-kanban-container');
+    if (prbKanbanWrapEl) {
+      prbKanbanWrapEl.querySelectorAll('.m-kanban-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('button')) return;
+          const pId = card.getAttribute('data-problem-id');
+          if (pId) openTicketDrawer(pId);
+        });
+      });
+    }
   }
 
   function open5WhysModal(problemId) {
@@ -6957,7 +7142,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
         const riskClass = chg.riskScore < 30 ? 'risk-low' : chg.riskScore < 60 ? 'risk-med' : 'risk-high';
         const cabClass = chg.cabStatus.includes('Approved') ? 'badge-cab-approved' : 'badge-cab-pending';
         return `
-          <tr>
+          <tr data-change-id="${chg.id}" style="cursor:pointer;">
             <td class="font-mono text-indigo font-bold">${chg.id}</td>
             <td><span class="badge-tag">${escapeHtml(chg.type)}</span></td>
             <td>
@@ -7010,7 +7195,7 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
     function renderChangeKanbanCard(c) {
       const riskClass = c.riskScore < 30 ? 'risk-low' : c.riskScore < 60 ? 'risk-med' : 'risk-high';
       return `
-        <div class="m-kanban-card">
+        <div class="m-kanban-card" data-change-id="${c.id}" style="cursor:pointer;">
           <div class="m-kanban-card-top">
             <span class="m-kanban-id">${c.id}</span>
             <span class="badge-tag" style="font-size:10px;">${escapeHtml(c.type)}</span>
@@ -7081,6 +7266,28 @@ kubectl scale deployment/pgbouncer --replicas=6 -n database
         }
       });
     });
+
+    // Attach drawer triggers to change table rows and kanban cards
+    if (tbody) {
+      tbody.querySelectorAll('tr[data-change-id]').forEach(row => {
+        row.addEventListener('click', (e) => {
+          if (e.target.closest('button')) return;
+          const id = row.getAttribute('data-change-id');
+          if (id) openTicketDrawer(id);
+        });
+      });
+    }
+
+    const chgKanbanWrapEl = document.getElementById('changes-kanban-container');
+    if (chgKanbanWrapEl) {
+      chgKanbanWrapEl.querySelectorAll('.m-kanban-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('button')) return;
+          const id = card.getAttribute('data-change-id');
+          if (id) openTicketDrawer(id);
+        });
+      });
+    }
   }
 
   // --- Knowledge Base ---
