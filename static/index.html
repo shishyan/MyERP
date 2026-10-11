@@ -51,19 +51,12 @@
         </button>
       </div>
 
-      <!-- Navigation Menu Items -->
+      <!-- Navigation Menu Items (Standard Hierarchy: Executive -> Service Requests -> Incidents -> Problems -> Changes -> Knowledge -> SLM AI Chat -> Settings) -->
       <nav class="sidebar-nav">
-        <div class="nav-section-label">OPERATIONS</div>
+        <div class="nav-section-label">OVERVIEW &amp; REQUESTS</div>
 
-        <button class="nav-item active" data-view="incident-command" id="nav-btn-incidents" title="Incident Command (Table View)">
-          <span class="nav-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-          </span>
-          <span class="nav-label">Incident Command</span>
-          <span class="nav-pill" id="sidebar-active-tickets-badge">12</span>
-        </button>
-
-        <button class="nav-item" data-view="executive-dashboard" id="nav-btn-executive" title="Executive Operations &amp; ITSM Dashboard">
+        <!-- 1. Executive Dashboard (Top Most) -->
+        <button class="nav-item active" data-view="executive-dashboard" id="nav-btn-executive" title="Executive Operations &amp; ITSM Dashboard">
           <span class="nav-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/><circle cx="19" cy="9" r="2"/></svg>
           </span>
@@ -71,41 +64,46 @@
           <span class="nav-pill pill-gold">HQ</span>
         </button>
 
-        <button class="nav-item" data-view="problem-management" id="nav-btn-problems" title="Problem Management & KEDB">
+        <!-- 2. Service Requests & Catalog (Top Menu Group) -->
+        <button class="nav-item" data-view="service-catalog" id="nav-btn-catalog" title="Enterprise Service Requests &amp; Fulfillment Catalog">
           <span class="nav-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/><path d="M4.93 4.93l4.24 4.24"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          </span>
+          <span class="nav-label">Service Requests &amp; Catalog</span>
+          <span class="nav-pill pill-emerald" id="badge-requests-sidebar">4</span>
+        </button>
+
+        <div class="nav-section-label mt-3">OPERATIONS &amp; GOVERNANCE</div>
+
+        <!-- 3. Incident Command -->
+        <button class="nav-item" data-view="incident-command" id="nav-btn-incidents" title="Incident Command (Table &amp; Triage)">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </span>
+          <span class="nav-label">Incident Command</span>
+          <span class="nav-pill" id="sidebar-active-tickets-badge">12</span>
+        </button>
+
+        <!-- 4. Problem Management -->
+        <button class="nav-item" data-view="problem-management" id="nav-btn-problems" title="Problem Management &amp; KEDB">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6"/><path d="M8 11h6"/></svg>
           </span>
           <span class="nav-label">Problem Management</span>
           <span class="nav-pill pill-purple">KEDB</span>
         </button>
 
-        <button class="nav-item" data-view="change-management" id="nav-btn-changes" title="Change Management & CAB Approvals">
+        <!-- 5. Change Management -->
+        <button class="nav-item" data-view="change-management" id="nav-btn-changes" title="Change Management &amp; CAB Approvals">
           <span class="nav-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
           </span>
           <span class="nav-label">Change Management</span>
           <span class="nav-pill pill-gold">CAB</span>
         </button>
 
-        <button class="nav-item" data-view="omnichannel-hub" id="nav-btn-omnichannel" title="Omnichannel Hub (Email & CTI Screen Pop)">
-          <span class="nav-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          </span>
-          <span class="nav-label">Omnichannel Hub</span>
-          <span class="nav-pill pill-emerald">CTI</span>
-        </button>
-
-        <div class="nav-section-label mt-3">SERVICE & KNOWLEDGE</div>
-
-        <button class="nav-item" data-view="service-catalog" id="nav-btn-catalog" title="Enterprise Service Catalog &amp; Service Requests Dashboard">
-          <span class="nav-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-          </span>
-          <span class="nav-label">Service Catalog &amp; Requests</span>
-          <span class="nav-pill pill-emerald" id="badge-requests-sidebar">4</span>
-        </button>
-
-        <button class="nav-item" data-view="knowledge-base" id="nav-btn-kb" title="Knowledge Base & KCS Articles">
+        <!-- 6. Knowledge Base -->
+        <button class="nav-item" data-view="knowledge-base" id="nav-btn-kb" title="Knowledge Base &amp; KCS Articles">
           <span class="nav-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
           </span>
@@ -113,22 +111,14 @@
           <span class="nav-pill pill-purple">KCS</span>
         </button>
 
+        <div class="nav-section-label mt-3">TECHNICAL INFRASTRUCTURE</div>
+
         <button class="nav-item" data-view="cmdb-topology" id="nav-btn-cmdb" title="Interactive CMDB Topology Graph">
           <span class="nav-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><circle cx="6" cy="18" r="3"/><line x1="9" y1="6" x2="15" y2="6"/><line x1="6" y1="9" x2="6" y2="15"/><line x1="18" y1="9" x2="18" y2="15"/><line x1="9" y1="18" x2="15" y2="18"/><line x1="8.5" y1="8.5" x2="15.5" y2="15.5"/></svg>
           </span>
           <span class="nav-label">CMDB Topology</span>
           <span class="nav-pill pill-live" id="sidebar-cmdb-live-badge">Live</span>
-        </button>
-
-        <div class="nav-section-label mt-3">AI & AUTOMATION</div>
-
-        <button class="nav-item" data-view="ai-ops" id="nav-btn-aiops" title="AI Ops Center & Autonomous SRE">
-          <span class="nav-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/><path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2"/></svg>
-          </span>
-          <span class="nav-label">AI Ops Center</span>
-          <span class="nav-pill pill-emerald">Auto</span>
         </button>
 
         <button class="nav-item" data-view="migration-studio" id="nav-btn-migration" title="Top 10 Native Migration Studio">
@@ -139,9 +129,27 @@
           <span class="nav-pill pill-gold">Top 10</span>
         </button>
 
-        <div class="nav-section-label mt-3">ADMINISTRATION</div>
+        <button class="nav-item" data-view="omnichannel-hub" id="nav-btn-omnichannel" title="Omnichannel Hub (Email &amp; CTI Screen Pop)">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </span>
+          <span class="nav-label">Omnichannel Hub</span>
+          <span class="nav-pill pill-emerald">CTI</span>
+        </button>
 
-        <button class="nav-item" data-view="setup" id="nav-btn-setup" title="Enterprise Setup & Master Data Configuration">
+        <div class="nav-section-label mt-3">INTELLIGENCE &amp; CONFIG</div>
+
+        <!-- 7. AI Chat (Local SLM Engine) -->
+        <button class="nav-item" data-view="ai-chat" id="nav-btn-aichat" title="AI Chat Assistant (Local SLM Engine)">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8"/><path d="M8 13h6"/></svg>
+          </span>
+          <span class="nav-label">AI Chat (Local SLM)</span>
+          <span class="nav-pill pill-emerald">SLM</span>
+        </button>
+
+        <!-- 8. Settings & Configurations (Bottom) -->
+        <button class="nav-item" data-view="setup" id="nav-btn-setup" title="Enterprise Setup &amp; Master Data Configuration">
           <span class="nav-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
           </span>
@@ -154,7 +162,7 @@
       <div class="sidebar-footer">
         <!-- Quick Zen Mode Toggle Pill -->
         <button class="sidebar-zen-btn" id="btn-sidebar-zen-toggle" title="Toggle Zen Focus Mode (Z)">
-          <span class="zen-lotus-icon">☯</span>
+          <span class="zen-lotus-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20 5 5 0 0 0 0-10 5 5 0 0 1 0-10z"/><circle cx="12" cy="7" r="1.5" fill="currentColor"/><circle cx="12" cy="17" r="1.5" fill="currentColor"/></svg></span>
           <span class="zen-btn-text">Zen Focus Mode</span>
           <span class="zen-indicator-dot" id="sidebar-zen-dot"></span>
         </button>
@@ -195,7 +203,7 @@
             <span class="crumb-separator">/</span>
             <span class="crumb-current" id="header-breadcrumb-view">Incident Command</span>
             <span class="zen-active-badge" id="zen-mode-badge" style="display: none;">
-              <span>☯</span> Zen Mode Active
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:4px;"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20 5 5 0 0 0 0-10 5 5 0 0 1 0-10z"/></svg>Zen Mode Active
             </span>
           </div>
 
@@ -251,7 +259,7 @@
 
           <!-- Zen Focus Mode Toggle Header Button -->
           <button class="btn-zen-mode" id="btn-zen-mode-toggle" title="Toggle Zen Focus Mode (hides chrome for calm, tranquil focus)">
-            <span class="zen-icon">☯</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20 5 5 0 0 0 0-10 5 5 0 0 1 0-10z"/></svg>
             <span class="zen-label">Zen Mode</span>
           </button>
 
@@ -282,7 +290,7 @@
             <div class="page-kpi-card" style="border-left: 3.5px solid #6366f1;">
               <div class="page-kpi-top">
                 <span class="page-kpi-title">Active Incidents</span>
-                <span class="page-kpi-icon">🚨</span>
+                <span class="page-kpi-icon text-indigo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
               </div>
               <span class="page-kpi-val font-mono text-indigo" id="kpi-inc-total">12 Open</span>
               <span class="page-kpi-sub">SRE &amp; Platform Triage</span>
@@ -291,7 +299,7 @@
             <div class="page-kpi-card" style="border-left: 3.5px solid #f43f5e;">
               <div class="page-kpi-top">
                 <span class="page-kpi-title">Critical P1/P2</span>
-                <span class="page-kpi-icon">⚡</span>
+                <span class="page-kpi-icon text-rose"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
               </div>
               <span class="page-kpi-val font-mono text-rose" id="kpi-inc-p1">2 Critical</span>
               <span class="page-kpi-sub">Outage / Revenue Cascade</span>
@@ -300,7 +308,7 @@
             <div class="page-kpi-card" style="border-left: 3.5px solid #10b981;">
               <div class="page-kpi-top">
                 <span class="page-kpi-title">SLA Compliance</span>
-                <span class="page-kpi-icon">⏱️</span>
+                <span class="page-kpi-icon text-emerald"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
               </div>
               <span class="page-kpi-val font-mono text-emerald" id="kpi-inc-sla">98.2%</span>
               <span class="page-kpi-sub">Target &gt; 95.0%</span>
@@ -309,7 +317,7 @@
             <div class="page-kpi-card" style="border-left: 3.5px solid #0284c7;">
               <div class="page-kpi-top">
                 <span class="page-kpi-title">Avg MTTR</span>
-                <span class="page-kpi-icon">📉</span>
+                <span class="page-kpi-icon text-sky"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg></span>
               </div>
               <span class="page-kpi-val font-mono text-sky" id="kpi-inc-mttr">24.5 Mins</span>
               <span class="page-kpi-sub">Mean Time to Mitigate</span>
@@ -318,7 +326,7 @@
             <div class="page-kpi-card" style="border-left: 3.5px solid #f59e0b;">
               <div class="page-kpi-top">
                 <span class="page-kpi-title">Open Labor Spend</span>
-                <span class="page-kpi-icon">💵</span>
+                <span class="page-kpi-icon text-amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
               </div>
               <span class="page-kpi-val font-mono text-amber" id="kpi-inc-cost">$2,410</span>
               <span class="page-kpi-sub">Logged Technician Labor</span>
@@ -467,7 +475,7 @@
                   <button class="exec-timeframe-btn" data-timeframe="ytd">YTD</button>
                 </div>
                 <button class="btn btn-sm btn-zen-outline" id="btn-export-exec-report" style="color:#ffffff; border-color:rgba(255,255,255,0.3); background:rgba(255,255,255,0.08);">
-                  <span>📥 Export Executive Briefing</span>
+                  <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px; margin-right:4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export Executive Briefing</span>
                 </button>
               </div>
             </div>
@@ -477,7 +485,7 @@
               <div class="page-kpi-card" style="border-left: 3.5px solid #6366f1;">
                 <div class="page-kpi-top">
                   <span class="page-kpi-title">Total Open Items</span>
-                  <span class="page-kpi-icon">📊</span>
+                  <span class="page-kpi-icon text-indigo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></span>
                 </div>
                 <span class="page-kpi-val font-mono text-indigo" id="exec-kpi-open">23 Active</span>
                 <span class="page-kpi-sub">Across All 4 Streams</span>
@@ -486,7 +494,7 @@
               <div class="page-kpi-card" style="border-left: 3.5px solid #f59e0b;">
                 <div class="page-kpi-top">
                   <span class="page-kpi-title">Pending Governance</span>
-                  <span class="page-kpi-icon">🗳️</span>
+                  <span class="page-kpi-icon text-amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
                 </div>
                 <span class="page-kpi-val font-mono text-amber" id="exec-kpi-pending">4 Pending</span>
                 <span class="page-kpi-sub">CAB &amp; Manager Sign-offs</span>
@@ -495,7 +503,7 @@
               <div class="page-kpi-card" style="border-left: 3.5px solid #10b981;">
                 <div class="page-kpi-top">
                   <span class="page-kpi-title">Period Completed</span>
-                  <span class="page-kpi-icon">✅</span>
+                  <span class="page-kpi-icon text-emerald"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
                 </div>
                 <span class="page-kpi-val font-mono text-emerald" id="exec-kpi-completed">86 Resolved</span>
                 <span class="page-kpi-sub">+14% vs Previous Week</span>
@@ -504,7 +512,7 @@
               <div class="page-kpi-card" style="border-left: 3.5px solid #0284c7;">
                 <div class="page-kpi-top">
                   <span class="page-kpi-title">Global SLA Adherence</span>
-                  <span class="page-kpi-icon">⏱️</span>
+                  <span class="page-kpi-icon text-emerald"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
                 </div>
                 <span class="page-kpi-val font-mono text-sky" id="exec-kpi-sla">98.7%</span>
                 <span class="page-kpi-sub">Target &gt; 95.0% • Zero Breaches</span>
@@ -513,7 +521,7 @@
               <div class="page-kpi-card" style="border-left: 3.5px solid #8b5cf6;">
                 <div class="page-kpi-top">
                   <span class="page-kpi-title">Mean Time to Resolve</span>
-                  <span class="page-kpi-icon">📉</span>
+                  <span class="page-kpi-icon text-sky"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg></span>
                 </div>
                 <span class="page-kpi-val font-mono text-purple" id="exec-kpi-mttr">22.4 Mins</span>
                 <span class="page-kpi-sub">P1/P2 Mitigation Velocity</span>
@@ -531,25 +539,25 @@
               </div>
               <div class="exec-bullets-grid">
                 <div class="exec-bullet-item">
-                  <span class="exec-bullet-icon">🚨</span>
+                  <span class="exec-bullet-icon text-rose"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
                   <div class="exec-bullet-text">
                     <strong>Incident Management:</strong> 12 open incidents; all 2 critical P1 outages mitigated under 25 mins with zero data loss or revenue interruption.
                   </div>
                 </div>
                 <div class="exec-bullet-item">
-                  <span class="exec-bullet-icon">🔍</span>
+                  <span class="exec-bullet-icon text-indigo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span>
                   <div class="exec-bullet-text">
                     <strong>Problem &amp; KEDB:</strong> 3 active investigations; 2 published workarounds deflecting an estimated ~34 recurring support tickets this week.
                   </div>
                 </div>
                 <div class="exec-bullet-item">
-                  <span class="exec-bullet-icon">🔄</span>
+                  <span class="exec-bullet-icon text-amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span>
                   <div class="exec-bullet-text">
                     <strong>Change Advisory:</strong> 4 RFCs processed; 100% CAB voting quorum passed with zero CMDB topology graph collisions.
                   </div>
                 </div>
                 <div class="exec-bullet-item">
-                  <span class="exec-bullet-icon">📦</span>
+                  <span class="exec-bullet-icon text-emerald"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
                   <div class="exec-bullet-text">
                     <strong>Service Requests:</strong> 4 fulfillment orders; 99.1% SLA compliance with average 4.2-hour hardware/IAM delivery turnaround.
                   </div>
@@ -591,28 +599,28 @@
                 <!-- Stream Share Breakdown -->
                 <div style="margin-bottom: 16px;">
                   <div class="exec-matrix-row">
-                    <span style="font-size:12px; font-weight:700; width:120px; color:#334155;">🚨 Incidents</span>
+                    <span style="font-size:12px; font-weight:700; width:120px; color:#334155;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1px; margin-right:4px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>Incidents</span>
                     <div class="exec-progress-track">
                       <div class="exec-progress-fill" id="exec-fill-inc" style="width: 52%; background: #6366f1;"></div>
                     </div>
                     <span class="font-mono text-xs font-bold text-indigo" id="exec-share-inc">12 (52%)</span>
                   </div>
                   <div class="exec-matrix-row">
-                    <span style="font-size:12px; font-weight:700; width:120px; color:#334155;">📦 Service Reqs</span>
+                    <span style="font-size:12px; font-weight:700; width:120px; color:#334155;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1px; margin-right:4px;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Service Requests</span>
                     <div class="exec-progress-track">
                       <div class="exec-progress-fill" id="exec-fill-req" style="width: 22%; background: #10b981;"></div>
                     </div>
                     <span class="font-mono text-xs font-bold text-emerald" id="exec-share-req">5 (22%)</span>
                   </div>
                   <div class="exec-matrix-row">
-                    <span style="font-size:12px; font-weight:700; width:120px; color:#334155;">🔄 Changes (RFC)</span>
+                    <span style="font-size:12px; font-weight:700; width:120px; color:#334155;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1px; margin-right:4px;"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>Changes (RFC)</span>
                     <div class="exec-progress-track">
                       <div class="exec-progress-fill" id="exec-fill-chg" style="width: 17%; background: #f59e0b;"></div>
                     </div>
                     <span class="font-mono text-xs font-bold text-amber" id="exec-share-chg">4 (17%)</span>
                   </div>
                   <div class="exec-matrix-row">
-                    <span style="font-size:12px; font-weight:700; width:120px; color:#334155;">🔍 Problems</span>
+                    <span style="font-size:12px; font-weight:700; width:120px; color:#334155;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1px; margin-right:4px;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Problems</span>
                     <div class="exec-progress-track">
                       <div class="exec-progress-fill" id="exec-fill-prb" style="width: 9%; background: #8b5cf6;"></div>
                     </div>
@@ -666,10 +674,10 @@
                   <div class="filter-chips-row">
                     <span class="filter-caption">Stream:</span>
                     <button class="filter-chip active exec-stream-chip" data-stream="ALL">All Streams</button>
-                    <button class="filter-chip exec-stream-chip" data-stream="INCIDENT">🚨 Incidents</button>
-                    <button class="filter-chip exec-stream-chip" data-stream="PROBLEM">🔍 Problems</button>
-                    <button class="filter-chip exec-stream-chip" data-stream="CHANGE">🔄 Changes</button>
-                    <button class="filter-chip exec-stream-chip" data-stream="REQUEST">📦 Requests</button>
+                    <button class="filter-chip exec-stream-chip" data-stream="INCIDENT"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1px; margin-right:4px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>Incidents</button>
+                    <button class="filter-chip exec-stream-chip" data-stream="PROBLEM"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1px; margin-right:4px;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Problems</button>
+                    <button class="filter-chip exec-stream-chip" data-stream="CHANGE"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1px; margin-right:4px;"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>Changes</button>
+                    <button class="filter-chip exec-stream-chip" data-stream="REQUEST"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1px; margin-right:4px;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Requests</button>
                   </div>
                 </div>
                 <div class="toolbar-right">
@@ -712,7 +720,7 @@
               <div class="page-kpi-card" style="border-left: 3.5px solid #6366f1;">
                 <div class="page-kpi-top">
                   <span class="page-kpi-title">Active Problems</span>
-                  <span class="page-kpi-icon">🔍</span>
+                  <span class="page-kpi-icon text-indigo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span>
                 </div>
                 <span class="page-kpi-val font-mono text-indigo" id="kpi-prb-total">3 Active</span>
                 <span class="page-kpi-sub">Root Cause Investigations</span>
@@ -721,7 +729,7 @@
               <div class="page-kpi-card" style="border-left: 3.5px solid #10b981;">
                 <div class="page-kpi-top">
                   <span class="page-kpi-title">KEDB Workarounds</span>
-                  <span class="page-kpi-icon">📖</span>
+                  <span class="page-kpi-icon text-emerald"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
                 </div>
                 <span class="page-kpi-val font-mono text-emerald" id="kpi-prb-kedb">2 Published</span>
                 <span class="page-kpi-sub">Deflecting Incidents</span>
@@ -730,7 +738,7 @@
               <div class="page-kpi-card" style="border-left: 3.5px solid #8b5cf6;">
                 <div class="page-kpi-top">
                   <span class="page-kpi-title">RCA Resolution Rate</span>
-                  <span class="page-kpi-icon">🎯</span>
+                  <span class="page-kpi-icon text-purple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
                 </div>
                 <span class="page-kpi-val font-mono text-purple" id="kpi-prb-rca">66.7%</span>
                 <span class="page-kpi-sub">Root Cause Pinpointed</span>
@@ -739,7 +747,7 @@
               <div class="page-kpi-card" style="border-left: 3.5px solid #0284c7;">
                 <div class="page-kpi-top">
                   <span class="page-kpi-title">Incident Deflection</span>
-                  <span class="page-kpi-icon">🛡️</span>
+                  <span class="page-kpi-icon text-sky"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
                 </div>
                 <span class="page-kpi-val font-mono text-sky" id="kpi-prb-deflection">18 Incidents</span>
                 <span class="page-kpi-sub">Prevented by Workarounds</span>
@@ -748,7 +756,7 @@
               <div class="page-kpi-card" style="border-left: 3.5px solid #f59e0b;">
                 <div class="page-kpi-top">
                   <span class="page-kpi-title">Avg RCA Turnaround</span>
-                  <span class="page-kpi-icon">⏱️</span>
+                  <span class="page-kpi-icon text-emerald"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
                 </div>
                 <span class="page-kpi-val font-mono text-amber" id="kpi-prb-time">1.4 Days</span>
                 <span class="page-kpi-sub">Target &lt; 3.0 Days</span>
@@ -851,7 +859,7 @@
               <div class="page-kpi-card" style="border-left: 3.5px solid #6366f1;">
                 <div class="page-kpi-top">
                   <span class="page-kpi-title">Active RFCs</span>
-                  <span class="page-kpi-icon">🔄</span>
+                  <span class="page-kpi-icon text-indigo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span>
                 </div>
                 <span class="page-kpi-val font-mono text-indigo" id="kpi-chg-total">3 Active</span>
                 <span class="page-kpi-sub">In Pipeline</span>
@@ -860,7 +868,7 @@
               <div class="page-kpi-card" style="border-left: 3.5px solid #f59e0b;">
                 <div class="page-kpi-top">
                   <span class="page-kpi-title">Pending CAB</span>
-                  <span class="page-kpi-icon">🗳️</span>
+                  <span class="page-kpi-icon text-amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
                 </div>
                 <span class="page-kpi-val font-mono text-amber" id="kpi-chg-pending">2 Pending</span>
                 <span class="page-kpi-sub">Awaiting Governance</span>
@@ -869,7 +877,7 @@
               <div class="page-kpi-card" style="border-left: 3.5px solid #f43f5e;">
                 <div class="page-kpi-top">
                   <span class="page-kpi-title">High Risk RFCs</span>
-                  <span class="page-kpi-icon">⚠️</span>
+                  <span class="page-kpi-icon text-rose"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
                 </div>
                 <span class="page-kpi-val font-mono text-rose" id="kpi-chg-risk">1 High Risk</span>
                 <span class="page-kpi-sub">CMDB Blast Radius &gt; 50</span>
@@ -878,7 +886,7 @@
               <div class="page-kpi-card" style="border-left: 3.5px solid #10b981;">
                 <div class="page-kpi-top">
                   <span class="page-kpi-title">Success Rate</span>
-                  <span class="page-kpi-icon">📈</span>
+                  <span class="page-kpi-icon text-emerald"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>
                 </div>
                 <span class="page-kpi-val font-mono text-emerald" id="kpi-chg-success">98.9%</span>
                 <span class="page-kpi-sub">Zero Rollbacks (30d)</span>
@@ -887,7 +895,7 @@
               <div class="page-kpi-card" style="border-left: 3.5px solid #0284c7;">
                 <div class="page-kpi-top">
                   <span class="page-kpi-title">Scheduled Windows</span>
-                  <span class="page-kpi-icon">📅</span>
+                  <span class="page-kpi-icon text-sky"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
                 </div>
                 <span class="page-kpi-val font-mono text-sky" id="kpi-chg-windows">2 Maintenance</span>
                 <span class="page-kpi-sub">FSC Collision Verified</span>
@@ -1011,7 +1019,7 @@
               <div class="omni-card">
                 <div style="display:flex; align-items:center; justify-content:space-between;">
                   <div style="display:flex; align-items:center; gap:8px;">
-                    <span style="font-size:20px;">✉️</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                     <h3 style="font-size:14px; font-weight:700;">Email-to-Ticket Inbound Simulator</h3>
                   </div>
                   <span class="badge-tag">support@opennow.io</span>
@@ -1046,7 +1054,7 @@
 
                   <div style="display:flex; align-items:center; justify-content:space-between; margin-top:4px;">
                     <span class="text-xs text-muted">NLP Parser matches CI &amp; assigns SLA instantly</span>
-                    <button type="submit" class="btn btn-sm btn-zen-primary">⚡ Ingest &amp; Parse Inbound Email</button>
+                    <button type="submit" class="btn btn-sm btn-zen-primary"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Ingest &amp; Parse Inbound Email</button>
                   </div>
                 </form>
 
@@ -1064,7 +1072,7 @@
               <div class="omni-card">
                 <div style="display:flex; align-items:center; justify-content:space-between;">
                   <div style="display:flex; align-items:center; gap:8px;">
-                    <span style="font-size:20px;">📞</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                     <h3 style="font-size:14px; font-weight:700;">CTI Phone Screen Pop &amp; Softphone</h3>
                   </div>
                   <span class="badge-tag" style="background:#dcfce7; color:#166534; border-color:#86efac;">● WebRTC Ready</span>
@@ -1101,7 +1109,7 @@
                   </div>
 
                   <div class="cti-actions-bar">
-                    <button class="btn btn-sm btn-zen-primary" id="btn-convert-call-incident">⚡ Convert Call to Incident</button>
+                    <button class="btn btn-sm btn-zen-primary" id="btn-convert-call-incident"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Convert Call to Incident</button>
                     <button class="btn btn-sm btn-zen-outline" id="btn-log-call-worklog">Log to Worklog</button>
                     <button class="btn btn-sm btn-zen-subtle" id="btn-simulate-new-call">Simulate New Ring</button>
                   </div>
@@ -1406,7 +1414,7 @@
                     <span>incident</span><span>sys_user</span><span>cmdb_ci</span><span>sys_journal</span>
                   </div>
                   <button class="btn-sample-load" data-preset="servicenow">
-                    <span>⚡ Load Authentic Enterprise Sample</span>
+                    <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Load Authentic Enterprise Sample</span>
                   </button>
                 </div>
 
@@ -1424,7 +1432,7 @@
                     <span>Issues</span><span>Assets CMDB</span><span>ChangeLog</span><span>Teams</span>
                   </div>
                   <button class="btn-sample-load" data-preset="jira">
-                    <span>⚡ Load Authentic Enterprise Sample</span>
+                    <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Load Authentic Enterprise Sample</span>
                   </button>
                 </div>
 
@@ -1442,7 +1450,7 @@
                     <span>Tickets</span><span>Organizations</span><span>Requesters</span><span>Audits</span>
                   </div>
                   <button class="btn-sample-load" data-preset="zendesk">
-                    <span>⚡ Load Authentic Enterprise Sample</span>
+                    <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Load Authentic Enterprise Sample</span>
                   </button>
                 </div>
 
@@ -1460,7 +1468,7 @@
                     <span>Incidents</span><span>CMDB Assets</span><span>Relationships</span><span>Conversations</span>
                   </div>
                   <button class="btn-sample-load" data-preset="freshservice">
-                    <span>⚡ Load Authentic Enterprise Sample</span>
+                    <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Load Authentic Enterprise Sample</span>
                   </button>
                 </div>
 
@@ -1478,7 +1486,7 @@
                     <span>HPD:HelpDesk</span><span>BaseElement</span><span>SupportGroups</span><span>WorkLog</span>
                   </div>
                   <button class="btn-sample-load" data-preset="bmc">
-                    <span>⚡ Load Authentic Enterprise Sample</span>
+                    <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Load Authentic Enterprise Sample</span>
                   </button>
                 </div>
 
@@ -1496,7 +1504,7 @@
                     <span>Case</span><span>Asset</span><span>Contact</span><span>CaseComment</span>
                   </div>
                   <button class="btn-sample-load" data-preset="salesforce">
-                    <span>⚡ Load Authentic Enterprise Sample</span>
+                    <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Load Authentic Enterprise Sample</span>
                   </button>
                 </div>
 
@@ -1514,7 +1522,7 @@
                     <span>Incident</span><span>ConfigItem</span><span>TeamDef</span><span>History</span>
                   </div>
                   <button class="btn-sample-load" data-preset="cherwell">
-                    <span>⚡ Load Authentic Enterprise Sample</span>
+                    <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Load Authentic Enterprise Sample</span>
                   </button>
                 </div>
 
@@ -1532,7 +1540,7 @@
                     <span>WorkOrder</span><span>CI Entities</span><span>CIRelations</span><span>WorkNotes</span>
                   </div>
                   <button class="btn-sample-load" data-preset="manageengine">
-                    <span>⚡ Load Authentic Enterprise Sample</span>
+                    <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Load Authentic Enterprise Sample</span>
                   </button>
                 </div>
 
@@ -1550,7 +1558,7 @@
                     <span>glpi_tickets</span><span>glpi_items</span><span>glpi_users</span><span>itilfollowup</span>
                   </div>
                   <button class="btn-sample-load" data-preset="glpi">
-                    <span>⚡ Load Authentic Enterprise Sample</span>
+                    <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Load Authentic Enterprise Sample</span>
                   </button>
                 </div>
 
@@ -1568,7 +1576,7 @@
                     <span>ticket</span><span>configitem</span><span>queue</span><span>article</span>
                   </div>
                   <button class="btn-sample-load" data-preset="otrs">
-                    <span>⚡ Load Authentic Enterprise Sample</span>
+                    <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Load Authentic Enterprise Sample</span>
                   </button>
                 </div>
               </div>
@@ -1825,7 +1833,7 @@
               <div class="page-kpi-card" style="border-left: 3.5px solid #10b981;">
                 <div class="page-kpi-top">
                   <span class="page-kpi-title">Active Requests</span>
-                  <span class="page-kpi-icon">📦</span>
+                  <span class="page-kpi-icon text-emerald"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
                 </div>
                 <span class="page-kpi-val font-mono text-emerald" id="stat-requests-active">4 Active</span>
                 <span class="page-kpi-sub">Fulfillment Pipeline</span>
@@ -1834,7 +1842,7 @@
               <div class="page-kpi-card" style="border-left: 3.5px solid #f59e0b;">
                 <div class="page-kpi-top">
                   <span class="page-kpi-title">Pending Approval</span>
-                  <span class="page-kpi-icon">🗳️</span>
+                  <span class="page-kpi-icon text-amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
                 </div>
                 <span class="page-kpi-val font-mono text-amber" id="stat-requests-approval">1 Pending</span>
                 <span class="page-kpi-sub">Manager Authorization</span>
@@ -1843,7 +1851,7 @@
               <div class="page-kpi-card" style="border-left: 3.5px solid #6366f1;">
                 <div class="page-kpi-top">
                   <span class="page-kpi-title">In Fulfillment</span>
-                  <span class="page-kpi-icon">⚡</span>
+                  <span class="page-kpi-icon text-rose"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
                 </div>
                 <span class="page-kpi-val font-mono text-indigo" id="stat-requests-fulfillment">2 In Progress</span>
                 <span class="page-kpi-sub">Asset Allocation &amp; IAM</span>
@@ -1852,7 +1860,7 @@
               <div class="page-kpi-card" style="border-left: 3.5px solid #0284c7;">
                 <div class="page-kpi-top">
                   <span class="page-kpi-title">Avg Turnaround</span>
-                  <span class="page-kpi-icon">⏱️</span>
+                  <span class="page-kpi-icon text-emerald"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
                 </div>
                 <span class="page-kpi-val font-mono text-sky" id="stat-requests-avg">4.2 Hours</span>
                 <span class="page-kpi-sub">Target &lt; 6.0 Hours</span>
@@ -1861,7 +1869,7 @@
               <div class="page-kpi-card" style="border-left: 3.5px solid #10b981;">
                 <div class="page-kpi-top">
                   <span class="page-kpi-title">SLA Compliance</span>
-                  <span class="page-kpi-icon">🎯</span>
+                  <span class="page-kpi-icon text-purple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
                 </div>
                 <span class="page-kpi-val font-mono text-emerald" id="stat-requests-sla">99.1%</span>
                 <span class="page-kpi-sub">On-Time Delivery</span>
@@ -1879,7 +1887,7 @@
                 <div class="catalog-icon-box" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: #ffffff;">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                 </div>
-                <div class="catalog-badge-pill">★ BESPOKE REQUEST</div>
+                <div class="catalog-badge-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-1px; margin-right:3px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>BESPOKE OFFERING</div>
                 <h3 style="color: #4338ca; font-size: 16px;">Custom Service Request</h3>
                 <p>Submit a customized IT, infrastructure, security, or tooling request tailored with bespoke specifications, budget allocation, and target delivery SLA.</p>
                 <button class="btn btn-zen-primary btn-sm mt-3" id="btn-open-custom-request" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); width: 100%;">
@@ -1965,7 +1973,7 @@
             <!-- Section Divider: Active Service Requests & Fulfillment Queue Dashboard -->
             <div class="catalog-section-divider">
               <div class="divider-title-group">
-                <span class="divider-icon-pill">📦</span>
+                <span class="divider-icon-pill"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
                 <div>
                   <h3 style="font-size: 16px; font-weight: 800; color: #0f172a; margin: 0;">Active Service Requests &amp; Fulfillment Queue Dashboard</h3>
                   <p style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">Track, approve, and fulfill employee hardware, IAM entitlements, and custom enterprise service requests</p>
@@ -2025,7 +2033,89 @@
           </div>
         </section>
 
-        <!-- VIEW 6: ENTERPRISE SETUP & MASTER DATA CONFIGURATION    -->
+                <!-- ======================================================== -->
+        <!-- VIEW: AI CHAT ASSISTANT (LOCAL SLM REASONING ENGINE)      -->
+        <!-- ======================================================== -->
+        <section id="view-ai-chat" class="view-panel">
+          <div class="ai-chat-workspace">
+
+            <!-- Chat Header Banner -->
+            <div class="ai-chat-header-banner">
+              <div class="ai-chat-header-left">
+                <h2>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8"/><path d="M8 13h6"/></svg>
+                  <span>OpenNow Local SLM Assistant</span>
+                  <span class="badge-zen-ver" style="background:#10b981; color:#ffffff; font-size:10.5px;">On-Device SLM</span>
+                </h2>
+                <p>Privacy-first on-premise Small Language Model engine for incident triage, CMDB root cause analysis, KEDB retrieval, and automated ITIL runbooks.</p>
+              </div>
+              <div class="ai-chat-header-right">
+                <div class="model-selector-pill">
+                  <span class="pulse-slm-dot"></span>
+                  <select id="select-ai-chat-model" class="model-select-dropdown">
+                    <option value="Mistral-ITSM-7B-Quantized (Local SLM)" selected>Mistral-ITSM-7B (Local)</option>
+                    <option value="Llama-3-8B-SRE (Local SLM)">Llama-3-8B-SRE (Local)</option>
+                    <option value="Gemma-2-9B-ITIL (Local SLM)">Gemma-2-9B-ITIL (Local)</option>
+                  </select>
+                </div>
+                <button class="btn btn-sm btn-zen-outline" id="btn-clear-ai-chat" title="Clear chat conversation" style="color:#ffffff; border-color:rgba(255,255,255,0.3); background:rgba(255,255,255,0.1);">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                  <span>Clear Session</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Suggested Quick Prompts -->
+            <div class="ai-quick-prompts-bar">
+              <span class="quick-prompts-label">Quick Prompts:</span>
+              <button class="quick-prompt-btn" data-prompt="Diagnose active P1 critical incident INC-1001 and calculate CMDB blast radius.">
+                <span>Diagnose INC-1001 Blast Radius</span>
+              </button>
+              <button class="quick-prompt-btn" data-prompt="Synthesize an emergency diagnostic runbook for PostgreSQL connection pool deadlock.">
+                <span>Postgres Deadlock Runbook</span>
+              </button>
+              <button class="quick-prompt-btn" data-prompt="Check Forward Schedule of Change (FSC) for CHG-2001 and detect any maintenance collisions.">
+                <span>Check CHG-2001 CAB Collisions</span>
+              </button>
+              <button class="quick-prompt-btn" data-prompt="How do I request a Developer Laptop M3 Max and what is the approval chain?">
+                <span>Laptop Request Approval Chain</span>
+              </button>
+              <button class="quick-prompt-btn" data-prompt="Summarize this week's SLA compliance rate, MTTR, and KEDB deflection stats.">
+                <span>Weekly Executive SLA Summary</span>
+              </button>
+            </div>
+
+            <!-- Chat Stream Card -->
+            <div class="ai-chat-stream-card">
+              <div class="ai-chat-messages" id="ai-chat-messages-container">
+                <!-- Welcome Assistant Message -->
+                <div class="chat-bubble-row assistant">
+                  <div class="chat-avatar-pill">SLM</div>
+                  <div class="chat-bubble-content">
+                    <h3>OpenNow Local SLM Engine Ready</h3>
+                    <p>Hello Alex. I am your on-premise Small Language Model, running locally without external cloud egress. I have direct context over registered CIs, active incident queues, CAB approvals, and KEDB workarounds.</p>
+                    <p>Ask me to triage an incident, analyze CMDB blast radius, inspect change schedules, or fetch runbook remediation commands.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Chat Input Bar -->
+              <div class="ai-chat-input-wrapper">
+                <textarea id="input-ai-chat-prompt" class="ai-chat-textarea" placeholder="Ask local SLM about any incident, change collision, runbook, or ITIL policy... (Enter to send, Shift+Enter for newline)" rows="2"></textarea>
+                <div class="ai-chat-input-actions">
+                  <span class="ai-chat-hint">Local Inference (18ms) • Zero Data Leakage</span>
+                  <button class="btn btn-zen-primary" id="btn-send-ai-chat" style="background:#047857;">
+                    <span>Send Query</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+<!-- VIEW 6: ENTERPRISE SETUP & MASTER DATA CONFIGURATION    -->
         <!-- ======================================================== -->
         <section id="view-setup" class="view-panel">
           <div class="setup-workspace">
@@ -2062,7 +2152,7 @@
                 </div>
                 <nav class="setup-vertical-nav">
                   <button class="setup-vertical-tab active" data-setup-tab="dna">
-                    <span class="vtab-icon">🏢</span>
+                    <span class="vtab-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="9" y1="22" x2="9" y2="22.01"/><line x1="15" y1="22" x2="15" y2="22.01"/><line x1="9" y1="6" x2="9" y2="6.01"/><line x1="15" y1="6" x2="15" y2="6.01"/><line x1="9" y1="10" x2="9" y2="10.01"/><line x1="15" y1="10" x2="15" y2="10.01"/><line x1="9" y1="14" x2="9" y2="14.01"/><line x1="15" y1="14" x2="15" y2="14.01"/><line x1="9" y1="18" x2="9" y2="18.01"/><line x1="15" y1="18" x2="15" y2="18.01"/></svg></span>
                     <div class="vtab-text">
                       <span class="vtab-title">1. Company DNA &amp; Industry</span>
                       <span class="vtab-subtitle">Adaptive Layout &amp; Blueprint</span>
@@ -2071,7 +2161,7 @@
                   </button>
 
                   <button class="setup-vertical-tab" data-setup-tab="taxonomy">
-                    <span class="vtab-icon">🏷️</span>
+                    <span class="vtab-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>
                     <div class="vtab-text">
                       <span class="vtab-title">2. Taxonomy &amp; Categories</span>
                       <span class="vtab-subtitle">3-Tier Master Data</span>
@@ -2080,7 +2170,7 @@
                   </button>
 
                   <button class="setup-vertical-tab" data-setup-tab="matrix">
-                    <span class="vtab-icon">⚡</span>
+                    <span class="vtab-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px; margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
                     <div class="vtab-text">
                       <span class="vtab-title">3. Priority Matrix</span>
                       <span class="vtab-subtitle">Impact × Urgency Grid</span>
@@ -2089,7 +2179,7 @@
                   </button>
 
                   <button class="setup-vertical-tab" data-setup-tab="sla">
-                    <span class="vtab-icon">⏱️</span>
+                    <span class="vtab-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
                     <div class="vtab-text">
                       <span class="vtab-title">4. SLA Policies &amp; Hours</span>
                       <span class="vtab-subtitle">Schedules &amp; Pause Rules</span>
@@ -2098,7 +2188,7 @@
                   </button>
 
                   <button class="setup-vertical-tab" data-setup-tab="resolutions">
-                    <span class="vtab-icon">✓</span>
+                    <span class="vtab-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
                     <div class="vtab-text">
                       <span class="vtab-title">5. Resolution Codes</span>
                       <span class="vtab-subtitle">Closure &amp; Root Causes</span>
@@ -2107,7 +2197,7 @@
                   </button>
 
                   <button class="setup-vertical-tab" data-setup-tab="technicians">
-                    <span class="vtab-icon">👥</span>
+                    <span class="vtab-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
                     <div class="vtab-text">
                       <span class="vtab-title">6. Technicians &amp; Rates</span>
                       <span class="vtab-subtitle">Roster &amp; Labor Billing</span>
@@ -2116,7 +2206,7 @@
                   </button>
 
                   <button class="setup-vertical-tab" data-setup-tab="rules">
-                    <span class="vtab-icon">⚙️</span>
+                    <span class="vtab-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
                     <div class="vtab-text">
                       <span class="vtab-title">7. Business Rules</span>
                       <span class="vtab-subtitle">Event-Driven Automation</span>
@@ -2125,7 +2215,7 @@
                   </button>
 
                   <button class="setup-vertical-tab" data-setup-tab="email-channels">
-                    <span class="vtab-icon">✉️</span>
+                    <span class="vtab-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
                     <div class="vtab-text">
                       <span class="vtab-title">8. Email Channels</span>
                       <span class="vtab-subtitle">Inbound Mailboxes</span>
@@ -2134,7 +2224,7 @@
                   </button>
 
                   <button class="setup-vertical-tab" data-setup-tab="phone-cti">
-                    <span class="vtab-icon">📞</span>
+                    <span class="vtab-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
                     <div class="vtab-text">
                       <span class="vtab-title">9. Phone &amp; CTI</span>
                       <span class="vtab-subtitle">Softphone Integration</span>
@@ -2191,7 +2281,7 @@
         <!-- Wizard Stepper Navigation Track -->
         <div class="modal-stepper-bar wizard-stepper-track">
           <div class="guided-step-item wizard-step-tab active" data-wizard-step="1" id="wizard-tab-1">
-            <div class="step-badge-icon icon-indigo">🎯</div>
+            <div class="step-badge-icon icon-indigo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
             <div class="step-text">
               <span class="step-index">STEP 01</span>
               <span class="step-name">Scope &amp; Telemetry</span>
@@ -2201,7 +2291,7 @@
           <div class="wizard-step-connector-line" id="wizard-conn-1"></div>
 
           <div class="guided-step-item wizard-step-tab" data-wizard-step="2" id="wizard-tab-2">
-            <div class="step-badge-icon icon-emerald">🏷️</div>
+            <div class="step-badge-icon icon-emerald"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
             <div class="step-text">
               <span class="step-index">STEP 02</span>
               <span class="step-name">3-Tier Classify</span>
@@ -2211,7 +2301,7 @@
           <div class="wizard-step-connector-line" id="wizard-conn-2"></div>
 
           <div class="guided-step-item wizard-step-tab" data-wizard-step="3" id="wizard-tab-3">
-            <div class="step-badge-icon icon-amber">⚡</div>
+            <div class="step-badge-icon icon-amber"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
             <div class="step-text">
               <span class="step-index">STEP 03</span>
               <span class="step-name">Priority &amp; SLA HUD</span>
@@ -2221,7 +2311,7 @@
           <div class="wizard-step-connector-line" id="wizard-conn-3"></div>
 
           <div class="guided-step-item wizard-step-tab" data-wizard-step="4" id="wizard-tab-4">
-            <div class="step-badge-icon icon-violet">✦</div>
+            <div class="step-badge-icon icon-violet"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
             <div class="step-text">
               <span class="step-index">STEP 04</span>
               <span class="step-name">Routing &amp; AI Copilot</span>
@@ -2253,19 +2343,19 @@
                   <div class="form-row-2 mb-3">
                     <div class="form-group">
                       <label for="input-ticket-caller" class="field-label-styled">
-                        <span class="label-icon">👤</span>
+                        <span class="label-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
                         <span>Reporting Caller / Engineer</span>
                         <span class="required">*</span>
                       </label>
                       <div class="input-with-icon-wrap">
-                        <span class="input-icon-left">✉️</span>
+                        <span class="input-icon-left"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
                         <input type="text" id="input-ticket-caller" class="zen-form-control input-enhanced" value="alex.rivera@opennow.io" placeholder="caller@company.com" required>
                       </div>
                     </div>
 
                     <div class="form-group">
                       <label for="select-caller-dept" class="field-label-styled">
-                        <span class="label-icon">🏢</span>
+                        <span class="label-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="9" y1="22" x2="9" y2="22.01"/><line x1="15" y1="22" x2="15" y2="22.01"/></svg></span>
                         <span>Department / Tier</span>
                       </label>
                       <select id="select-caller-dept" class="zen-form-control zen-select select-enhanced">
@@ -2280,7 +2370,7 @@
 
                   <div class="form-group mb-3">
                     <label for="input-ticket-title" class="field-label-styled">
-                      <span class="label-icon">🎯</span>
+                      <span class="label-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
                       <span>Incident Title &amp; Headline</span>
                       <span class="required">*</span>
                     </label>
@@ -2715,7 +2805,7 @@
 
     <!-- Floating Zen Mode Restore Pill -->
     <div class="zen-floating-pill" id="zen-floating-restore" style="display: none;">
-      <span class="zen-icon">☯</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20 5 5 0 0 0 0-10 5 5 0 0 1 0-10z"/></svg>
       <span>Zen Focus Mode</span>
       <button class="btn-zen-exit" id="btn-zen-exit" title="Exit Zen Mode">Exit (Z)</button>
     </div>
