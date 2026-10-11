@@ -26,10 +26,10 @@
   --text-zen-muted: #64748b;
   --text-zen-light: #94a3b8;
 
-  /* Aurora Gradient Sidebar (Blue-Green-Purple) */
+  /* Aurora Gradient Sidebar (Blue-Green-Purple) - Permanent 10% Scale */
   --sidebar-gradient: linear-gradient(180deg, #1e3a8a 0%, #0d9488 45%, #6d28d9 85%, #4c1d95 100%);
-  --sidebar-width: 260px;
-  --sidebar-collapsed-width: 72px;
+  --sidebar-width: 286px;
+  --sidebar-collapsed-width: 80px;
 
   /* Accent & Semantic Colors */
   --accent-indigo: #4f46e5;
@@ -78,18 +78,14 @@
   padding: 0;
 }
 
-html {
-  zoom: 1.2;
-}
-
 html, body {
   width: 100%;
   height: 100%;
   background-color: var(--bg-zen-canvas);
   color: var(--text-zen-primary);
   font-family: var(--font-sans);
-  font-size: 13.5px;
-  line-height: 1.5;
+  font-size: 16.2px; /* Permanent 20% native layout scale for content (base 13.5px * 1.2) */
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
@@ -148,6 +144,7 @@ button, input, select, textarea {
   height: 100vh;
   background: var(--sidebar-gradient);
   color: #ffffff;
+  font-size: 14.8px; /* Permanent 10% native scale for sidebar */
   display: flex;
   flex-direction: column;
   box-shadow: 4px 0 24px rgba(15, 23, 42, 0.12);
